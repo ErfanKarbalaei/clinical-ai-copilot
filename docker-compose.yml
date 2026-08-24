@@ -1,0 +1,53 @@
+# ============================================================
+# Clinical AI Copilot — local development infrastructure
+#
+# Only the data-layer services live here (PostgreSQL + MinIO).
+# The backend and the frontend run locally during development
+# and are intentionally NOT containerized at this stage.
+#
+# Values are read from the `.env` file next to this file
+# (copy `.env.example` to `.env` first).
+# ============================================================
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: clinical-ai-copilot-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-clinical_ai_copilot}
+      POSTGRES_USER: ${POSTGRES_USER:-clinical_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-clinical_password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-clinical_user} -d ${POSTGRES_DB:-clinical_ai_copilot}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    container_name: clinical-ai-copilot-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-minioadmin}
+    ports:
+      - "${MINIO_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  minio_data:
