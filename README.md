@@ -59,14 +59,15 @@ clinical-ai-copilot/
 ├── backend/                  # FastAPI service (Python 3.11+)
 │   ├── app/
 │   │   ├── core/             # configuration + logging
-│   │   ├── db/               # SQLAlchemy engine/session + declarative Base
-│   │   ├── models/           # ORM models (empty — later tasks)
+│   │   ├── db/               # engine/session + declarative Base + mixins
+│   │   ├── models/           # ORM models (Patient, Condition, Medication, ...)
 │   │   ├── schemas/          # Pydantic schemas
 │   │   ├── api/              # HTTP routers (v1)
 │   │   ├── services/         # business services (empty — later tasks)
 │   │   └── utils/            # shared helpers (empty — later tasks)
 │   ├── tests/                # pytest tests
-│   ├── alembic/              # migrations (no migrations yet)
+│   ├── alembic/              # migrations (initial clinical schema)
+│   ├── scripts/              # dev scripts (seed.py)
 │   ├── requirements.txt
 │   ├── requirements-dev.txt
 │   ├── alembic.ini
@@ -189,7 +190,20 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
   (persistent volumes, healthchecks, configurable credentials/ports)
 - Environment template (`.env.example`) and documentation (READMEs)
 
-**Not started (intentionally — later phases):** authentication, patient data
-model and migrations, clinical features, document upload/processing, OCR,
-Speech-to-Text, AI model integrations, medical-evidence retrieval,
+**Done — Task 2 (patient data model):**
+
+- 10 core entities: patients, conditions, medications, patient_medications,
+  allergies, documents, voice_notes, clinical_notes, lab_results,
+  clinical_events (see `docs/data-model/README.md`)
+- Alembic migration `d3d54628e9bd` (create core clinical entities) — fully
+  reversible, `alembic check` clean
+- Database tests (13 passing): defaults, unique national code, FK
+  cascades, voice-note/document traceability links
+- Development seed script (`backend/scripts/seed.py`) with sample Persian
+  clinical data
+- Documentation: data-model reference + Task 2 report
+
+**Not started (intentionally — later phases):** authentication,
+patient-facing API endpoints, clinical features, document upload/processing,
+OCR, Speech-to-Text, AI model integrations, medical-evidence retrieval,
 prescription-safety rules, RAG/vector search.

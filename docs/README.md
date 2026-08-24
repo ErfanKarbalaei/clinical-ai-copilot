@@ -11,7 +11,9 @@ Planned contents (added incrementally, only as features are actually implemented
 
 Current contents:
 
+- `data-model/` — patient database schema, relationships, and design decisions
 - `task-01-foundation-report.md` — Task 1 (project foundation) implementation report
+- `task-02-data-model-report.md` — Task 2 (patient data model) implementation report
 
 No documentation files have been added yet — the repository is currently at the
 foundation stage (Task 1: monorepo skeleton, backend/frontend skeletons,

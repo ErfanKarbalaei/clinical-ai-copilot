@@ -1,9 +1,9 @@
 # Backend — Clinical AI Copilot
 
-FastAPI service (Python 3.11+). Currently contains **only the project
-foundation**: environment-based configuration, logging, database
-engine/session wiring, an empty Alembic setup, and the health endpoints.
-No business features yet.
+FastAPI service (Python 3.11+). Contains the project foundation (Task 1) and
+the patient data model (Task 2): configuration, logging, database wiring,
+ORM models, one Alembic migration, and the health endpoints. No clinical API
+endpoints yet.
 
 ## Structure
 
@@ -11,14 +11,15 @@ No business features yet.
 backend/
 ├── app/
 │   ├── core/        # configuration + logging
-│   ├── db/          # SQLAlchemy engine/session + declarative Base
-│   ├── models/      # ORM models (empty — added in later tasks)
+│   ├── db/          # engine/session + declarative Base + mixins
+│   ├── models/      # ORM models (Patient, Condition, Medication, Document, ...)
 │   ├── schemas/     # Pydantic schemas
 │   ├── api/         # HTTP routers (v1)
 │   ├── services/    # business services (empty — added in later tasks)
 │   └── utils/       # shared helpers (empty — added in later tasks)
-├── tests/           # pytest tests
-├── alembic/         # migrations (no migrations yet)
+├── tests/           # pytest tests (health, models, seed)
+├── alembic/         # migrations
+├── scripts/         # development scripts (seed.py)
 ├── requirements.txt
 ├── requirements-dev.txt
 ├── alembic.ini
@@ -61,14 +62,36 @@ uvicorn app.main:app --reload --port 8000
 python -m pytest
 ```
 
+Health-endpoint tests always run. Model/seed tests need PostgreSQL and are
+skipped automatically when it is not reachable (start it with
+`docker compose up -d postgres`). They run against a separate
+`<POSTGRES_DB>_test` database and never touch development data.
+
 ## Alembic (migrations)
 
-No migrations exist yet (no business models). Once models are added:
+Current head: `d3d54628e9bd` — *create core clinical entities* (10 tables).
+
+```bash
+alembic upgrade head      # apply migrations
+alembic downgrade base    # revert all (drops tables + enum types)
+alembic check             # verify models match the database
+```
+
+After changing models, generate a new migration:
 
 ```bash
 alembic revision --autogenerate -m "message"
-alembic upgrade head
 ```
 
 The database URL for Alembic comes from the same application settings —
 never from `alembic.ini`.
+
+## Seed data (development only)
+
+```bash
+python -m scripts.seed            # insert sample data (refuses if data exists)
+python -m scripts.seed --reset    # wipe clinical tables and reseed
+```
+
+Inserts 3 fictional patients with conditions, medications, allergies,
+documents, voice notes, notes, lab results, and timeline events.

@@ -13,6 +13,8 @@ from sqlalchemy import engine_from_config, pool
 from app.core.config import get_settings
 from app.db.base import Base
 
+import app.models  # noqa: F401  (registers ORM models on Base.metadata)
+
 # Alembic Config object — provides access to values in alembic.ini.
 config = context.config
 
