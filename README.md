@@ -203,7 +203,17 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
   clinical data
 - Documentation: data-model reference + Task 2 report
 
+**Done — Task 3 (patient API):**
+
+- Patient CRUD endpoints under `/api/v1/patients`: create, list (search +
+  pagination), get, partial update, delete (cascades related clinical data)
+- Persian error messages for 404/409; validation (کد ملی = 10 unique digits,
+  past date of birth)
+- 14 new API tests — full suite: 27 passing
+- See `backend/README.md` for the endpoint table
+
 **Not started (intentionally — later phases):** authentication,
-patient-facing API endpoints, clinical features, document upload/processing,
-OCR, Speech-to-Text, AI model integrations, medical-evidence retrieval,
-prescription-safety rules, RAG/vector search.
+API endpoints for conditions/medications/allergies/documents/voice notes,
+clinical features, document upload/processing, OCR, Speech-to-Text, AI model
+integrations, medical-evidence retrieval, prescription-safety rules,
+RAG/vector search.

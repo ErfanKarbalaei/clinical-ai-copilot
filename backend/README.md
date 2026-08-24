@@ -56,6 +56,20 @@ uvicorn app.main:app --reload --port 8000
 - Interactive docs (Swagger): http://localhost:8000/docs
 - Health: http://localhost:8000/health (also `/api/v1/health`)
 
+### API endpoints
+
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | `/api/v1/patients` | Create a patient (201; 409 on duplicate national code) |
+| GET | `/api/v1/patients` | List patients — `?q=` search (name/national code), `?limit=` (≤100), `&offset=` |
+| GET | `/api/v1/patients/{id}` | Get a patient (404 if missing) |
+| PATCH | `/api/v1/patients/{id}` | Partially update a patient |
+| DELETE | `/api/v1/patients/{id}` | Delete a patient and all related clinical data (204) |
+
+Validation: `national_code` must be exactly 10 digits and unique;
+`date_of_birth` must be in the past. Custom errors (404/409) return Persian
+messages.
+
 ## Tests
 
 ```bash

@@ -16,6 +16,7 @@ from sqlalchemy.orm import Session
 import app.models  # noqa: F401  (register models on Base.metadata)
 from app.core.config import get_settings
 from app.db.base import Base
+from app.db.session import get_db
 from app.main import app
 
 settings = get_settings()
@@ -28,6 +29,16 @@ TEST_DATABASE_URL = settings.database_url.rsplit("/", 1)[0] + "/" + TEST_DATABAS
 def client() -> TestClient:
     """HTTP test client for the FastAPI application."""
     return TestClient(app)
+
+
+@pytest.fixture()
+def api_client(db_session) -> TestClient:
+    """HTTP test client whose DB dependency uses the isolated test session."""
+    app.dependency_overrides[get_db] = lambda: db_session
+    try:
+        yield TestClient(app)
+    finally:
+        app.dependency_overrides.clear()
 
 
 def _create_test_database_if_missing() -> None:
