@@ -212,8 +212,22 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
 - 14 new API tests — full suite: 27 passing
 - See `backend/README.md` for the endpoint table
 
+**Done — Task 4 (clinical APIs):**
+
+- Conditions API: nested create/list + flat get/patch/delete
+  (`/api/v1/patients/{id}/conditions`, `/api/v1/conditions/{id}`)
+- Allergies API: same shape (`/api/v1/patients/{id}/allergies`,
+  `/api/v1/allergies/{id}`) — severe-first ordering
+- Patient medications API (`/api/v1/patients/{id}/medications`,
+  `/api/v1/patient-medications/{id}`) — by catalog id or name (catalog entry
+  reused/created), active-first deterministic ordering, `?status=` filter,
+  stopping preserves history
+- Patient overview: `GET /api/v1/patients/{id}/overview` — profile,
+  conditions, active medications, allergies, 5 recent labs/notes (pure
+  structured data, no AI summary)
+- 36 new API tests — full suite: 63 passing
+
 **Not started (intentionally — later phases):** authentication,
-API endpoints for conditions/medications/allergies/documents/voice notes,
-clinical features, document upload/processing, OCR, Speech-to-Text, AI model
-integrations, medical-evidence retrieval, prescription-safety rules,
-RAG/vector search.
+API endpoints for documents/voice notes/lab entries, clinical features,
+document upload/processing, OCR, Speech-to-Text, AI model integrations,
+medical-evidence retrieval, prescription-safety rules, RAG/vector search.

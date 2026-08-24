@@ -5,6 +5,11 @@ from datetime import date, datetime
 from pydantic import BaseModel, ConfigDict, Field, PastDate
 
 from app.models.enums import Gender
+from app.schemas.allergy import AllergyResponse
+from app.schemas.clinical_note import ClinicalNoteResponse
+from app.schemas.condition import ConditionResponse
+from app.schemas.lab_result import LabResultResponse
+from app.schemas.medication import PatientMedicationResponse
 
 
 class PatientBase(BaseModel):
@@ -58,3 +63,28 @@ class PatientListResponse(BaseModel):
 
     items: list[PatientResponse]
     total: int
+
+
+class PatientOverviewResponse(BaseModel):
+    """Structured clinical overview of a patient (pure database data).
+
+    No AI summary is generated here — every section is structured data
+    read directly from the database.
+    """
+
+    patient: PatientResponse
+    conditions: list[ConditionResponse] = Field(
+        description="همهٔ مشکلات بالینی — فعال‌ها اول"
+    )
+    active_medications: list[PatientMedicationResponse] = Field(
+        description="فقط داروهای فعال"
+    )
+    allergies: list[AllergyResponse] = Field(
+        description="حساسیت‌ها — شدیدترها اول"
+    )
+    recent_lab_results: list[LabResultResponse] = Field(
+        description="۵ نتیجهٔ آزمایش اخیر"
+    )
+    recent_clinical_notes: list[ClinicalNoteResponse] = Field(
+        description="۵ یادداشت بالینی اخیر"
+    )

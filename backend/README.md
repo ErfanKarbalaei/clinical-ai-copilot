@@ -58,6 +58,8 @@ uvicorn app.main:app --reload --port 8000
 
 ### API endpoints
 
+**Patients**
+
 | Method | Path | Description |
 | --- | --- | --- |
 | POST | `/api/v1/patients` | Create a patient (201; 409 on duplicate national code) |
@@ -65,6 +67,31 @@ uvicorn app.main:app --reload --port 8000
 | GET | `/api/v1/patients/{id}` | Get a patient (404 if missing) |
 | PATCH | `/api/v1/patients/{id}` | Partially update a patient |
 | DELETE | `/api/v1/patients/{id}` | Delete a patient and all related clinical data (204) |
+| GET | `/api/v1/patients/{id}/overview` | Structured clinical overview (profile, conditions, active medications, allergies, 5 recent labs/notes) — no AI summary |
+
+**Conditions** (active first, then newest onset first)
+
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | `/api/v1/patients/{id}/conditions` | Add a condition (201) |
+| GET | `/api/v1/patients/{id}/conditions` | List the patient's conditions |
+| GET/PATCH/DELETE | `/api/v1/conditions/{id}` | Get / partially update / delete a condition |
+
+**Allergies** (severe first)
+
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | `/api/v1/patients/{id}/allergies` | Add an allergy (201) |
+| GET | `/api/v1/patients/{id}/allergies` | List the patient's allergies |
+| GET/PATCH/DELETE | `/api/v1/allergies/{id}` | Get / partially update / delete an allergy |
+
+**Patient medications** (active → stopped → completed; newest start first; history preserved — stop via PATCH, not DELETE)
+
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | `/api/v1/patients/{id}/medications` | Add a medication — by `medication_id` **or** `medication_name` (catalog entry is reused/created) |
+| GET | `/api/v1/patients/{id}/medications` | List medications — `?status=active|stopped|completed` filter |
+| GET/PATCH/DELETE | `/api/v1/patient-medications/{id}` | Get / partially update (dose, frequency, status, notes) / delete a record |
 
 Validation: `national_code` must be exactly 10 digits and unique;
 `date_of_birth` must be in the past. Custom errors (404/409) return Persian

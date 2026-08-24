@@ -6,9 +6,15 @@ registered here as they are implemented.
 
 from fastapi import APIRouter
 
+from app.api.v1.routes.allergies import router as allergies_router
+from app.api.v1.routes.conditions import router as conditions_router
 from app.api.v1.routes.health import router as health_router
+from app.api.v1.routes.medications import router as medications_router
 from app.api.v1.routes.patients import router as patients_router
 
 api_router = APIRouter()
 api_router.include_router(health_router)
 api_router.include_router(patients_router)
+api_router.include_router(conditions_router)
+api_router.include_router(allergies_router)
+api_router.include_router(medications_router)
