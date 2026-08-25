@@ -227,7 +227,17 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
   structured data, no AI summary)
 - 36 new API tests — full suite: 63 passing
 
+**Done — Task 5 (frontend — patients & clinical record):**
+
+- Persian RTL pages: `/` (landing → patients), `/patients` (server-rendered
+  list with search + pagination + create dialog), `/patients/[id]` (clinical
+  record: profile, conditions, allergies, active medications with
+  add/edit/stop/delete, 5 recent labs, 5 recent notes)
+- Typed API client (`lib/api.ts`) + Persian labels/Jalali dates (`lib/format.ts`)
+- shadcn/ui components (dialog, input, label, select, textarea, table, ...)
+- All data from the real API — no mock data; `tsc` + `next build` clean;
+  SSR pages verified against the seeded backend
+
 **Not started (intentionally — later phases):** authentication,
-API endpoints for documents/voice notes/lab entries, clinical features,
 document upload/processing, OCR, Speech-to-Text, AI model integrations,
 medical-evidence retrieval, prescription-safety rules, RAG/vector search.

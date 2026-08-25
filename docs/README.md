@@ -16,6 +16,7 @@ Current contents:
 - `task-02-data-model-report.md` — Task 2 (patient data model) implementation report
 - `task-03-patient-api-report.md` — Task 3 (patient CRUD API) implementation report
 - `task-04-clinical-apis-report.md` — Task 4 (conditions/allergies/medications APIs + overview) implementation report
+- `task-05-frontend-report.md` — Task 5 (frontend: patients list + clinical record) implementation report
 
 No documentation files have been added yet — the repository is currently at the
 foundation stage (Task 1: monorepo skeleton, backend/frontend skeletons,

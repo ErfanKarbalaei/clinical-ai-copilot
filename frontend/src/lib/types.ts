@@ -1,0 +1,147 @@
+/** TypeScript types mirroring the backend API schemas (Tasks 3 & 4). */
+
+export type Gender = "male" | "female" | "other" | "unknown";
+export type ConditionStatus = "active" | "resolved";
+export type AllergySeverity = "mild" | "moderate" | "severe" | "unknown";
+export type MedicationStatus = "active" | "stopped" | "completed";
+export type ResultFlag = "normal" | "abnormal" | "critical";
+export type NoteSource = "manual" | "voice" | "ai_assisted";
+
+export interface Patient {
+  id: number;
+  first_name: string;
+  last_name: string;
+  national_code: string | null;
+  date_of_birth: string | null;
+  gender: Gender;
+  phone: string | null;
+  address: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PatientListResponse {
+  items: Patient[];
+  total: number;
+}
+
+export interface PatientCreatePayload {
+  first_name: string;
+  last_name: string;
+  national_code?: string | null;
+  date_of_birth?: string | null;
+  gender?: Gender;
+  phone?: string | null;
+  address?: string | null;
+}
+
+export interface Condition {
+  id: number;
+  patient_id: number;
+  name: string;
+  status: ConditionStatus;
+  onset_date: string | null;
+  resolved_date: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ConditionPayload {
+  name: string;
+  status?: ConditionStatus;
+  onset_date?: string | null;
+  resolved_date?: string | null;
+  notes?: string | null;
+}
+
+export interface Allergy {
+  id: number;
+  patient_id: number;
+  allergen: string;
+  reaction: string | null;
+  severity: AllergySeverity;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AllergyPayload {
+  allergen: string;
+  reaction?: string | null;
+  severity?: AllergySeverity;
+}
+
+export interface MedicationBrief {
+  id: number;
+  name: string;
+  generic_name: string | null;
+}
+
+export interface PatientMedication {
+  id: number;
+  patient_id: number;
+  medication: MedicationBrief;
+  dosage: string | null;
+  frequency: string | null;
+  status: MedicationStatus;
+  start_date: string | null;
+  end_date: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PatientMedicationCreatePayload {
+  medication_id?: number;
+  medication_name?: string;
+  generic_name?: string | null;
+  dosage?: string | null;
+  frequency?: string | null;
+  status?: MedicationStatus;
+  start_date?: string | null;
+  end_date?: string | null;
+  notes?: string | null;
+}
+
+export interface PatientMedicationUpdatePayload {
+  dosage?: string | null;
+  frequency?: string | null;
+  status?: MedicationStatus;
+  start_date?: string | null;
+  end_date?: string | null;
+  notes?: string | null;
+}
+
+export interface LabResult {
+  id: number;
+  patient_id: number;
+  document_id: number | null;
+  test_name: string;
+  value: string;
+  unit: string | null;
+  reference_range: string | null;
+  flag: ResultFlag | null;
+  result_date: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ClinicalNote {
+  id: number;
+  patient_id: number;
+  voice_note_id: number | null;
+  title: string;
+  content: string;
+  source: NoteSource;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PatientOverview {
+  patient: Patient;
+  conditions: Condition[];
+  active_medications: PatientMedication[];
+  allergies: Allergy[];
+  recent_lab_results: LabResult[];
+  recent_clinical_notes: ClinicalNote[];
+}

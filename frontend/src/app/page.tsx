@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { UsersIcon } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,15 +13,6 @@ import {
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
-
-/** Swagger UI is served by the backend at `/docs` (outside /api/v1). */
-function apiDocsUrl(): string {
-  try {
-    return new URL("/docs", API_BASE_URL).toString();
-  } catch {
-    return "http://localhost:8000/docs";
-  }
-}
 
 export default function HomePage() {
   return (
@@ -54,52 +48,33 @@ export default function HomePage() {
           </p>
         </header>
 
-        {/* Development status card */}
+        {/* Entry point */}
         <Card>
           <CardHeader>
-            <div className="flex items-center gap-2">
-              <span className="relative flex size-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex size-2.5 rounded-full bg-emerald-500" />
-              </span>
-              <CardTitle>وضعیت محیط توسعه</CardTitle>
-            </div>
-            <CardDescription>بررسی راه‌اندازی اولیه پروژه</CardDescription>
+            <CardTitle>محیط توسعه پروژه با موفقیت اجرا شده است.</CardTitle>
+            <CardDescription>
+              بخش مدیریت بیماران آماده است؛ قابلیت‌های دیگر در مراحل بعدی اضافه می‌شوند.
+            </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <p className="text-lg leading-8 font-medium">
-              محیط توسعه پروژه با موفقیت اجرا شده است.
-            </p>
-
+          <CardContent className="space-y-5">
             <dl className="divide-y overflow-hidden rounded-lg border">
               <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
-                <dt className="text-muted-foreground">
-                  نشانی پایه سرویس (API)
-                </dt>
+                <dt className="text-muted-foreground">نشانی پایه سرویس (API)</dt>
                 <dd dir="ltr" className="font-mono text-xs">
                   {API_BASE_URL}
                 </dd>
               </div>
               <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
-                <dt className="text-muted-foreground">وضعیت پایه پروژه</dt>
+                <dt className="text-muted-foreground">وضعیت پروژه</dt>
                 <dd>
-                  <Badge variant="secondary">آماده توسعه</Badge>
-                </dd>
-              </div>
-              <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
-                <dt className="text-muted-foreground">نسخه</dt>
-                <dd dir="ltr" className="font-mono text-xs">
-                  0.1.0
+                  <Badge variant="secondary">مدیریت بیماران فعال است</Badge>
                 </dd>
               </div>
             </dl>
 
-            <Button
-              render={
-                <a href={apiDocsUrl()} target="_blank" rel="noreferrer" />
-              }
-            >
-              مشاهده مستندات API
+            <Button size="lg" className="w-full" render={<Link href="/patients" />}>
+              <UsersIcon />
+              ورود به فهرست بیماران
             </Button>
           </CardContent>
         </Card>
