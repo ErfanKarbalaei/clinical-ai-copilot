@@ -93,6 +93,21 @@ uvicorn app.main:app --reload --port 8000
 | GET | `/api/v1/patients/{id}/medications` | List medications — `?status=active|stopped|completed` filter |
 | GET/PATCH/DELETE | `/api/v1/patient-medications/{id}` | Get / partially update (dose, frequency, status, notes) / delete a record |
 
+**Documents** (originals stored unchanged in MinIO; only metadata in PostgreSQL)
+
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | `/api/v1/patients/{id}/documents` | Multipart upload — `file` + optional `title`, `doc_type` (201; PDF/PNG/JPEG/WebP/txt, max 20 MB; creates a `document_uploaded` timeline event) |
+| GET | `/api/v1/patients/{id}/documents` | List a patient's documents (newest first) |
+| GET | `/api/v1/documents/{id}` | Document metadata |
+| GET | `/api/v1/documents/{id}/download` | 307 redirect to a 1-hour presigned URL served by MinIO |
+| PATCH | `/api/v1/documents/{id}` | Update metadata (title/type) — the original file never changes |
+| DELETE | `/api/v1/documents/{id}` | Delete the file from MinIO + metadata + timeline event (204) |
+
+Storage errors return **503** (`سرویس ذخیره‌سازی فایل در دسترس نیست`).
+Development E2E check: `python -m scripts.e2e_documents` (needs backend +
+PostgreSQL + MinIO running).
+
 Validation: `national_code` must be exactly 10 digits and unique;
 `date_of_birth` must be in the past. Custom errors (404/409) return Persian
 messages.

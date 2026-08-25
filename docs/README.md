@@ -17,6 +17,7 @@ Current contents:
 - `task-03-patient-api-report.md` — Task 3 (patient CRUD API) implementation report
 - `task-04-clinical-apis-report.md` — Task 4 (conditions/allergies/medications APIs + overview) implementation report
 - `task-05-frontend-report.md` — Task 5 (frontend: patients list + clinical record) implementation report
+- `task-06-documents-report.md` — Task 6 (document upload/storage API with MinIO) implementation report
 
 No documentation files have been added yet — the repository is currently at the
 foundation stage (Task 1: monorepo skeleton, backend/frontend skeletons,

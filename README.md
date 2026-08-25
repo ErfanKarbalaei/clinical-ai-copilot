@@ -164,10 +164,10 @@ backend) and `frontend/.env.example` (used by Next.js):
 | `POSTGRES_PASSWORD` | compose, backend | PostgreSQL password |
 | `POSTGRES_HOST` | backend | host the backend connects to |
 | `POSTGRES_PORT` | compose, backend | PostgreSQL port (host + backend) |
-| `MINIO_ENDPOINT` | backend (later) | MinIO endpoint, e.g. `localhost:9000` |
-| `MINIO_ACCESS_KEY` | compose, backend (later) | MinIO access key (root user) |
-| `MINIO_SECRET_KEY` | compose, backend (later) | MinIO secret key (root password) |
-| `MINIO_BUCKET` | backend (later) | bucket for clinical documents/audio |
+| `MINIO_ENDPOINT` | backend, compose | MinIO endpoint, e.g. `localhost:9000` |
+| `MINIO_ACCESS_KEY` | compose, backend | MinIO access key (root user) |
+| `MINIO_SECRET_KEY` | compose, backend | MinIO secret key (root password) |
+| `MINIO_BUCKET` | backend | bucket for clinical documents/audio |
 | `MINIO_PORT` | compose | host port for the MinIO API |
 | `MINIO_CONSOLE_PORT` | compose | host port for the MinIO console UI |
 | `BACKEND_PORT` | backend (reference) | backend port (default `8000`) |
@@ -238,6 +238,20 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
 - All data from the real API — no mock data; `tsc` + `next build` clean;
   SSR pages verified against the seeded backend
 
+**Done — Task 6 (patient documents):**
+
+- MinIO storage service (`services/storage.py`): bucket bootstrap, unique
+  sanitized object keys (`patients/{id}/documents/{uuid}-{name}`), upload,
+  presigned URLs, delete
+- Documents API: multipart upload (PDF/PNG/JPEG/WebP/txt, ≤20 MB, Persian
+  422s), list (newest first), metadata get/patch, download via 307
+  presigned redirect, delete (file + metadata + timeline event); 503 when
+  storage is down
+- Upload/delete maintain the patient timeline automatically
+- 17 new tests (API with faked storage + live-MinIO integration, auto-skip)
+  — full suite: 80 passing; live E2E verified byte-identical roundtrip
+
 **Not started (intentionally — later phases):** authentication,
-document upload/processing, OCR, Speech-to-Text, AI model integrations,
-medical-evidence retrieval, prescription-safety rules, RAG/vector search.
+document text extraction (OCR/AI), frontend documents UI, voice notes,
+Speech-to-Text, AI model integrations, medical-evidence retrieval,
+prescription-safety rules, RAG/vector search.
