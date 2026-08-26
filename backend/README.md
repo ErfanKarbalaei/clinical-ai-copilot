@@ -103,6 +103,20 @@ uvicorn app.main:app --reload --port 8000
 | GET | `/api/v1/documents/{id}/download` | 307 redirect to a 1-hour presigned URL served by MinIO |
 | PATCH | `/api/v1/documents/{id}` | Update metadata (title/type) — the original file never changes |
 | DELETE | `/api/v1/documents/{id}` | Delete the file from MinIO + metadata + timeline event (204) |
+| POST | `/api/v1/documents/{id}/extract` | Re-run text extraction (202; 409 while already processing) |
+
+**Text extraction** (deterministic — no AI): runs automatically after each
+upload as a background task. `pending → processing → completed | failed`.
+- `text/plain` → decoded directly
+- PDFs → embedded text layer (pypdf); scans fall back to OCR over the
+  page's embedded images
+- images → Tesseract OCR (`fas+eng` when Persian data is installed)
+
+OCR is optional — without the Tesseract binary, text PDFs still extract and
+scans/images fail with a logged reason. Install options:
+`choco install tesseract` (admin), `scoop install tesseract`, or set
+`TESSERACT_CMD` in `.env` to the binary path (add `fas.traineddata` from
+[tessdata](https://github.com/tesseract-ocr/tessdata) for Persian).
 
 Storage errors return **503** (`سرویس ذخیره‌سازی فایل در دسترس نیست`).
 Development E2E check: `python -m scripts.e2e_documents` (needs backend +

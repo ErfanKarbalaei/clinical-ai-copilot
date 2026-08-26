@@ -170,6 +170,7 @@ backend) and `frontend/.env.example` (used by Next.js):
 | `MINIO_BUCKET` | backend | bucket for clinical documents/audio |
 | `MINIO_PORT` | compose | host port for the MinIO API |
 | `MINIO_CONSOLE_PORT` | compose | host port for the MinIO console UI |
+| `TESSERACT_CMD` | backend (optional) | absolute path to the Tesseract binary (empty = PATH lookup) |
 | `BACKEND_PORT` | backend (reference) | backend port (default `8000`) |
 | `NEXT_PUBLIC_API_URL` | frontend | public backend API base URL, inlined at build time |
 
@@ -251,7 +252,22 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
 - 17 new tests (API with faked storage + live-MinIO integration, auto-skip)
   — full suite: 80 passing; live E2E verified byte-identical roundtrip
 
+**Done — Task 7 (document text extraction):**
+
+- Deterministic extraction pipeline (no AI/LLM): text/plain decoded, PDFs
+  via pypdf text layer with OCR fallback over embedded page images, images
+  via Tesseract (`fas+eng`, optional — auto-detected)
+- Runs as a FastAPI background task after upload: `pending → processing →
+  completed | failed`; re-extract endpoint (`POST /documents/{id}/extract`)
+- Race-safe processing (document deleted mid-extraction is handled) and
+  storage-level `get_object_bytes`
+- Frontend: documents section on the patient record — upload dialog, status
+  badges (در انتظار/در حال پردازش/استخراج شد/ناموفق), download of the
+  original, extracted-text viewer, re-extract on failure, delete
+- 12 new tests (incl. live Persian OCR) — full suite: 92 passing; real-file
+  E2E verified (text PDF, Persian image OCR, scanned PDF, byte-identical
+  original, re-extract)
+
 **Not started (intentionally — later phases):** authentication,
-document text extraction (OCR/AI), frontend documents UI, voice notes,
-Speech-to-Text, AI model integrations, medical-evidence retrieval,
-prescription-safety rules, RAG/vector search.
+voice notes, Speech-to-Text, AI model integrations, medical-evidence
+retrieval, prescription-safety rules, RAG/vector search.

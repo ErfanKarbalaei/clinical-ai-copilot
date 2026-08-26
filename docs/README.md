@@ -18,6 +18,7 @@ Current contents:
 - `task-04-clinical-apis-report.md` — Task 4 (conditions/allergies/medications APIs + overview) implementation report
 - `task-05-frontend-report.md` — Task 5 (frontend: patients list + clinical record) implementation report
 - `task-06-documents-report.md` — Task 6 (document upload/storage API with MinIO) implementation report
+- `task-07-extraction-report.md` — Task 7 (deterministic text extraction: PDF + OCR, frontend documents UI) implementation report
 
 No documentation files have been added yet — the repository is currently at the
 foundation stage (Task 1: monorepo skeleton, backend/frontend skeletons,

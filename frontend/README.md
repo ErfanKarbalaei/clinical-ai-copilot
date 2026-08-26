@@ -16,7 +16,7 @@ The entire user interface is **Persian and right-to-left (RTL)**:
 | --- | --- |
 | `/` | Landing page — status + entry point to the patients list |
 | `/patients` | Patient list (server-rendered): search by name/national code, pagination, «بیمار جدید» dialog |
-| `/patients/[id]` | Patient clinical record (server-rendered from `/overview`): profile, conditions, allergies, active medications (add/edit/**stop**/delete), 5 recent labs, 5 recent notes |
+| `/patients/[id]` | Patient clinical record (server-rendered from `/overview` + `/documents`): profile, conditions, allergies, active medications (add/edit/**stop**/delete), documents (upload/status/download/extracted text/delete), 5 recent labs, 5 recent notes |
 
 All data comes from the backend REST API (`src/lib/api.ts`) — there is no
 hardcoded/mock patient data in the frontend.
