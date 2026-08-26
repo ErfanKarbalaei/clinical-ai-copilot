@@ -10,6 +10,7 @@ import type {
   AllergyPayload,
   Condition,
   ConditionPayload,
+  Document,
   Patient,
   PatientCreatePayload,
   PatientListResponse,
@@ -156,5 +157,36 @@ export const api = {
     return request<void>(`/patient-medications/${recordId}`, {
       method: "DELETE",
     });
+  },
+
+  // --- documents ---
+  listDocuments(patientId: number) {
+    return request<Document[]>(`/patients/${patientId}/documents`);
+  },
+  uploadDocument(
+    patientId: number,
+    form: { file: File; title?: string; docType?: string }
+  ) {
+    const body = new FormData();
+    body.append("file", form.file);
+    if (form.title) body.append("title", form.title);
+    if (form.docType) body.append("doc_type", form.docType);
+    return request<Document>(`/patients/${patientId}/documents`, {
+      method: "POST",
+      body,
+      // Let the browser set the multipart Content-Type with the boundary.
+      headers: {} as HeadersInit,
+    });
+  },
+  reextractDocument(documentId: number) {
+    return request<Document>(`/documents/${documentId}/extract`, {
+      method: "POST",
+    });
+  },
+  deleteDocument(documentId: number) {
+    return request<void>(`/documents/${documentId}`, { method: "DELETE" });
+  },
+  documentDownloadUrl(documentId: number): string {
+    return `${API_BASE_URL}/documents/${documentId}/download`;
   },
 };

@@ -4,7 +4,9 @@ import {
   ActivityIcon,
   AlertCircleIcon,
   ArrowRightIcon,
+  DownloadIcon,
   FileTextIcon,
+  FileUpIcon,
   FlaskConicalIcon,
   PhoneIcon,
   PillIcon,
@@ -18,6 +20,11 @@ import {
   AddConditionButton,
   ConditionRowActions,
 } from "@/components/patients/condition-actions";
+import {
+  AddDocumentButton,
+  DocumentRowActions,
+  ViewExtractedTextButton,
+} from "@/components/patients/document-actions";
 import {
   AddMedicationButton,
   MedicationRowActions,
@@ -44,6 +51,9 @@ import {
   allergySeverityLabels,
   calculateAge,
   conditionStatusLabels,
+  documentTypeLabels,
+  extractionStatusLabels,
+  formatBytes,
   formatDate,
   formatDateTime,
   genderLabels,
@@ -51,7 +61,11 @@ import {
   noteSourceLabels,
   resultFlagLabels,
 } from "@/lib/format";
-import type { AllergySeverity, ResultFlag } from "@/lib/types";
+import type {
+  AllergySeverity,
+  ExtractionStatus,
+  ResultFlag,
+} from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -79,6 +93,19 @@ function flagBadgeVariant(flag: ResultFlag): string {
   }
 }
 
+function extractionStatusBadgeClass(status: ExtractionStatus): string {
+  switch (status) {
+    case "completed":
+      return "text-emerald-600 dark:text-emerald-400";
+    case "failed":
+      return "text-destructive";
+    case "processing":
+      return "animate-pulse";
+    default:
+      return "";
+  }
+}
+
 interface PatientDetailPageProps {
   params: Promise<{ id: string }>;
 }
@@ -91,8 +118,12 @@ export default async function PatientDetailPage({
   if (!Number.isInteger(patientId) || patientId <= 0) notFound();
 
   let overview: Awaited<ReturnType<typeof api.getPatientOverview>>;
+  let documents: Awaited<ReturnType<typeof api.listDocuments>>;
   try {
-    overview = await api.getPatientOverview(patientId);
+    [overview, documents] = await Promise.all([
+      api.getPatientOverview(patientId),
+      api.listDocuments(patientId),
+    ]);
   } catch (cause) {
     if (cause instanceof ApiError && cause.status === 404) notFound();
     return (
@@ -312,6 +343,77 @@ export default async function PatientDetailPage({
                       {medicationStatusLabels[record.status]}
                     </Badge>
                     <MedicationRowActions patientId={patient.id} record={record} />
+                  </div>
+                </div>
+              ))
+            )}
+          </CardContent>
+        </Card>
+
+        {/* --- documents --- */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <FileUpIcon className="size-4 text-muted-foreground" />
+              اسناد
+            </CardTitle>
+            <CardDescription>
+              {documents.length > 0
+                ? `${documents.length} سند — جدیدترین اول`
+                : "سندی بارگذاری نشده است"}
+            </CardDescription>
+            <CardAction>
+              <AddDocumentButton patientId={patient.id} />
+            </CardAction>
+          </CardHeader>
+          <CardContent className="space-y-1">
+            {documents.length === 0 ? (
+              <EmptyState
+                title="سندی بارگذاری نشده است"
+                description="گزارش آزمایش، تصویر یا فایل بالینی بیمار را بارگذاری کنید."
+              />
+            ) : (
+              documents.map((document) => (
+                <div
+                  key={document.id}
+                  className="flex items-start justify-between gap-2 rounded-lg px-2 py-2.5 hover:bg-muted/50"
+                >
+                  <div className="min-w-0 space-y-0.5">
+                    <p className="truncate font-medium">{document.title}</p>
+                    <p className="text-xs text-muted-foreground" dir="ltr">
+                      {document.file_name} — {formatBytes(document.file_size_bytes)}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {documentTypeLabels[document.doc_type]} —{" "}
+                      {formatDateTime(document.created_at)}
+                    </p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <Badge
+                      variant="outline"
+                      className={extractionStatusBadgeClass(
+                        document.extraction_status
+                      )}
+                    >
+                      {extractionStatusLabels[document.extraction_status]}
+                    </Badge>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label="دانلود فایل اصلی"
+                      title="دانلود فایل اصلی"
+                      render={
+                        <a
+                          href={api.documentDownloadUrl(document.id)}
+                          target="_blank"
+                          rel="noreferrer"
+                        />
+                      }
+                    >
+                      <DownloadIcon />
+                    </Button>
+                    <ViewExtractedTextButton document={document} />
+                    <DocumentRowActions document={document} />
                   </div>
                 </div>
               ))

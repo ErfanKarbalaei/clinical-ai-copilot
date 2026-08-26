@@ -7,22 +7,34 @@ metadata. Extracted text is a later (AI) phase — uploads start as
 
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    Depends,
+    File,
+    Form,
+    HTTPException,
+    UploadFile,
+    status,
+)
 from fastapi.responses import RedirectResponse
 from sqlalchemy import delete, select
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.api.v1.dependencies import patient_from_id
 from app.db.session import get_db
 from app.models import ClinicalEvent, Document, Patient
-from app.models.enums import DocumentType
+from app.models.enums import DocumentType, ExtractionStatus
 from app.schemas.document import DocumentResponse, DocumentUpdate
 from app.services import storage
+from app.services.documents import process_document
 from app.services.storage import StorageError
 
 router = APIRouter(tags=["documents"])
 
 DOCUMENT_NOT_FOUND_DETAIL = "سند یافت نشد."
+DOCUMENT_ALREADY_PROCESSING_DETAIL = "این سند هم‌اکنون در حال پردازش است."
 INVALID_FILE_TYPE_DETAIL = "نوع فایل مجاز نیست. فرمت‌های مجاز: PDF، تصاویر (PNG/JPEG/WebP) و متن ساده."
 FILE_TOO_LARGE_DETAIL = "حجم فایل بیش از حد مجاز است (حداکثر ۲۰ مگابایت)."
 FILE_NAME_TOO_LONG_DETAIL = "نام فایل بیش از حد طولانی است."
@@ -57,6 +69,8 @@ def _get_document_or_404(db: Session, document_id: int) -> Document:
         "Multipart upload: `file` (required) plus optional `title` and "
         "`doc_type` form fields. The original file is preserved unchanged "
         "in object storage; only metadata is stored in PostgreSQL. "
+        "Text extraction (deterministic PDF/OCR tools) runs automatically "
+        "after the upload — follow `extraction_status` on the document. "
         "Allowed types: PDF, PNG, JPEG, WebP, plain text — max 20 MB."
     ),
     responses={
@@ -66,6 +80,7 @@ def _get_document_or_404(db: Session, document_id: int) -> Document:
     },
 )
 async def upload_document(
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="فایل سند"),
     title: str | None = Form(default=None, description="عنوان (پیش‌فرض: نام فایل)"),
     doc_type: DocumentType | None = Form(default=None, description="نوع سند"),
@@ -135,6 +150,9 @@ async def upload_document(
     )
     db.commit()
     db.refresh(document)
+
+    # Text extraction runs after the response (deterministic tools only).
+    background_tasks.add_task(process_document, document.id)
     return document
 
 
@@ -165,6 +183,36 @@ def list_documents(
 )
 def get_document(document_id: int, db: Session = Depends(get_db)) -> Document:
     return _get_document_or_404(db, document_id)
+
+
+@router.post(
+    "/documents/{document_id}/extract",
+    response_model=DocumentResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+    summary="Re-run text extraction for a document",
+    description=(
+        "Queues the extraction pipeline again (useful after an OCR engine "
+        "was installed or after a failure). Returns the document's current "
+        "state; poll GET /documents/{id} for the outcome."
+    ),
+    responses={
+        status.HTTP_404_NOT_FOUND: {"description": DOCUMENT_NOT_FOUND_DETAIL},
+        status.HTTP_409_CONFLICT: {"description": DOCUMENT_ALREADY_PROCESSING_DETAIL},
+    },
+)
+def reextract_document(
+    document_id: int,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+) -> Document:
+    document = _get_document_or_404(db, document_id)
+    if document.extraction_status == ExtractionStatus.processing:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=DOCUMENT_ALREADY_PROCESSING_DETAIL,
+        )
+    background_tasks.add_task(process_document, document.id)
+    return document
 
 
 @router.get(
@@ -237,4 +285,9 @@ def delete_document(document_id: int, db: Session = Depends(get_db)) -> None:
             ClinicalEvent.source_id == document_id,
         )
     )
-    db.commit()
+    try:
+        db.commit()
+    except SQLAlchemyError:
+        # e.g. a concurrent background task deleted it first — same outcome.
+        db.rollback()
+    return None

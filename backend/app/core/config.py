@@ -51,6 +51,10 @@ class Settings(BaseSettings):
     MINIO_BUCKET: str = "clinical-documents"
     MINIO_SECURE: bool = False
 
+    # --- OCR (optional) ---
+    # Absolute path to the tesseract binary; leave empty to use PATH lookup.
+    TESSERACT_CMD: str = ""
+
     @property
     def cors_origins_list(self) -> list[str]:
         """Parse CORS_ORIGINS into a list of origins."""

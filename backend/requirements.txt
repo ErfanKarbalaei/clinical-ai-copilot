@@ -13,3 +13,9 @@ alembic>=1.13,<2.0
 
 # ---- Object storage (MinIO / S3-compatible) ----
 minio>=7.2,<8.0
+
+# ---- Document text extraction (deterministic, no AI) ----
+pypdf>=5.0,<7.0
+pytesseract>=0.3.13,<1.0   # needs the Tesseract binary (optional; see README)
+Pillow>=10.4,<12.0
+python-multipart>=0.0.9,<1.0

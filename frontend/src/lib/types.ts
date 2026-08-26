@@ -6,6 +6,13 @@ export type AllergySeverity = "mild" | "moderate" | "severe" | "unknown";
 export type MedicationStatus = "active" | "stopped" | "completed";
 export type ResultFlag = "normal" | "abnormal" | "critical";
 export type NoteSource = "manual" | "voice" | "ai_assisted";
+export type DocumentType =
+  | "lab_report"
+  | "imaging_report"
+  | "discharge_summary"
+  | "medical_note"
+  | "other";
+export type ExtractionStatus = "pending" | "processing" | "completed" | "failed";
 
 export interface Patient {
   id: number;
@@ -133,6 +140,20 @@ export interface ClinicalNote {
   title: string;
   content: string;
   source: NoteSource;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Document {
+  id: number;
+  patient_id: number;
+  title: string;
+  doc_type: DocumentType;
+  file_name: string;
+  mime_type: string;
+  file_size_bytes: number;
+  extraction_status: ExtractionStatus;
+  extracted_text: string | null;
   created_at: string;
   updated_at: string;
 }

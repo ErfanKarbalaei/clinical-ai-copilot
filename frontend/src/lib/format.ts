@@ -3,6 +3,8 @@
 import type {
   AllergySeverity,
   ConditionStatus,
+  DocumentType,
+  ExtractionStatus,
   Gender,
   MedicationStatus,
   NoteSource,
@@ -61,6 +63,41 @@ export const noteSourceLabels: Record<NoteSource, string> = {
   voice: "صوتی",
   ai_assisted: "با کمک هوش مصنوعی",
 };
+
+export const documentTypeLabels: Record<DocumentType, string> = {
+  lab_report: "آزمایش آزمایشگاه",
+  imaging_report: "گزارش تصویربرداری",
+  discharge_summary: "خلاصهٔ تخلیه",
+  medical_note: "یادداشت بالینی",
+  other: "سایر",
+};
+
+export const documentTypeOptions = (
+  Object.keys(documentTypeLabels) as DocumentType[]
+).map((value) => ({ value, label: documentTypeLabels[value] }));
+
+export const extractionStatusLabels: Record<ExtractionStatus, string> = {
+  pending: "در انتظار پردازش",
+  processing: "در حال پردازش",
+  completed: "متن استخراج شد",
+  failed: "پردازش ناموفق",
+};
+
+/** Human-readable file size, e.g. «۲۰۴٫۸ KB». */
+export function formatBytes(bytes: number): string {
+  if (bytes < 1024) return `${bytes} بایت`;
+  const units = ["KB", "MB", "GB"];
+  let value = bytes / 1024;
+  let unit = 0;
+  while (value >= 1024 && unit < units.length - 1) {
+    value /= 1024;
+    unit += 1;
+  }
+  const formatted = new Intl.NumberFormat("fa-IR", {
+    maximumFractionDigits: 1,
+  }).format(value);
+  return `${formatted} ${units[unit]}`;
+}
 
 /** Persian (Jalali) calendar date, e.g. «۱۵ مرداد ۱۴۰۵». Empty → «—». */
 export function formatDate(iso: string | null | undefined): string {

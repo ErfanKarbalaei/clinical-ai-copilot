@@ -11,8 +11,10 @@ from app.api.v1.routes.documents import (
     STORAGE_UNAVAILABLE_DETAIL,
 )
 from app.models import ClinicalEvent
+from app.services import documents as documents_service
 from app.services import storage
 from app.services.storage import StorageError
+from tests.pdf_helper import pdf_with_text
 
 PATIENTS_URL = "/api/v1/patients"
 DOCUMENTS_NESTED_URL = "/api/v1/patients/{patient_id}/documents"
@@ -23,26 +25,35 @@ PDF_FILE = {"file": ("lab-report.pdf", PDF_BYTES, "application/pdf")}
 
 
 @pytest.fixture()
-def uploaded_keys(monkeypatch):
-    """Fake the storage layer; record every key it 'stores'."""
+def uploaded_keys(monkeypatch, db_session):
+    """Fake the storage layer; record every key and serve its bytes back."""
     keys: list[str] = []
     deleted_keys: list[str] = []
+    stored: dict[str, bytes] = {}
 
     def fake_upload(*, patient_id, file_name, content_type, data):
         key = f"patients/{patient_id}/documents/fake-{len(keys) + 1}-{file_name}"
         keys.append(key)
+        stored[key] = data
         return key
 
     monkeypatch.setattr(storage, "upload_file", fake_upload)
-    monkeypatch.setattr(
-        storage,
-        "delete_object",
-        lambda key: deleted_keys.append(key),
-    )
+    monkeypatch.setattr(storage, "delete_object", lambda key: deleted_keys.append(key))
     monkeypatch.setattr(
         storage,
         "presigned_download_url",
         lambda key, expires=None: f"http://minio.test/{key}?sig=fake",
+    )
+    monkeypatch.setattr(
+        storage, "get_object_bytes", lambda key: stored[key]  # noqa: B023
+    )
+    # Run the real extraction pipeline against the isolated test session.
+    monkeypatch.setattr(
+        documents_routes,
+        "process_document",
+        lambda document_id: documents_service.process_document(
+            document_id, db=db_session
+        ),
     )
     return keys, deleted_keys
 
@@ -59,7 +70,7 @@ def make_patient(api_client):
     return _make
 
 
-def _upload(api_client, patient_id: int, *, files=None, data=None):
+def _upload(api_client, patient_id: int, files=None, data=None):
     return api_client.post(
         DOCUMENTS_NESTED_URL.format(patient_id=patient_id),
         files=files or PDF_FILE,
@@ -277,3 +288,96 @@ def test_delete_missing_document_returns_404(api_client):
     response = api_client.delete(DOCUMENTS_ITEM_URL.format(document_id=999999))
 
     assert response.status_code == 404
+
+
+# --- extraction pipeline (background task, deterministic tools) ---
+
+
+def test_upload_response_starts_as_pending_then_extracts(api_client, make_patient, uploaded_keys):
+    """The upload response says `pending`; the background task completes it."""
+    patient = make_patient("۱۴")
+
+    created = _upload(api_client, patient["id"], PDF_FILE).json()
+    assert created["extraction_status"] == "pending"  # task runs after response
+
+    # TestClient runs background tasks synchronously — fetch the outcome.
+    final = api_client.get(DOCUMENTS_ITEM_URL.format(document_id=created["id"])).json()
+    # The fake PDF is not parseable → deterministic failure, no crash.
+    assert final["extraction_status"] == "failed"
+    assert final["extracted_text"] is None
+
+
+def test_upload_text_file_extracts_inline(api_client, make_patient, uploaded_keys):
+    patient = make_patient("۱۵")
+
+    created = _upload(
+        api_client,
+        patient["id"],
+        {"file": ("note.txt", "HbA1c: 8.2 percent".encode(), "text/plain")},
+    ).json()
+
+    final = api_client.get(DOCUMENTS_ITEM_URL.format(document_id=created["id"])).json()
+    assert final["extraction_status"] == "completed"
+    assert final["extracted_text"] == "HbA1c: 8.2 percent"
+
+
+def test_upload_pdf_with_text_layer_extracts(api_client, make_patient, uploaded_keys):
+    patient = make_patient("۱۶")
+
+    created = _upload(
+        api_client,
+        patient["id"],
+        {"file": ("lab.pdf", pdf_with_text("CLINICAL LAB REPORT WITH DETAILED PATIENT RESULTS 2026"), "application/pdf")},
+    ).json()
+
+    final = api_client.get(DOCUMENTS_ITEM_URL.format(document_id=created["id"])).json()
+    assert final["extraction_status"] == "completed"
+    assert "CLINICAL LAB REPORT" in final["extracted_text"]
+
+
+def test_storage_outage_during_extraction_marks_failed(api_client, make_patient, uploaded_keys, monkeypatch):
+    patient = make_patient("۱۷")
+    created = _upload(api_client, patient["id"], PDF_FILE).json()
+
+    def broken_download(key):
+        raise StorageError("minio down")
+
+    monkeypatch.setattr(storage, "get_object_bytes", broken_download)
+    response = api_client.post(
+        DOCUMENTS_ITEM_URL.format(document_id=created["id"]) + "/extract"
+    )
+
+    assert response.status_code == 202
+    final = api_client.get(DOCUMENTS_ITEM_URL.format(document_id=created["id"])).json()
+    assert final["extraction_status"] == "failed"
+
+
+def test_reextract_endpoint_and_404s(api_client, make_patient, uploaded_keys, monkeypatch):
+    patient = make_patient("۱۸")
+    created = _upload(
+        api_client,
+        patient["id"],
+        {"file": ("broken.pdf", b"%PDF-garbage", "application/pdf")},
+    ).json()
+    assert (
+        api_client.get(DOCUMENTS_ITEM_URL.format(document_id=created["id"])).json()[
+            "extraction_status"
+        ]
+        == "failed"
+    )
+
+    # Fix the "storage" so the same document now extracts successfully.
+    fixed = pdf_with_text("SECOND ATTEMPT REPORT WITH FULL CLINICAL TEXT CONTENT")
+    monkeypatch.setattr(storage, "get_object_bytes", lambda key: fixed)
+
+    response = api_client.post(
+        DOCUMENTS_ITEM_URL.format(document_id=created["id"]) + "/extract"
+    )
+    assert response.status_code == 202
+
+    final = api_client.get(DOCUMENTS_ITEM_URL.format(document_id=created["id"])).json()
+    assert final["extraction_status"] == "completed"
+    assert "SECOND ATTEMPT REPORT" in final["extracted_text"]
+
+    missing = api_client.post("/api/v1/documents/999999/extract")
+    assert missing.status_code == 404

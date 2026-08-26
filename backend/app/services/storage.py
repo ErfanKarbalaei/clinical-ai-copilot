@@ -88,6 +88,19 @@ def upload_file(
     return key
 
 
+def get_object_bytes(storage_key: str) -> bytes:
+    """Read an object's full content (used by the extraction pipeline)."""
+    try:
+        response = get_client().get_object(_bucket(), storage_key)
+        try:
+            return response.read()
+        finally:
+            response.close()
+            response.release_conn()
+    except S3Error as error:
+        raise StorageError(f"download failed: {error}") from None
+
+
 def delete_object(storage_key: str) -> None:
     """Delete an object; a missing object is treated as success."""
     try:
