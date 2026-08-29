@@ -93,6 +93,25 @@ uvicorn app.main:app --reload --port 8000
 | GET | `/api/v1/patients/{id}/medications` | List medications — `?status=active|stopped|completed` filter |
 | GET/PATCH/DELETE | `/api/v1/patient-medications/{id}` | Get / partially update (dose, frequency, status, notes) / delete a record |
 
+**Voice notes** (Persian speech-to-text via Speechmatics; audio originals preserved in MinIO; raw transcript never auto-becomes a note)
+
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | `/api/v1/patients/{id}/voice-notes` | Multipart audio upload (`file`, `title`, `conversation_type`, `duration_seconds`) — transcription runs automatically (201; ≤50 MB) |
+| GET | `/api/v1/patients/{id}/voice-notes` | List (newest first) |
+| GET | `/api/v1/voice-notes/{id}` | Voice note + raw transcript |
+| GET | `/api/v1/voice-notes/{id}/download` | 307 redirect to a presigned URL (original audio) |
+| PATCH | `/api/v1/voice-notes/{id}` | Rename (title only) |
+| POST | `/api/v1/voice-notes/{id}/transcribe` | Re-run transcription (202; 409 while running) |
+| POST | `/api/v1/voice-notes/{id}/note` | Save the doctor-reviewed transcript as a clinical note (linked back to the recording) |
+| DELETE | `/api/v1/voice-notes/{id}` | Delete audio + row + timeline event (derived notes are kept) |
+
+Speech-to-Text: ready-to-use **Speechmatics batch API** (`fa` language,
+`enhanced` operating point). Doctor–patient conversations are transcribed
+with **speaker diarization** (transcript keeps `S1:`/`S2:` turns); physician
+notes skip it. Set `SPEECHMATICS_API_KEY` in `.env` — without it,
+transcriptions deterministically end as `failed` with the reason logged.
+
 **Documents** (originals stored unchanged in MinIO; only metadata in PostgreSQL)
 
 | Method | Path | Description |

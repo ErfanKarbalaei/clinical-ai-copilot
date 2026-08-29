@@ -171,6 +171,7 @@ backend) and `frontend/.env.example` (used by Next.js):
 | `MINIO_PORT` | compose | host port for the MinIO API |
 | `MINIO_CONSOLE_PORT` | compose | host port for the MinIO console UI |
 | `TESSERACT_CMD` | backend (optional) | absolute path to the Tesseract binary (empty = PATH lookup) |
+| `SPEECHMATICS_API_KEY` | backend | Speechmatics API key for Persian speech-to-text (empty = transcription fails with a logged reason) |
 | `BACKEND_PORT` | backend (reference) | backend port (default `8000`) |
 | `NEXT_PUBLIC_API_URL` | frontend | public backend API base URL, inlined at build time |
 
@@ -268,6 +269,23 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
   E2E verified (text PDF, Persian image OCR, scanned PDF, byte-identical
   original, re-extract)
 
+**Done — Task 8 (Persian speech-to-text):**
+
+- Voice-note API: multipart audio upload (WebM/OGG/MP3/M4A/WAV/FLAC, ≤50MB,
+  originals preserved in MinIO), list/get/rename/download/retry/delete +
+  `POST /voice-notes/{id}/note` (doctor reviews the raw transcript and saves
+  it as a linked clinical note — never automatic)
+- STT: ready-to-use **Speechmatics batch API** (`fa`, `enhanced`) as a
+  background task: `pending → processing → completed | failed`; doctor–patient
+  recordings are **speaker-diarized** (`S1:`/`S2:` turns); physician notes
+  are not (faster/cheaper)
+- Frontend: voice-notes section — in-browser **microphone recording**
+  (MediaRecorder) or file upload, Persian status badges, raw-transcript
+  viewer, review→note dialog, retry, delete
+- 17 new tests (mocked Speechmatics + API lifecycle) — full suite: 109
+  passing; live E2E with a real WAV (byte-identical audio roundtrip,
+  no-key failure path, timeline events, delete semantics)
+
 **Not started (intentionally — later phases):** authentication,
-voice notes, Speech-to-Text, AI model integrations, medical-evidence
-retrieval, prescription-safety rules, RAG/vector search.
+AI model integrations (summaries/Q&A), medical-evidence retrieval,
+prescription-safety rules, RAG/vector search.
