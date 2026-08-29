@@ -3,12 +3,14 @@
 import type {
   AllergySeverity,
   ConditionStatus,
+  ConversationType,
   DocumentType,
   ExtractionStatus,
   Gender,
   MedicationStatus,
   NoteSource,
   ResultFlag,
+  TranscriptionStatus,
 } from "@/lib/types";
 
 export const genderLabels: Record<Gender, string> = {
@@ -82,6 +84,37 @@ export const extractionStatusLabels: Record<ExtractionStatus, string> = {
   completed: "متن استخراج شد",
   failed: "پردازش ناموفق",
 };
+
+export const conversationTypeLabels: Record<ConversationType, string> = {
+  physician_note: "یادداشت صوتی پزشک",
+  doctor_patient: "گفتگوی پزشک و بیمار",
+};
+
+export const conversationTypeOptions = (
+  Object.keys(conversationTypeLabels) as ConversationType[]
+).map((value) => ({
+  value,
+  label: conversationTypeLabels[value],
+  description:
+    value === "doctor_patient"
+      ? "با تشخیص گوینده (دو نفره)"
+      : "گفتار تک‌نفره — سریع‌تر",
+}));
+
+export const transcriptionStatusLabels: Record<TranscriptionStatus, string> = {
+  pending: "در انتظار تبدیل به متن",
+  processing: "در حال تبدیل به متن",
+  completed: "تبدیل انجام شد",
+  failed: "تبدیل ناموفق",
+};
+
+/** Duration as m:ss (e.g. 1:23). */
+export function formatDuration(seconds: number | null | undefined): string {
+  if (seconds == null || seconds < 0) return "—";
+  const minutes = Math.floor(seconds / 60);
+  const rest = Math.floor(seconds % 60);
+  return `${minutes}:${String(rest).padStart(2, "0")}`;
+}
 
 /** Human-readable file size, e.g. «۲۰۴٫۸ KB». */
 export function formatBytes(bytes: number): string {

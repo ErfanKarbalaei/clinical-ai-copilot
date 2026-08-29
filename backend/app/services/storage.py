@@ -57,21 +57,28 @@ _CONSECUTIVE_DOTS = re.compile(r"\.{2,}")
 _MAX_NAME_LENGTH = 150
 
 
-def build_storage_key(patient_id: int, file_name: str) -> str:
-    """Deterministic, unique object key: patients/{id}/documents/{uuid}-{name}."""
+def build_storage_key(
+    patient_id: int, file_name: str, folder: str = "documents"
+) -> str:
+    """Deterministic, unique object key: patients/{id}/{folder}/{uuid}-{name}."""
     # Strip any path components, replace unsafe characters and collapse dots.
     base_name = file_name.replace("\\", "/").rsplit("/", 1)[-1] or "file"
     safe_name = _UNSAFE_CHARS.sub("_", base_name)
     safe_name = _CONSECUTIVE_DOTS.sub(".", safe_name).lstrip(".")
     safe_name = safe_name[:_MAX_NAME_LENGTH] or "file"
-    return f"patients/{patient_id}/documents/{uuid.uuid4().hex}-{safe_name}"
+    return f"patients/{patient_id}/{folder}/{uuid.uuid4().hex}-{safe_name}"
 
 
 def upload_file(
-    *, patient_id: int, file_name: str, content_type: str, data: bytes
+    *,
+    patient_id: int,
+    file_name: str,
+    content_type: str,
+    data: bytes,
+    folder: str = "documents",
 ) -> str:
     """Upload the original file and return its storage key."""
-    key = build_storage_key(patient_id, file_name)
+    key = build_storage_key(patient_id, file_name, folder)
     try:
         client = get_client()
         if not client.bucket_exists(_bucket()):

@@ -13,6 +13,8 @@ export type DocumentType =
   | "medical_note"
   | "other";
 export type ExtractionStatus = "pending" | "processing" | "completed" | "failed";
+export type ConversationType = "physician_note" | "doctor_patient";
+export type TranscriptionStatus = "pending" | "processing" | "completed" | "failed";
 
 export interface Patient {
   id: number;
@@ -156,6 +158,24 @@ export interface Document {
   extracted_text: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface VoiceNote {
+  id: number;
+  patient_id: number;
+  title: string | null;
+  conversation_type: ConversationType;
+  duration_seconds: number | null;
+  language: string;
+  transcription_status: TranscriptionStatus;
+  transcript: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ClinicalNoteFromVoicePayload {
+  title: string;
+  content: string;
 }
 
 export interface PatientOverview {

@@ -8,6 +8,7 @@ import {
   FileTextIcon,
   FileUpIcon,
   FlaskConicalIcon,
+  MicIcon,
   PhoneIcon,
   PillIcon,
 } from "lucide-react";
@@ -30,6 +31,11 @@ import {
   MedicationRowActions,
 } from "@/components/patients/medication-actions";
 import {
+  AddVoiceNoteButton,
+  ViewTranscriptButton,
+  VoiceNoteRowActions,
+} from "@/components/patients/voice-note-actions";
+import {
   DeletePatientButton,
   EditPatientButton,
 } from "@/components/patients/patient-actions";
@@ -51,20 +57,24 @@ import {
   allergySeverityLabels,
   calculateAge,
   conditionStatusLabels,
+  conversationTypeLabels,
   documentTypeLabels,
   extractionStatusLabels,
   formatBytes,
   formatDate,
   formatDateTime,
+  formatDuration,
   genderLabels,
   medicationStatusLabels,
   noteSourceLabels,
   resultFlagLabels,
+  transcriptionStatusLabels,
 } from "@/lib/format";
 import type {
   AllergySeverity,
   ExtractionStatus,
   ResultFlag,
+  TranscriptionStatus,
 } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -106,6 +116,19 @@ function extractionStatusBadgeClass(status: ExtractionStatus): string {
   }
 }
 
+function transcriptionStatusBadgeClass(status: TranscriptionStatus): string {
+  switch (status) {
+    case "completed":
+      return "text-emerald-600 dark:text-emerald-400";
+    case "failed":
+      return "text-destructive";
+    case "processing":
+      return "animate-pulse";
+    default:
+      return "";
+  }
+}
+
 interface PatientDetailPageProps {
   params: Promise<{ id: string }>;
 }
@@ -119,10 +142,12 @@ export default async function PatientDetailPage({
 
   let overview: Awaited<ReturnType<typeof api.getPatientOverview>>;
   let documents: Awaited<ReturnType<typeof api.listDocuments>>;
+  let voiceNotes: Awaited<ReturnType<typeof api.listVoiceNotes>>;
   try {
-    [overview, documents] = await Promise.all([
+    [overview, documents, voiceNotes] = await Promise.all([
       api.getPatientOverview(patientId),
       api.listDocuments(patientId),
+      api.listVoiceNotes(patientId),
     ]);
   } catch (cause) {
     if (cause instanceof ApiError && cause.status === 404) notFound();
@@ -414,6 +439,67 @@ export default async function PatientDetailPage({
                     </Button>
                     <ViewExtractedTextButton document={document} />
                     <DocumentRowActions document={document} />
+                  </div>
+                </div>
+              ))
+            )}
+          </CardContent>
+        </Card>
+
+        {/* --- voice notes (Persian speech-to-text) --- */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <MicIcon className="size-4 text-muted-foreground" />
+              یادداشت‌های صوتی
+            </CardTitle>
+            <CardDescription>
+              {voiceNotes.length > 0
+                ? `${voiceNotes.length} مورد — گفتار فارسی، متن خام حفظ می‌شود`
+                : "موردی ثبت نشده است"}
+            </CardDescription>
+            <CardAction>
+              <AddVoiceNoteButton patientId={patient.id} />
+            </CardAction>
+          </CardHeader>
+          <CardContent className="space-y-1">
+            {voiceNotes.length === 0 ? (
+              <EmptyState
+                title="یادداشت صوتی ثبت نشده است"
+                description="با دکمهٔ میکروفون، گفتار خود را ضبط یا فایل صوتی بارگذاری کنید."
+              />
+            ) : (
+              voiceNotes.map((voiceNote) => (
+                <div
+                  key={voiceNote.id}
+                  className="flex items-start justify-between gap-2 rounded-lg px-2 py-2.5 hover:bg-muted/50"
+                >
+                  <div className="min-w-0 space-y-0.5">
+                    <p className="truncate font-medium">
+                      {voiceNote.title ?? "بدون عنوان"}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {conversationTypeLabels[voiceNote.conversation_type]} —{" "}
+                      {formatDuration(voiceNote.duration_seconds)} —{" "}
+                      {formatDateTime(voiceNote.created_at)}
+                    </p>
+                    {voiceNote.transcript ? (
+                      <p className="line-clamp-1 text-xs text-muted-foreground">
+                        {voiceNote.transcript.split("\n")[0]}
+                      </p>
+                    ) : null}
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <Badge
+                      variant="outline"
+                      className={transcriptionStatusBadgeClass(
+                        voiceNote.transcription_status
+                      )}
+                    >
+                      {transcriptionStatusLabels[voiceNote.transcription_status]}
+                    </Badge>
+                    <ViewTranscriptButton voiceNote={voiceNote} />
+                    <VoiceNoteRowActions voiceNote={voiceNote} />
                   </div>
                 </div>
               ))

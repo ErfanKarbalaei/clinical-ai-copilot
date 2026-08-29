@@ -8,6 +8,7 @@
 import type {
   Allergy,
   AllergyPayload,
+  ClinicalNoteFromVoicePayload,
   Condition,
   ConditionPayload,
   Document,
@@ -18,6 +19,7 @@ import type {
   PatientMedicationCreatePayload,
   PatientMedicationUpdatePayload,
   PatientOverview,
+  VoiceNote,
 } from "@/lib/types";
 
 const API_BASE_URL =
@@ -188,5 +190,58 @@ export const api = {
   },
   documentDownloadUrl(documentId: number): string {
     return `${API_BASE_URL}/documents/${documentId}/download`;
+  },
+
+  // --- voice notes (Persian speech-to-text) ---
+  listVoiceNotes(patientId: number) {
+    return request<VoiceNote[]>(`/patients/${patientId}/voice-notes`);
+  },
+  uploadVoiceNote(
+    patientId: number,
+    form: {
+      file: File;
+      title?: string;
+      conversationType?: string;
+      durationSeconds?: number;
+    }
+  ) {
+    const body = new FormData();
+    body.append("file", form.file);
+    if (form.title) body.append("title", form.title);
+    if (form.conversationType)
+      body.append("conversation_type", form.conversationType);
+    if (form.durationSeconds != null)
+      body.append("duration_seconds", String(Math.round(form.durationSeconds)));
+    return request<VoiceNote>(`/patients/${patientId}/voice-notes`, {
+      method: "POST",
+      body,
+      headers: {} as HeadersInit,
+    });
+  },
+  retranscribeVoiceNote(voiceNoteId: number) {
+    return request<VoiceNote>(`/voice-notes/${voiceNoteId}/transcribe`, {
+      method: "POST",
+    });
+  },
+  createNoteFromVoiceNote(
+    voiceNoteId: number,
+    payload: ClinicalNoteFromVoicePayload
+  ) {
+    return request<unknown>(`/voice-notes/${voiceNoteId}/note`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  },
+  renameVoiceNote(voiceNoteId: number, title: string) {
+    return request<VoiceNote>(`/voice-notes/${voiceNoteId}`, {
+      method: "PATCH",
+      body: JSON.stringify({ title }),
+    });
+  },
+  deleteVoiceNote(voiceNoteId: number) {
+    return request<void>(`/voice-notes/${voiceNoteId}`, { method: "DELETE" });
+  },
+  voiceNoteDownloadUrl(voiceNoteId: number): string {
+    return `${API_BASE_URL}/voice-notes/${voiceNoteId}/download`;
   },
 };

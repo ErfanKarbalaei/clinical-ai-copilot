@@ -55,6 +55,12 @@ class Settings(BaseSettings):
     # Absolute path to the tesseract binary; leave empty to use PATH lookup.
     TESSERACT_CMD: str = ""
 
+    # --- Speech-to-Text (Speechmatics batch API) ---
+    SPEECHMATICS_API_KEY: str = ""  # empty → transcription marked failed with reason
+    SPEECHMATICS_BASE_URL: str = "https://asr.api.speechmatics.com/v2"
+    STT_POLL_INTERVAL_SECONDS: float = 3.0
+    STT_TIMEOUT_SECONDS: int = 300
+
     @property
     def cors_origins_list(self) -> list[str]:
         """Parse CORS_ORIGINS into a list of origins."""

@@ -12,6 +12,7 @@ from app.api.v1.routes.documents import router as documents_router
 from app.api.v1.routes.health import router as health_router
 from app.api.v1.routes.medications import router as medications_router
 from app.api.v1.routes.patients import router as patients_router
+from app.api.v1.routes.voice_notes import router as voice_notes_router
 
 api_router = APIRouter()
 api_router.include_router(health_router)
@@ -20,3 +21,4 @@ api_router.include_router(conditions_router)
 api_router.include_router(allergies_router)
 api_router.include_router(medications_router)
 api_router.include_router(documents_router)
+api_router.include_router(voice_notes_router)
