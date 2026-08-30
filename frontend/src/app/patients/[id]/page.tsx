@@ -27,6 +27,7 @@ import {
   DocumentRowActions,
   ViewExtractedTextButton,
 } from "@/components/patients/document-actions";
+import { ClinicalChat } from "@/components/patients/clinical-chat";
 import {
   AddMedicationButton,
   MedicationRowActions,
@@ -659,6 +660,9 @@ export default async function PatientDetailPage({
           </CardContent>
         </Card>
       </div>
+
+      {/* --- clinical AI assistant (decision support, grounded in context) --- */}
+      <ClinicalChat patientId={patient.id} />
     </main>
   );
 }

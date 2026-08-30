@@ -178,6 +178,18 @@ export interface ClinicalNoteFromVoicePayload {
   content: string;
 }
 
+export interface ChatTurn {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export interface ChatResponse {
+  patient_id: number;
+  question: string;
+  answer: string;
+  generated_at: string;
+}
+
 export interface PatientOverview {
   patient: Patient;
   conditions: Condition[];

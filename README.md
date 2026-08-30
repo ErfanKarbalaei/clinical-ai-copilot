@@ -172,6 +172,9 @@ backend) and `frontend/.env.example` (used by Next.js):
 | `MINIO_CONSOLE_PORT` | compose | host port for the MinIO console UI |
 | `TESSERACT_CMD` | backend (optional) | absolute path to the Tesseract binary (empty = PATH lookup) |
 | `SPEECHMATICS_API_KEY` | backend | Speechmatics API key for Persian speech-to-text (empty = transcription fails with a logged reason) |
+| `AI_API_KEY` | backend | API key for the clinical AI assistant (any OpenAI-compatible provider; empty = chat returns 503) |
+| `AI_BASE_URL` | backend (optional) | OpenAI-compatible base URL (default `https://api.openai.com/v1`; e.g. `http://localhost:11434/v1` for Ollama) |
+| `AI_MODEL` | backend (optional) | Model name (default `gpt-4o-mini`) |
 | `BACKEND_PORT` | backend (reference) | backend port (default `8000`) |
 | `NEXT_PUBLIC_API_URL` | frontend | public backend API base URL, inlined at build time |
 
@@ -302,6 +305,22 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
 - 9 new tests (sections, empty patient, ordering, fallback dates,
   resolution/stop events, source refs, 404s) — full suite: 118 passing
 
+**Done — Task 10 (clinical AI assistant):**
+
+- `POST /patients/{id}/chat` — stateless clinical Q&A: patient context
+  (Task 9) + physician question (+ optional bounded history) → answer from
+  a ready-to-use model; grounded in the record only, Persian answers,
+  explicit decision-support rules; no RAG/vector search
+- Provider-agnostic AI layer (`services/ai.py`): OpenAI-compatible
+  chat-completions client over httpx (no SDK) — switch providers via env
+  (`AI_API_KEY`/`AI_BASE_URL`/`AI_MODEL`); 503 unconfigured / 502 provider
+  failure with Persian messages
+- Frontend: «دستیار هوشمند بالینی» section on the patient page — question
+  box, send, loading state, follow-up history (client-side), RTL bubbles,
+  medical disclaimer; existing design untouched
+- 9 new tests (mocked provider: wire format, grounding, history bound,
+  errors, validations) — full suite: 127 passing
+
 **Not started (intentionally — later phases):** authentication,
-AI model integrations (summaries/Q&A), medical-evidence retrieval,
-prescription-safety rules, RAG/vector search.
+medical-evidence retrieval with citations, prescription-safety rules,
+RAG/vector search, persisted conversations.

@@ -8,6 +8,8 @@
 import type {
   Allergy,
   AllergyPayload,
+  ChatResponse,
+  ChatTurn,
   ClinicalNoteFromVoicePayload,
   Condition,
   ConditionPayload,
@@ -255,5 +257,17 @@ export const api = {
   },
   voiceNoteDownloadUrl(voiceNoteId: number): string {
     return `${API_BASE_URL}/voice-notes/${voiceNoteId}/download`;
+  },
+
+  // --- clinical AI assistant (decision support) ---
+  askClinicalQuestion(
+    patientId: number,
+    question: string,
+    history: ChatTurn[] = []
+  ) {
+    return request<ChatResponse>(`/patients/${patientId}/chat`, {
+      method: "POST",
+      body: JSON.stringify({ question, history }),
+    });
   },
 };

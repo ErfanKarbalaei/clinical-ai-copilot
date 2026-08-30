@@ -61,6 +61,13 @@ class Settings(BaseSettings):
     STT_POLL_INTERVAL_SECONDS: float = 3.0
     STT_TIMEOUT_SECONDS: int = 300
 
+    # --- AI assistant (provider-agnostic, OpenAI-compatible chat API) ---
+    AI_API_KEY: str = ""  # empty → chat returns 503 with a Persian message
+    AI_BASE_URL: str = "https://api.openai.com/v1"
+    AI_MODEL: str = "gpt-4o-mini"
+    AI_TIMEOUT_SECONDS: float = 60.0
+    AI_MAX_HISTORY_TURNS: int = 6
+
     @property
     def cors_origins_list(self) -> list[str]:
         """Parse CORS_ORIGINS into a list of origins."""

@@ -114,6 +114,19 @@ with **speaker diarization** (transcript keeps `S1:`/`S2:` turns); physician
 notes skip it. Set `SPEECHMATICS_API_KEY` in `.env` — without it,
 transcriptions deterministically end as `failed` with the reason logged.
 
+**Clinical AI assistant** (decision support — no RAG, no vector search)
+
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | `/api/v1/patients/{id}/chat` | `{question, history?}` → `{patient_id, question, answer, generated_at}`. The patient's full structured context (Task 9) + the question are sent to a ready-to-use model. 503 when unconfigured, 502 on provider failure |
+
+Provider-agnostic: any **OpenAI-compatible** `chat/completions` API —
+set `AI_API_KEY` (+ optional `AI_BASE_URL`, `AI_MODEL`) in `.env`. Works
+with OpenAI, OpenRouter, or local Ollama/vLLM/LM Studio
+(e.g. `AI_BASE_URL=http://localhost:11434/v1`). Stateless — no chat
+storage; the frontend keeps the visible transcript. Answers are grounded
+in the patient's data only; the physician makes the final decision.
+
 **Documents** (originals stored unchanged in MinIO; only metadata in PostgreSQL)
 
 | Method | Path | Description |
