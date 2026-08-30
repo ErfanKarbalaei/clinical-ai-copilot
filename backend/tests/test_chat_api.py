@@ -12,7 +12,12 @@ from app.api.v1.routes.chat import (
 )
 from app.core.config import get_settings
 from app.services import ai
-from app.services.ai import AIError, AIUnavailableError, OpenAICompatibleProvider
+from app.services.ai import (
+    AIError,
+    AIUnavailableError,
+    GeminiProvider,
+    OpenAICompatibleProvider,
+)
 
 PATIENTS_URL = "/api/v1/patients"
 CHAT_URL = "/api/v1/patients/{patient_id}/chat"
@@ -123,6 +128,122 @@ def test_get_provider_without_key_raises():
             ai.get_provider()
     finally:
         monkeypatched.undo()
+        ai.reset_provider_cache()
+
+
+# --- Gemini native provider (wire format mocked) ---
+
+
+def _mock_http(monkeypatch, handler):
+    original_client = httpx.Client
+    transport = httpx.MockTransport(handler)
+    monkeypatch.setattr(
+        httpx,
+        "Client",
+        lambda **kwargs: original_client(
+            transport=transport, timeout=kwargs.get("timeout")
+        ),
+    )
+
+
+def test_gemini_provider_sends_native_request(monkeypatch):
+    requests = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(
+            200,
+            json={
+                "candidates": [
+                    {
+                        "content": {
+                            "role": "model",
+                            "parts": [
+                                {"text": "خلاصهٔ وضعیت: "},
+                                {"text": "دیابت کنترل‌نشده"},
+                            ],
+                        }
+                    }
+                ]
+            },
+        )
+
+    _mock_http(monkeypatch, handler)
+    provider = GeminiProvider(api_key="gem-key", model="gemini-2.5-flash", timeout=5.0)
+
+    answer = provider.complete(
+        system="SYS",
+        user="USR",
+        history=[
+            {"role": "user", "content": "سؤال قبل"},
+            {"role": "assistant", "content": "پاسخ قبل"},
+        ],
+    )
+
+    assert answer == "خلاصهٔ وضعیت: دیابت کنترل‌نشده"  # parts joined
+    request = requests[0]
+    assert str(request.url) == (
+        "https://generativelanguage.googleapis.com/v1beta"
+        "/models/gemini-2.5-flash:generateContent"
+    )
+    assert request.headers["x-goog-api-key"] == "gem-key"
+    body = json.loads(request.content)
+    assert body["system_instruction"] == {"parts": [{"text": "SYS"}]}
+    # assistant history turns map to Gemini's "model" role; user stays "user"
+    assert body["contents"] == [
+        {"role": "user", "parts": [{"text": "سؤال قبل"}]},
+        {"role": "model", "parts": [{"text": "پاسخ قبل"}]},
+        {"role": "user", "parts": [{"text": "USR"}]},
+    ]
+
+
+def test_gemini_provider_maps_invalid_key(monkeypatch):
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(400, json={"error": {"message": "API key not valid"}})
+
+    _mock_http(monkeypatch, handler)
+    provider = GeminiProvider(api_key="bad", model="gemini-2.5-flash", timeout=5.0)
+
+    with pytest.raises(AIError, match="API key"):
+        provider.complete(system="s", user="u")
+
+
+def test_gemini_provider_maps_quota_error(monkeypatch):
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(429, json={"error": {"message": "quota exceeded"}})
+
+    _mock_http(monkeypatch, handler)
+    provider = GeminiProvider(api_key="k", model="gemini-2.5-flash", timeout=5.0)
+
+    with pytest.raises(AIError, match="rate limit"):
+        provider.complete(system="s", user="u")
+
+
+def test_provider_dispatch_selects_gemini_with_default_model(monkeypatch):
+    ai.reset_provider_cache()
+    settings = get_settings()
+    monkeypatch.setattr(settings, "AI_PROVIDER", "gemini")
+    monkeypatch.setattr(settings, "AI_API_KEY", "gem-key")
+    monkeypatch.setattr(settings, "AI_MODEL", "")
+    try:
+        provider = ai.get_provider()
+        assert isinstance(provider, GeminiProvider)
+        assert provider.model == "gemini-2.5-flash"
+    finally:
+        ai.reset_provider_cache()
+
+
+def test_provider_dispatch_openai_default_model(monkeypatch):
+    ai.reset_provider_cache()
+    settings = get_settings()
+    monkeypatch.setattr(settings, "AI_PROVIDER", "openai_compatible")
+    monkeypatch.setattr(settings, "AI_API_KEY", "k")
+    monkeypatch.setattr(settings, "AI_MODEL", "")
+    try:
+        provider = ai.get_provider()
+        assert isinstance(provider, OpenAICompatibleProvider)
+        assert provider.model == "gpt-4o-mini"
+    finally:
         ai.reset_provider_cache()
 
 

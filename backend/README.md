@@ -120,10 +120,17 @@ transcriptions deterministically end as `failed` with the reason logged.
 | --- | --- | --- |
 | POST | `/api/v1/patients/{id}/chat` | `{question, history?}` → `{patient_id, question, answer, generated_at}`. The patient's full structured context (Task 9) + the question are sent to a ready-to-use model. 503 when unconfigured, 502 on provider failure |
 
-Provider-agnostic: any **OpenAI-compatible** `chat/completions` API —
-set `AI_API_KEY` (+ optional `AI_BASE_URL`, `AI_MODEL`) in `.env`. Works
-with OpenAI, OpenRouter, or local Ollama/vLLM/LM Studio
-(e.g. `AI_BASE_URL=http://localhost:11434/v1`). Stateless — no chat
+Provider-agnostic — two implementations behind one interface, switched by
+pure configuration (`AI_PROVIDER` in `.env`):
+
+- **`gemini`** — native Google Gemini API (`generateContent`, v1beta);
+  default model `gemini-2.5-flash`. Set `AI_API_KEY` to a Google AI Studio
+  key.
+- **`openai_compatible`** — any OpenAI-style `chat/completions` API
+  (OpenAI, OpenRouter, local Ollama/vLLM/LM Studio via `AI_BASE_URL`);
+  default model `gpt-4o-mini`.
+
+Optional `AI_MODEL` overrides the provider default. Stateless — no chat
 storage; the frontend keeps the visible transcript. Answers are grounded
 in the patient's data only; the physician makes the final decision.
 

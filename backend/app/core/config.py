@@ -61,10 +61,13 @@ class Settings(BaseSettings):
     STT_POLL_INTERVAL_SECONDS: float = 3.0
     STT_TIMEOUT_SECONDS: int = 300
 
-    # --- AI assistant (provider-agnostic, OpenAI-compatible chat API) ---
+    # --- AI assistant (provider-agnostic) ---
+    # AI_PROVIDER: "openai_compatible" (any OpenAI-style chat/completions API)
+    #              or "gemini" (native Google Gemini generateContent API)
+    AI_PROVIDER: str = "openai_compatible"
     AI_API_KEY: str = ""  # empty → chat returns 503 with a Persian message
     AI_BASE_URL: str = "https://api.openai.com/v1"
-    AI_MODEL: str = "gpt-4o-mini"
+    AI_MODEL: str = ""  # empty → provider default (gpt-4o-mini / gemini-2.5-flash)
     AI_TIMEOUT_SECONDS: float = 60.0
     AI_MAX_HISTORY_TURNS: int = 6
 

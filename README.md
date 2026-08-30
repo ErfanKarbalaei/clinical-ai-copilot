@@ -172,9 +172,10 @@ backend) and `frontend/.env.example` (used by Next.js):
 | `MINIO_CONSOLE_PORT` | compose | host port for the MinIO console UI |
 | `TESSERACT_CMD` | backend (optional) | absolute path to the Tesseract binary (empty = PATH lookup) |
 | `SPEECHMATICS_API_KEY` | backend | Speechmatics API key for Persian speech-to-text (empty = transcription fails with a logged reason) |
-| `AI_API_KEY` | backend | API key for the clinical AI assistant (any OpenAI-compatible provider; empty = chat returns 503) |
+| `AI_PROVIDER` | backend | `gemini` (native Google API, default model `gemini-2.5-flash`) or `openai_compatible` (default `gpt-4o-mini`) |
+| `AI_API_KEY` | backend | Provider API key (Gemini key from Google AI Studio, or OpenAI-compatible key; empty = chat returns 503) |
 | `AI_BASE_URL` | backend (optional) | OpenAI-compatible base URL (default `https://api.openai.com/v1`; e.g. `http://localhost:11434/v1` for Ollama) |
-| `AI_MODEL` | backend (optional) | Model name (default `gpt-4o-mini`) |
+| `AI_MODEL` | backend (optional) | Model override (empty = provider default: `gemini-2.5-flash` / `gpt-4o-mini`) |
 | `BACKEND_PORT` | backend (reference) | backend port (default `8000`) |
 | `NEXT_PUBLIC_API_URL` | frontend | public backend API base URL, inlined at build time |
 
@@ -312,14 +313,23 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
   a ready-to-use model; grounded in the record only, Persian answers,
   explicit decision-support rules; no RAG/vector search
 - Provider-agnostic AI layer (`services/ai.py`): OpenAI-compatible
-  chat-completions client over httpx (no SDK) — switch providers via env
-  (`AI_API_KEY`/`AI_BASE_URL`/`AI_MODEL`); 503 unconfigured / 502 provider
-  failure with Persian messages
+  chat-completions client over httpx (no SDK) — switch providers via env;
+  503 unconfigured / 502 provider failure with Persian messages
 - Frontend: «دستیار هوشمند بالینی» section on the patient page — question
   box, send, loading state, follow-up history (client-side), RTL bubbles,
   medical disclaimer; existing design untouched
-- 9 new tests (mocked provider: wire format, grounding, history bound,
-  errors, validations) — full suite: 127 passing
+
+**Done — Task 10.5 (Gemini connected):**
+
+- Native `GeminiProvider` (Google `generateContent` v1beta) added to the
+  existing provider-agnostic layer — no redesign; `get_provider()` now
+  dispatches on `AI_PROVIDER` (`gemini` | `openai_compatible`)
+- Role mapping (assistant→model), `system_instruction`, multi-part
+  response joining, invalid-key/quota error mapping
+- Default model `gemini-2.5-flash`; `AI_MODEL` empty = provider default
+- Live wire-verified against the real Google endpoint (invalid-key
+  exchange → correct 502 mapping; Google answered 403 directly)
+- 5 new tests — full suite: 132 passing
 
 **Not started (intentionally — later phases):** authentication,
 medical-evidence retrieval with citations, prescription-safety rules,
