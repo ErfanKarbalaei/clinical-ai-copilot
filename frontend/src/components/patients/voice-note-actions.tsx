@@ -121,11 +121,12 @@ export function AddVoiceNoteButton({ patientId }: { patientId: number }) {
       recorder.onstop = () => {
         stream.getTracks().forEach((track) => track.stop());
         const extension = mimeType.includes("mp4") ? "m4a" : "webm";
-        const blob = new Blob(chunksRef.current, { type: mimeType || "audio/webm" });
+        // Keep only the media type (drop ";codecs=opus") so the multipart
+        // part carries a clean Content-Type the backend accepts.
+        const cleanType = (mimeType || "audio/webm").split(";")[0].trim();
+        const blob = new Blob(chunksRef.current, { type: cleanType });
         recordedRef.current = {
-          file: new File([blob], `recording.${extension}`, {
-            type: blob.type || "audio/webm",
-          }),
+          file: new File([blob], `recording.${extension}`, { type: cleanType }),
           seconds,
         };
       };
@@ -352,7 +353,7 @@ function CreateNoteFromVoiceDialog({
             اصلی در پرونده ثبت می‌شود.
           </DialogDescription>
         </DialogHeader>
-        <form id="voice-note-form" onSubmit={handleSubmit} className="space-y-4">
+        <form id="voice-note-review-form" onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="note_title">عنوان یادداشت *</Label>
             <Input
@@ -379,7 +380,7 @@ function CreateNoteFromVoiceDialog({
           <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             انصراف
           </Button>
-          <Button type="submit" form="voice-note-form" disabled={submitting}>
+          <Button type="submit" form="voice-note-review-form" disabled={submitting}>
             {submitting ? "در حال ذخیره…" : "ثبت در پرونده"}
           </Button>
         </DialogFooter>

@@ -32,6 +32,11 @@ from app.schemas.patient import (
     PatientResponse,
     PatientUpdate,
 )
+from app.schemas.patient_context import (
+    PatientContextResponse,
+    PatientTimelineResponse,
+)
+from app.services.patient_context import build_patient_context, build_timeline
 
 router = APIRouter(prefix="/patients", tags=["patients"])
 
@@ -136,6 +141,46 @@ def delete_patient(
 ) -> None:
     db.delete(patient)
     db.commit()
+
+
+@router.get(
+    "/{patient_id}/context",
+    response_model=PatientContextResponse,
+    summary="Get the complete structured patient context",
+    description=(
+        "Everything that exists in the database for this patient: "
+        "demographics, conditions, medications (with history), allergies, "
+        "lab values, documents (incl. extracted/OCR text), voice notes "
+        "(incl. raw transcripts) and clinical notes. Pure structured data — "
+        "no AI summary. This is the input layer for the future AI copilot."
+    ),
+    responses={status.HTTP_404_NOT_FOUND: {"description": PATIENT_NOT_FOUND_DETAIL}},
+)
+def get_patient_context(
+    patient: Patient = Depends(patient_from_id),
+    db: Session = Depends(get_db),
+) -> PatientContextResponse:
+    return build_patient_context(db, patient)
+
+
+@router.get(
+    "/{patient_id}/timeline",
+    response_model=PatientTimelineResponse,
+    summary="Get the unified clinical timeline",
+    description=(
+        "Chronological timeline derived from the actual records: documents, "
+        "lab results, clinical notes, voice notes, condition onsets/"
+        "resolutions and medication starts/stops. Newest first; items "
+        "without a primary date fall back to their record's created_at."
+    ),
+    responses={status.HTTP_404_NOT_FOUND: {"description": PATIENT_NOT_FOUND_DETAIL}},
+)
+def get_patient_timeline(
+    patient: Patient = Depends(patient_from_id),
+    db: Session = Depends(get_db),
+) -> PatientTimelineResponse:
+    items = build_timeline(db, patient)
+    return PatientTimelineResponse(items=items, total=len(items))
 
 
 @router.get(

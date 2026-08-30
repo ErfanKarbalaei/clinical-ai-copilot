@@ -20,6 +20,7 @@ Current contents:
 - `task-06-documents-report.md` — Task 6 (document upload/storage API with MinIO) implementation report
 - `task-07-extraction-report.md` — Task 7 (deterministic text extraction: PDF + OCR, frontend documents UI) implementation report
 - `task-08-voice-notes-report.md` — Task 8 (Persian speech-to-text: voice notes API + UI via Speechmatics) implementation report
+- `task-09-context-timeline-report.md` — Task 9 (patient context builder + unified clinical timeline) implementation report
 
 No documentation files have been added yet — the repository is currently at the
 foundation stage (Task 1: monorepo skeleton, backend/frontend skeletons,

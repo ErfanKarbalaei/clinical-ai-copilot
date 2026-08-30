@@ -186,3 +186,29 @@ export interface PatientOverview {
   recent_lab_results: LabResult[];
   recent_clinical_notes: ClinicalNote[];
 }
+
+export interface PatientContext {
+  patient: Patient;
+  conditions: Condition[];
+  medications: PatientMedication[];
+  allergies: Allergy[];
+  lab_results: LabResult[];
+  documents: Document[];
+  voice_notes: VoiceNote[];
+  clinical_notes: ClinicalNote[];
+  generated_at: string;
+}
+
+export interface TimelineItem {
+  event_type: string;
+  date: string;
+  title: string;
+  description: string | null;
+  source_type: string;
+  source_id: number;
+}
+
+export interface PatientTimeline {
+  items: TimelineItem[];
+  total: number;
+}

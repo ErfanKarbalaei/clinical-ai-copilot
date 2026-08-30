@@ -13,12 +13,14 @@ import type {
   ConditionPayload,
   Document,
   Patient,
+  PatientContext,
   PatientCreatePayload,
   PatientListResponse,
   PatientMedication,
   PatientMedicationCreatePayload,
   PatientMedicationUpdatePayload,
   PatientOverview,
+  PatientTimeline,
   VoiceNote,
 } from "@/lib/types";
 
@@ -36,12 +38,19 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  // For FormData bodies the Content-Type header must NOT be set manually —
+  // the browser generates it including the multipart boundary.
+  const headers = new Headers(init?.headers);
+  if (!(init?.body instanceof FormData)) {
+    headers.set("Content-Type", headers.get("Content-Type") ?? "application/json");
+  }
+
   let response: Response;
   try {
     response = await fetch(`${API_BASE_URL}${path}`, {
       cache: "no-store",
       ...init,
-      headers: { "Content-Type": "application/json", ...init?.headers },
+      headers,
     });
   } catch {
     throw new ApiError("ارتباط با سرور برقرار نشد.", 0);
@@ -100,6 +109,12 @@ export const api = {
   },
   getPatientOverview(id: number) {
     return request<PatientOverview>(`/patients/${id}/overview`);
+  },
+  getPatientContext(id: number) {
+    return request<PatientContext>(`/patients/${id}/context`);
+  },
+  getPatientTimeline(id: number) {
+    return request<PatientTimeline>(`/patients/${id}/timeline`);
   },
 
   // --- conditions ---
@@ -176,8 +191,6 @@ export const api = {
     return request<Document>(`/patients/${patientId}/documents`, {
       method: "POST",
       body,
-      // Let the browser set the multipart Content-Type with the boundary.
-      headers: {} as HeadersInit,
     });
   },
   reextractDocument(documentId: number) {
@@ -215,7 +228,6 @@ export const api = {
     return request<VoiceNote>(`/patients/${patientId}/voice-notes`, {
       method: "POST",
       body,
-      headers: {} as HeadersInit,
     });
   },
   retranscribeVoiceNote(voiceNoteId: number) {

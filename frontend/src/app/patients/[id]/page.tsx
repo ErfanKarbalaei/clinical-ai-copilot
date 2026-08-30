@@ -8,6 +8,7 @@ import {
   FileTextIcon,
   FileUpIcon,
   FlaskConicalIcon,
+  HistoryIcon,
   MicIcon,
   PhoneIcon,
   PillIcon,
@@ -129,6 +130,24 @@ function transcriptionStatusBadgeClass(status: TranscriptionStatus): string {
   }
 }
 
+function timelineIcon(eventType: string) {
+  switch (eventType) {
+    case "document_uploaded":
+      return <FileUpIcon className="size-3.5" />;
+    case "lab_result":
+      return <FlaskConicalIcon className="size-3.5" />;
+    case "voice_note_recorded":
+      return <MicIcon className="size-3.5" />;
+    case "note_created":
+      return <FileTextIcon className="size-3.5" />;
+    case "medication_started":
+    case "medication_stopped":
+      return <PillIcon className="size-3.5" />;
+    default:
+      return <ActivityIcon className="size-3.5" />;
+  }
+}
+
 interface PatientDetailPageProps {
   params: Promise<{ id: string }>;
 }
@@ -140,14 +159,12 @@ export default async function PatientDetailPage({
   const patientId = Number(id);
   if (!Number.isInteger(patientId) || patientId <= 0) notFound();
 
-  let overview: Awaited<ReturnType<typeof api.getPatientOverview>>;
-  let documents: Awaited<ReturnType<typeof api.listDocuments>>;
-  let voiceNotes: Awaited<ReturnType<typeof api.listVoiceNotes>>;
+  let context: Awaited<ReturnType<typeof api.getPatientContext>>;
+  let timeline: Awaited<ReturnType<typeof api.getPatientTimeline>>;
   try {
-    [overview, documents, voiceNotes] = await Promise.all([
-      api.getPatientOverview(patientId),
-      api.listDocuments(patientId),
-      api.listVoiceNotes(patientId),
+    [context, timeline] = await Promise.all([
+      api.getPatientContext(patientId),
+      api.getPatientTimeline(patientId),
     ]);
   } catch (cause) {
     if (cause instanceof ApiError && cause.status === 404) notFound();
@@ -160,8 +177,14 @@ export default async function PatientDetailPage({
     );
   }
 
-  const { patient, conditions, active_medications, allergies, recent_lab_results, recent_clinical_notes } =
-    overview;
+  const { patient, conditions, allergies, documents, voice_notes: voiceNotes } =
+    context;
+  // the context carries the full medication history; the card shows active ones
+  const active_medications = context.medications.filter(
+    (record) => record.status === "active"
+  );
+  const recent_lab_results = context.lab_results.slice(0, 5);
+  const recent_clinical_notes = context.clinical_notes.slice(0, 5);
   const age = calculateAge(patient.date_of_birth);
 
   return (
@@ -210,6 +233,53 @@ export default async function PatientDetailPage({
             )}
           </span>
           {patient.address ? <span>نشانی: {patient.address}</span> : null}
+        </CardContent>
+      </Card>
+
+      {/* --- unified clinical timeline --- */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <HistoryIcon className="size-4 text-muted-foreground" />
+            تایم‌لاین بالینی
+          </CardTitle>
+          <CardDescription>
+            {timeline.total > 0
+              ? `${timeline.total} رویداد — جدیدترین اول`
+              : "رویدادی ثبت نشده است"}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {timeline.items.length === 0 ? (
+            <EmptyState
+              title="رویداد بالینی ثبت نشده است"
+              description="با ثبت دارو، سند، یادداشت یا آزمایش، رویدادها به‌صورت خودکار به تایم‌لاین اضافه می‌شوند."
+            />
+          ) : (
+            <ol className="border-s ps-7">
+              {timeline.items.map((item, index) => (
+                <li
+                  key={`${item.source_type}-${item.source_id}-${item.event_type}-${index}`}
+                  className="relative pb-5 last:pb-0"
+                >
+                  <span className="absolute -start-[35px] top-0 flex size-[22px] items-center justify-center rounded-full bg-muted text-muted-foreground">
+                    {timelineIcon(item.event_type)}
+                  </span>
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+                    <p className="font-medium">{item.title}</p>
+                    <span className="text-xs text-muted-foreground">
+                      {formatDateTime(item.date)}
+                    </span>
+                  </div>
+                  {item.description ? (
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      {item.description}
+                    </p>
+                  ) : null}
+                </li>
+              ))}
+            </ol>
+          )}
         </CardContent>
       </Card>
 

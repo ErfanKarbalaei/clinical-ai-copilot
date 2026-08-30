@@ -286,6 +286,22 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
   passing; live E2E with a real WAV (byte-identical audio roundtrip,
   no-key failure path, timeline events, delete semantics)
 
+**Done — Task 9 (patient context & clinical timeline):**
+
+- `GET /patients/{id}/context` — one response with everything the database
+  holds for the patient (demographics, conditions, full medication history,
+  allergies, labs, documents incl. extracted/OCR text, voice notes incl.
+  raw transcripts, clinical notes) — the ready-made input layer for the
+  future AI copilot; no AI, no duplication, live reads only
+- `GET /patients/{id}/timeline` — unified chronological timeline derived
+  from the actual records (newest first; `created_at` fallback for missing
+  dates; same event_type/source vocabulary as `clinical_events`)
+- Frontend: patient page now consumes the context layer directly (one
+  fetch) + new full-width Persian RTL timeline card with per-type icons;
+  all existing sections preserved
+- 9 new tests (sections, empty patient, ordering, fallback dates,
+  resolution/stop events, source refs, 404s) — full suite: 118 passing
+
 **Not started (intentionally — later phases):** authentication,
 AI model integrations (summaries/Q&A), medical-evidence retrieval,
 prescription-safety rules, RAG/vector search.

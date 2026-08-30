@@ -68,6 +68,8 @@ uvicorn app.main:app --reload --port 8000
 | PATCH | `/api/v1/patients/{id}` | Partially update a patient |
 | DELETE | `/api/v1/patients/{id}` | Delete a patient and all related clinical data (204) |
 | GET | `/api/v1/patients/{id}/overview` | Structured clinical overview (profile, conditions, active medications, allergies, 5 recent labs/notes) — no AI summary |
+| GET | `/api/v1/patients/{id}/context` | **Complete patient context** — everything in the DB (demographics, conditions, full medication history, allergies, labs, documents incl. extracted text, voice notes incl. raw transcripts, notes). Input layer for the future AI copilot — pure structured data |
+| GET | `/api/v1/patients/{id}/timeline` | **Unified clinical timeline** `{items, total}` — derived from actual records (documents, labs, notes, voice notes, condition onsets/resolutions, medication starts/stops), newest first, missing dates fall back to created_at |
 
 **Conditions** (active first, then newest onset first)
 
