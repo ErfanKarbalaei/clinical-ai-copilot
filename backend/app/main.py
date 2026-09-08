@@ -21,8 +21,9 @@ def create_app() -> FastAPI:
         debug=settings.DEBUG,
     )
 
-    # The Next.js frontend (http://localhost:3000) calls the API cross-origin
-    # during development, so CORS is part of the foundation.
+    # The Next.js frontend calls the API cross-origin during development
+    # (localhost:3000 by default, localhost:3100 for an alternate instance),
+    # so CORS is part of the foundation. Override via CORS_ORIGINS in .env.
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins_list,

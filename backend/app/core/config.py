@@ -34,8 +34,10 @@ class Settings(BaseSettings):
     API_V1_PREFIX: str = "/api/v1"
 
     # --- CORS ---
-    # Comma-separated list of allowed browser origins (frontend dev server).
-    CORS_ORIGINS: str = "http://localhost:3000"
+    # Comma-separated list of allowed browser origins. Frontend dev server
+    # defaults to localhost:3000; localhost:3100 is the alternate instance
+    # port. Override via CORS_ORIGINS in .env.
+    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3100"
 
     # --- PostgreSQL ---
     POSTGRES_DB: str = "clinical_ai_copilot"
