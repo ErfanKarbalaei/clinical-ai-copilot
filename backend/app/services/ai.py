@@ -7,14 +7,21 @@ Two boring implementations behind one tiny interface (``LLMProvider``):
 - ``GeminiProvider`` — Google's native ``generateContent`` API (v1beta)
 
 Switching providers is pure configuration: ``AI_PROVIDER`` selects the
-implementation, ``AI_MODEL`` is optional (empty = provider default).
+implementation, ``AI_MODEL`` is optional (empty = provider default), and
+``AI_PROXY`` can route requests through a proxy on restricted networks.
 No SDK dependency (plain httpx), no RAG, no vector search — just prompt +
 patient context. The provider instance is created lazily and cached; tests
 swap it by monkeypatching :func:`get_provider`.
+
+Transient transport failures (connection resets, truncated bodies — common
+on filtered networks) are retried a few times before surfacing. Error
+messages always carry the real provider failure so the backend log shows
+what actually happened.
 """
 
 import json
 import logging
+import time
 from typing import Protocol
 
 import httpx
@@ -22,6 +29,11 @@ import httpx
 from app.core.config import get_settings
 
 logger = logging.getLogger(__name__)
+
+# Transient transport errors worth retrying (resets / truncated bodies).
+_RETRYABLE_TRANSPORT_ERRORS = (httpx.TransportError, httpx.RemoteProtocolError)
+_HTTP_ATTEMPTS = 3
+_RETRY_BACKOFF_SECONDS = 1.0
 
 
 class AIError(Exception):
@@ -62,14 +74,62 @@ class LLMProvider(Protocol):
     ) -> str: ...
 
 
+def _post_with_retries(
+    client: httpx.Client, url: str, *, headers: dict, json_body: dict
+) -> httpx.Response:
+    """POST with a few retries on transient transport failures.
+
+    Filtered networks frequently reset connections mid-response; retrying
+    turns those into a short delay instead of a user-facing failure.
+    """
+    last_error: Exception | None = None
+    for attempt in range(1, _HTTP_ATTEMPTS + 1):
+        try:
+            return client.post(url, headers=headers, json=json_body)
+        except _RETRYABLE_TRANSPORT_ERRORS as error:
+            last_error = error
+            logger.warning(
+                "AI provider transport failure (attempt %d/%d): %s",
+                attempt, _HTTP_ATTEMPTS, error,
+            )
+            if attempt < _HTTP_ATTEMPTS:
+                time.sleep(_RETRY_BACKOFF_SECONDS * attempt)
+    raise AIError(f"provider unreachable after {_HTTP_ATTEMPTS} attempts: {last_error}")
+
+
+def _http_client(timeout: float, proxy: str | None) -> httpx.Client:
+    return httpx.Client(
+        timeout=httpx.Timeout(timeout),
+        proxy=proxy or None,
+    )
+
+
+def _snippet(text: str, limit: int = 200) -> str:
+    return " ".join(text.split())[:limit]
+
+
+def _looks_like_json(response: httpx.Response, body_text: str) -> bool:
+    content_type = response.headers.get("content-type", "")
+    return content_type.startswith("application/json") or body_text.lstrip().startswith("{")
+
+
 class OpenAICompatibleProvider:
     """OpenAI-compatible chat-completions client (httpx, no SDK)."""
 
-    def __init__(self, *, base_url: str, api_key: str, model: str, timeout: float):
+    def __init__(
+        self,
+        *,
+        base_url: str,
+        api_key: str,
+        model: str,
+        timeout: float,
+        proxy: str | None = None,
+    ):
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
         self.model = model
         self.timeout = timeout
+        self.proxy = proxy
 
     def complete(
         self,
@@ -82,25 +142,27 @@ class OpenAICompatibleProvider:
         messages.extend(history or [])
         messages.append({"role": "user", "content": user})
 
-        client = httpx.Client(timeout=httpx.Timeout(self.timeout))
+        client = _http_client(self.timeout, self.proxy)
         try:
-            response = client.post(
+            response = _post_with_retries(
+                client,
                 f"{self.base_url}/chat/completions",
                 headers={"Authorization": f"Bearer {self.api_key}"},
-                json={"model": self.model, "messages": messages},
+                json_body={"model": self.model, "messages": messages},
             )
-        except httpx.HTTPError as error:
-            raise AIError(f"provider unreachable: {error}") from None
         finally:
             client.close()
 
         if response.status_code in (401, 403):
-            raise AIError("provider rejected the API key")
+            raise AIError(
+                f"provider rejected the API key (HTTP {response.status_code}): "
+                f"{_snippet(response.text)}"
+            )
         if response.status_code == 429:
             raise AIError("provider rate limit exceeded")
         if response.status_code != 200:
             raise AIError(
-                f"provider error ({response.status_code}): {response.text[:200]}"
+                f"provider error ({response.status_code}): {_snippet(response.text)}"
             )
         try:
             return response.json()["choices"][0]["message"]["content"]
@@ -126,10 +188,18 @@ class GeminiProvider:
     turns → ``model``.
     """
 
-    def __init__(self, *, api_key: str, model: str, timeout: float):
+    def __init__(
+        self,
+        *,
+        api_key: str,
+        model: str,
+        timeout: float,
+        proxy: str | None = None,
+    ):
         self.api_key = api_key
         self.model = model
         self.timeout = timeout
+        self.proxy = proxy
 
     def complete(
         self,
@@ -144,31 +214,46 @@ class GeminiProvider:
             contents.append({"role": role, "parts": [{"text": turn["content"]}]})
         contents.append({"role": "user", "parts": [{"text": user}]})
 
-        client = httpx.Client(timeout=httpx.Timeout(self.timeout))
+        client = _http_client(self.timeout, self.proxy)
         try:
-            response = client.post(
+            response = _post_with_retries(
+                client,
                 f"{GEMINI_BASE_URL}/models/{self.model}:generateContent",
                 headers={"x-goog-api-key": self.api_key},
-                json={
+                json_body={
                     "system_instruction": {"parts": [{"text": system}]},
                     "contents": contents,
                 },
             )
-        except httpx.HTTPError as error:
-            raise AIError(f"provider unreachable: {error}") from None
         finally:
             client.close()
 
         body_text = response.text
-        if response.status_code in (401, 403) or (
-            response.status_code == 400 and "API key not valid" in body_text
-        ):
-            raise AIError("provider rejected the API key")
+        json_body = _looks_like_json(response, body_text)
+
+        if response.status_code == 400 and "API key not valid" in body_text:
+            raise AIError(
+                f"provider rejected the API key (HTTP 400): {_snippet(body_text)}"
+            )
+        if response.status_code == 403 and not json_body:
+            # Google's edge answers restricted regions with an HTML 403 page
+            # — this is a network/region block, NOT an API-key problem.
+            raise AIError(
+                "Google blocked the request at the network level "
+                "(HTTP 403, HTML error page — typically a region restriction "
+                "or filtering; route the backend through a proxy via AI_PROXY "
+                "in .env and restart)"
+            )
+        if response.status_code in (401, 403):
+            raise AIError(
+                f"provider rejected the API key (HTTP {response.status_code}): "
+                f"{_snippet(body_text)}"
+            )
         if response.status_code == 429:
             raise AIError("provider rate limit exceeded")
         if response.status_code != 200:
             raise AIError(
-                f"provider error ({response.status_code}): {body_text[:200]}"
+                f"provider error ({response.status_code}): {_snippet(body_text)}"
             )
         try:
             parts = response.json()["candidates"][0]["content"]["parts"]
@@ -184,11 +269,13 @@ def get_provider() -> LLMProvider:
         settings = get_settings()
         if not settings.AI_API_KEY:
             raise AIUnavailableError("AI_API_KEY is not configured")
+        proxy = settings.AI_PROXY or None
         if settings.AI_PROVIDER == "gemini":
             _provider = GeminiProvider(
                 api_key=settings.AI_API_KEY,
                 model=settings.AI_MODEL or GEMINI_DEFAULT_MODEL,
                 timeout=settings.AI_TIMEOUT_SECONDS,
+                proxy=proxy,
             )
         else:
             _provider = OpenAICompatibleProvider(
@@ -196,6 +283,7 @@ def get_provider() -> LLMProvider:
                 api_key=settings.AI_API_KEY,
                 model=settings.AI_MODEL or OPENAI_DEFAULT_MODEL,
                 timeout=settings.AI_TIMEOUT_SECONDS,
+                proxy=proxy,
             )
     return _provider
 

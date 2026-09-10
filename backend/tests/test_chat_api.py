@@ -208,6 +208,56 @@ def test_gemini_provider_maps_invalid_key(monkeypatch):
         provider.complete(system="s", user="u")
 
 
+def test_gemini_provider_distinguishes_network_block_from_bad_key(monkeypatch):
+    """Google's region/network block is an HTML 403 — must NOT say 'bad key'."""
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            403,
+            headers={"content-type": "text/html"},
+            content=b"<html><title>Error 403 (Forbidden)!!1</title></html>",
+        )
+
+    _mock_http(monkeypatch, handler)
+    provider = GeminiProvider(api_key="good-key", model="gemini-2.5-flash", timeout=5.0)
+
+    with pytest.raises(AIError) as excinfo:
+        provider.complete(system="s", user="u")
+    message = str(excinfo.value)
+    assert "network level" in message and "AI_PROXY" in message
+    assert "rejected the API key" not in message
+
+
+def test_gemini_provider_retries_transient_transport_failures(monkeypatch):
+    calls = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(1)
+        if len(calls) < 3:
+            # simulate a filtered network: connection dies mid-response
+            raise httpx.RemoteProtocolError("peer closed connection without sending complete message body")
+        return httpx.Response(
+            200, json={"candidates": [{"content": {"parts": [{"text": "پاسخ"}]}}]}
+        )
+
+    _mock_http(monkeypatch, handler)
+    provider = GeminiProvider(api_key="k", model="gemini-2.5-flash", timeout=5.0)
+
+    import app.services.ai as ai_module
+    monkeypatch.setattr(ai_module, "_RETRY_BACKOFF_SECONDS", 0.0)
+
+    answer = provider.complete(system="s", user="u")
+
+    assert answer == "پاسخ"
+    assert len(calls) == 3  # two failures retried, third succeeded
+
+
+def test_provider_accepts_proxy_configuration():
+    provider = GeminiProvider(
+        api_key="k", model="m", timeout=5.0, proxy="http://127.0.0.1:7890"
+    )
+    assert provider.proxy == "http://127.0.0.1:7890"
+
+
 def test_gemini_provider_maps_quota_error(monkeypatch):
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(429, json={"error": {"message": "quota exceeded"}})

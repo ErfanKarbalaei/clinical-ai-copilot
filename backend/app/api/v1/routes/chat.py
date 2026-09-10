@@ -5,6 +5,7 @@ Grounding: the answer is built ONLY from the patient's structured context
 retrieval. Decision support only — the final decision rests with the physician.
 """
 
+import logging
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -20,6 +21,8 @@ from app.services.ai import AIError, AIUnavailableError
 from app.services.patient_context import build_patient_context
 
 router = APIRouter(tags=["ai-assistant"])
+
+logger = logging.getLogger(__name__)
 
 AI_NOT_CONFIGURED_DETAIL = "سرویس هوش مصنوعی تنظیم نشده است (AI_API_KEY)."
 AI_PROVIDER_ERROR_DETAIL = "سرویس هوش مصنوعی پاسخ نداد؛ کمی بعد دوباره تلاش کنید."
@@ -68,7 +71,13 @@ def ask_clinical_question(
             user=ai.build_user_message(context.model_dump(), payload.question),
             history=history,
         )
-    except AIError:
+    except AIError as error:
+        # The API keeps the safe Persian 502, but the backend log must show
+        # the REAL provider failure for debugging.
+        logger.error(
+            "AI provider failure (patient=%s, question=%r): %s",
+            patient.id, payload.question[:120], error,
+        )
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail=AI_PROVIDER_ERROR_DETAIL,
