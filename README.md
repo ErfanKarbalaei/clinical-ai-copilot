@@ -172,10 +172,10 @@ backend) and `frontend/.env.example` (used by Next.js):
 | `MINIO_CONSOLE_PORT` | compose | host port for the MinIO console UI |
 | `TESSERACT_CMD` | backend (optional) | absolute path to the Tesseract binary (empty = PATH lookup) |
 | `SPEECHMATICS_API_KEY` | backend | Speechmatics API key for Persian speech-to-text (empty = transcription fails with a logged reason) |
-| `AI_PROVIDER` | backend | `gemini` (native Google API, default model `gemini-2.5-flash`) or `openai_compatible` (default `gpt-4o-mini`) |
+| `AI_PROVIDER` | backend | `gemini` (native Google API, default model `gemini-3.6-flash`) or `openai_compatible` (default `gpt-4o-mini`) |
 | `AI_API_KEY` | backend | Provider API key (Gemini key from Google AI Studio, or OpenAI-compatible key; empty = chat returns 503) |
 | `AI_BASE_URL` | backend (optional) | OpenAI-compatible base URL (default `https://api.openai.com/v1`; e.g. `http://localhost:11434/v1` for Ollama) |
-| `AI_MODEL` | backend (optional) | Model override (empty = provider default: `gemini-2.5-flash` / `gpt-4o-mini`) |
+| `AI_MODEL` | backend (optional) | Model override (empty = provider default: `gemini-3.6-flash` / `gpt-4o-mini`) |
 | `BACKEND_PORT` | backend (reference) | backend port (default `8000`) |
 | `NEXT_PUBLIC_API_URL` | frontend | public backend API base URL, inlined at build time |
 
@@ -331,6 +331,21 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
   exchange → correct 502 mapping; Google answered 403 directly)
 - 5 new tests — full suite: 132 passing
 
+**Done — Task 11 (medication safety / prescription check):**
+
+- `POST /patients/{id}/medications/check` — deterministic prescription-safety
+  check of one candidate (by catalog id or free-text name) against the
+  patient's active regimen and allergies: drug–drug interactions, allergy
+  conflicts (incl. penicillin→cephalosporin cross-reactivity), duplicate
+  therapy
+- Versioned local rules KB (`app/data/medication_rules.json`): ~30 drug
+  classes with Persian/English generic+brand aliases, 32 interactions,
+  cross-reactivity rules; every warning cites its `rule_id`
+- Optional `explain=true`: the configured LLM only *explains* the
+  deterministic warnings in Persian — it can never invent/suppress one;
+  provider outage leaves the warnings fully intact
+- 31 new tests — full suite: 172 passing; live smoke verified
+
 **Not started (intentionally — later phases):** authentication,
-medical-evidence retrieval with citations, prescription-safety rules,
-RAG/vector search, persisted conversations.
+medical-evidence retrieval with citations, RAG/vector search, persisted
+conversations.

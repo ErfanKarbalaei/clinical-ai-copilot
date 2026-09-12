@@ -278,7 +278,7 @@ def test_provider_dispatch_selects_gemini_with_default_model(monkeypatch):
     try:
         provider = ai.get_provider()
         assert isinstance(provider, GeminiProvider)
-        assert provider.model == "gemini-2.5-flash"
+        assert provider.model == ai.GEMINI_DEFAULT_MODEL  # falls back to constant
     finally:
         ai.reset_provider_cache()
 
@@ -292,7 +292,7 @@ def test_provider_dispatch_openai_default_model(monkeypatch):
     try:
         provider = ai.get_provider()
         assert isinstance(provider, OpenAICompatibleProvider)
-        assert provider.model == "gpt-4o-mini"
+        assert provider.model == ai.OPENAI_DEFAULT_MODEL
     finally:
         ai.reset_provider_cache()
 

@@ -69,7 +69,7 @@ class Settings(BaseSettings):
     AI_PROVIDER: str = "openai_compatible"
     AI_API_KEY: str = ""  # empty → chat returns 503 with a Persian message
     AI_BASE_URL: str = "https://api.openai.com/v1"
-    AI_MODEL: str = ""  # empty → provider default (gpt-4o-mini / gemini-2.5-flash)
+    AI_MODEL: str = "gemini-3.6-flash"  # empty → provider default (gpt-4o-mini / gemini-2.5-flash)
     AI_TIMEOUT_SECONDS: float = 60.0
     AI_MAX_HISTORY_TURNS: int = 6
     # Optional HTTP(S) proxy for reaching the AI provider from restricted

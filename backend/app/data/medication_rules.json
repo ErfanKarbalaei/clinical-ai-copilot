@@ -1,0 +1,237 @@
+{
+  "version": "2026.09.1",
+  "source_note": "Curated for the Clinical AI Copilot university MVP from well-established public drug references. This is an EDUCATIONAL rule set, not a clinical-grade interaction database. Every warning cites its rule_id for traceability.",
+  "drug_classes": [
+    {
+      "id": "nsaid",
+      "label_en": "NSAID",
+      "label_fa": "ضدالتهاب غیراستروئیدی (NSAID)",
+      "aliases": ["ibuprofen", "naproxen", "diclofenac", "indomethacin", "meloxicam", "ketoprofen", "aspirin", "acetylsalicylic", "piroxicam", "ایبوپروفن", "ناپروکسن", "دیکلوفناک", "ایندومتاسین", "آسپرین", "اسپرین", "بروفن", "ژلوفن", "پیرکسیکام"]
+    },
+    {
+      "id": "warfarin",
+      "label_en": "Warfarin",
+      "label_fa": "وارفارین",
+      "aliases": ["warfarin", "coumadin", "وارفارین"]
+    },
+    {
+      "id": "doac",
+      "label_en": "Direct oral anticoagulant",
+      "label_fa": "ضدانعقاد خوراکی جدید (DOAC)",
+      "aliases": ["rivaroxaban", "apixaban", "dabigatran", "edoxaban", "ریواروکسابان", "آپیکسابان", "دابیگاتران"]
+    },
+    {
+      "id": "acei",
+      "label_en": "ACE inhibitor",
+      "label_fa": "مهارکننده آنزیم مبدل آنژیوتانسین (ACEI)",
+      "aliases": ["enalapril", "captopril", "lisinopril", "ramipril", "perindopril", "fosinopril", "انالاپریل", "کاپتوپریل", "لیزینوپریل", "رامیپریل", "پریندوپریل"]
+    },
+    {
+      "id": "arb",
+      "label_en": "ARB",
+      "label_fa": "بلوک‌کننده گیرنده آنژیوتانسین (ARB)",
+      "aliases": ["losartan", "valsartan", "olmesartan", "candesartan", "telmisartan", "irbesartan", "لوزارتان", "والزارتان", "اولمزارتان", "کاندسارتان", "تلمیزارتان", "ایرب‌سارتان"]
+    },
+    {
+      "id": "thiazide",
+      "label_en": "Thiazide diuretic",
+      "label_fa": "دیورتیک تیازیدی",
+      "aliases": ["hydrochlorothiazide", "hctz", "chlorthalidone", "indapamide", "هیدروکلروتیازید", "کلرتالیدون", "اینداپامید"]
+    },
+    {
+      "id": "loop",
+      "label_en": "Loop diuretic",
+      "label_fa": "دیورتیک لوپ",
+      "aliases": ["furosemide", "lasix", "torsemide", "bumetanide", "فوروزماید", "لازیکس", "توراسماید"]
+    },
+    {
+      "id": "potassium_sparing",
+      "label_en": "Potassium-sparing diuretic",
+      "label_fa": "دیورتیک نگهدارنده پتاسیم",
+      "aliases": ["spironolactone", "eplerenone", "amiloride", "اسپیرونولاکتون", "اپلرنون", "آمیلیلید"]
+    },
+    {
+      "id": "potassium",
+      "label_en": "Potassium supplement",
+      "label_fa": "مکمل پتاسیم",
+      "aliases": ["potassium chloride", "kcl", "potassium", "کلرید پتاسیم", "پتاسیم"]
+    },
+    {
+      "id": "beta_blocker",
+      "label_en": "Beta blocker",
+      "label_fa": "بتابلاکر",
+      "aliases": ["metoprolol", "atenolol", "propranolol", "carvedilol", "bisoprolol", "nebivolol", "متوپرولول", "آتنولول", "پروپرانولول", "کارودیلول", "بیسوپرولول"]
+    },
+    {
+      "id": "ccb",
+      "label_en": "Calcium channel blocker",
+      "label_fa": "بلوک‌کننده کانال کلسیم",
+      "aliases": ["amlodipine", "nifedipine", "diltiazem", "verapamil", "felodipine", "آملودیپین", "نیفدیپین", "دیلتیازم", "وراپامیل"]
+    },
+    {
+      "id": "statin",
+      "label_en": "Statin",
+      "label_fa": "استاتین (کاهنده چربی خون)",
+      "aliases": ["atorvastatin", "rosuvastatin", "simvastatin", "lovastatin", "pravastatin", "آتورواستاتین", "روزوواستاتین", "سیمواستاتین", "پراواستاتین"]
+    },
+    {
+      "id": "fibrate",
+      "label_en": "Fibrate",
+      "label_fa": "فیبرات",
+      "aliases": ["gemfibrozil", "fenofibrate", "جمفیبروزیل", "فنوفیبرات"]
+    },
+    {
+      "id": "metformin",
+      "label_en": "Metformin (biguanide)",
+      "label_fa": "متفورمین (بی‌گوانید)",
+      "aliases": ["metformin", "glucophage", "متفورمین", "گلوکوفاژ"]
+    },
+    {
+      "id": "sulfonylurea",
+      "label_en": "Sulfonylurea",
+      "label_fa": "سولفونیل‌اوره",
+      "aliases": ["glibenclamide", "glyburide", "gliclazide", "glipizide", "glimepiride", "گلیبنکلامید", "گلیکلازید", "گلیپیزید", "گلیمپیرید"]
+    },
+    {
+      "id": "insulin",
+      "label_en": "Insulin",
+      "label_fa": "انسولین",
+      "aliases": ["insulin", "glargine", "lispro", "aspart", "detemir", "regular insulin", "انسولین", "گلارژین", "لیسپرو", "آسپارت"],
+      "duplicate_allowed": true
+    },
+    {
+      "id": "corticosteroid",
+      "label_en": "Systemic corticosteroid",
+      "label_fa": "کورتیکواستروئید سیستمیک",
+      "aliases": ["prednisolone", "prednisone", "dexamethasone", "hydrocortisone", "methylprednisolone", "پردنیزولون", "پردنیزون", "دگزامتازون", "هیدروکورتیزون", "متیل پردنیزولون"]
+    },
+    {
+      "id": "ssri",
+      "label_en": "SSRI antidepressant",
+      "label_fa": "مهارکننده بازجذب سروتونین (SSRI)",
+      "aliases": ["fluoxetine", "sertraline", "citalopram", "escitalopram", "paroxetine", "fluvoxamine", "فلوکستین", "سرترالین", "سیتالوپرام", "اس سیتالوپرام", "پاروکستین"]
+    },
+    {
+      "id": "tramadol",
+      "label_en": "Tramadol",
+      "label_fa": "ترامادول",
+      "aliases": ["tramadol", "ترامادول"]
+    },
+    {
+      "id": "opioid",
+      "label_en": "Opioid",
+      "label_fa": "شبه‌تریاکید (اوپیوئید)",
+      "aliases": ["morphine", "codeine", "oxycodone", "fentanyl", "hydromorphone", "مورفین", "کدئین", "اکسی کدون", "فنتانیل"]
+    },
+    {
+      "id": "benzodiazepine",
+      "label_en": "Benzodiazepine",
+      "label_fa": "بنزودیازپین",
+      "aliases": ["diazepam", "alprazolam", "clonazepam", "lorazepam", "oxazepam", "دیازپام", "آلپرازولام", "کلونازپام", "لورازپام"]
+    },
+    {
+      "id": "penicillin",
+      "label_en": "Penicillin antibiotic",
+      "label_fa": "آنتی‌بیوتیک پنی‌سیلینی",
+      "aliases": ["amoxicillin", "penicillin", "ampicillin", "coamoxiclav", "augmentin", "piperacillin", "phenoxymethylpenicillin", "آموکسی سیلین", "آموکسیسیلین", "پنی سیلین", "پنی‌سیلین", "آمپی سیلین", "اوگمنتین"]
+    },
+    {
+      "id": "cephalosporin",
+      "label_en": "Cephalosporin antibiotic",
+      "label_fa": "آنتی‌بیوتیک سفالوسپورینی",
+      "aliases": ["cephalexin", "ceftriaxone", "cefixime", "cefazolin", "ceftazidime", "سفالکسین", "سفتریاکسون", "سفیکسیم", "سفازولین"]
+    },
+    {
+      "id": "macrolide",
+      "label_en": "Macrolide antibiotic",
+      "label_fa": "آنتی‌بیوتیک ماکرولیدی",
+      "aliases": ["azithromycin", "erythromycin", "clarithromycin", "آزیترومایسین", "ازیترومایسین", "اریترومایسین", "کلاریترومایسین", "ازیترو"]
+    },
+    {
+      "id": "quinolone",
+      "label_en": "Fluoroquinolone antibiotic",
+      "label_fa": "آنتی‌بیوتیک فلوروکینولونی",
+      "aliases": ["ciprofloxacin", "levofloxacin", "ofloxacin", "norfloxacin", "سیپروفلوکساسین", "لفوفلوکساسین", "لفوکساسین", "نورفلوکساسین"]
+    },
+    {
+      "id": "sulfa_antibiotic",
+      "label_en": "Sulfonamide antibiotic (TMP-SMX)",
+      "label_fa": "آنتی‌بیوتیک سولفونامیدی (کو-تریموکسازول)",
+      "aliases": ["trimethoprim", "sulfamethoxazole", "cotrimoxazole", "bactrim", "co-trimoxazole", "کو تریموکسازول", "کو-تریموکسازول", "سولفامتوکسازول", "تری متوپریم"]
+    },
+    {
+      "id": "metronidazole",
+      "label_en": "Metronidazole",
+      "label_fa": "مترونیدازول",
+      "aliases": ["metronidazole", "flagyl", "مترونیدازول", "فلاژیل"]
+    },
+    {
+      "id": "methotrexate",
+      "label_en": "Methotrexate",
+      "label_fa": "متوترکسات",
+      "aliases": ["methotrexate", "متوترکسات"]
+    },
+    {
+      "id": "lithium",
+      "label_en": "Lithium",
+      "label_fa": "لیتیم",
+      "aliases": ["lithium", "lithium carbonate", "لیتیم"]
+    },
+    {
+      "id": "digoxin",
+      "label_en": "Digoxin",
+      "label_fa": "دیگوکسین",
+      "aliases": ["digoxin", "دیگوکسین"]
+    },
+    {
+      "id": "levothyroxine",
+      "label_en": "Levothyroxine",
+      "label_fa": "لووتیروکسین",
+      "aliases": ["levothyroxine", "l-thyroxine", "euthyrox", "لووتیروکسین", "لووتiroکسین", "ال تیروکسین", "یوتیروکس"]
+    },
+    {
+      "id": "ppi",
+      "label_en": "Proton pump inhibitor",
+      "label_fa": "مهارکننده پمپ پروتون",
+      "aliases": ["omeprazole", "pantoprazole", "esomeprazole", "lansoprazole", "rabeprazole", "امپرازول", "پنتوپرازول", "اس امپرازول", "لانسوپرازول", "رابپرازول"]
+    }
+  ],
+  "interactions": [
+    { "rule_id": "INT-001", "classes": ["nsaid", "warfarin"], "severity": "severe", "title_fa": "خطر خونریزی (NSAID + وارفارین)", "detail_fa": "استفاده همزمان از NSAID با وارفارین خطر خونریزی گوارشی را به‌طور قابل‌توجهی افزایش می‌دهد؛ در صورت ضرورت، پوشش گاستروپروتکتیو و پایش INR توصیه می‌شود." },
+    { "rule_id": "INT-002", "classes": ["nsaid", "doac"], "severity": "severe", "title_fa": "خطر خونریزی (NSAID + ضدانعقاد خوراکی جدید)", "detail_fa": "هم‌مصرفی NSAID با ضدانعقادهای خوراکی جدید (DOAC) خطر خونریزی را افزایش می‌دهد." },
+    { "rule_id": "INT-003", "classes": ["warfarin", "doac"], "severity": "severe", "title_fa": "ضدانعقاد درمانی تکراری", "detail_fa": "تجویز همزمان وارفارین و DOAC به‌طور معمول مناسب نیست و خطر خونریزی شدید دارد." },
+    { "rule_id": "INT-004", "classes": ["nsaid", "acei"], "severity": "moderate", "title_fa": "کاهش اثر ضدفشاری و خطر کلیوی (NSAID + ACEI)", "detail_fa": "NSAID اثر کاهنده فشار خون مهارکننده‌های ACE را کاهش می‌دهد و خطر آسیب کلیوی حاد را بالا می‌برد؛ پایش فشار و عملکرد کلیه توصیه می‌شود." },
+    { "rule_id": "INT-005", "classes": ["nsaid", "arb"], "severity": "moderate", "title_fa": "کاهش اثر ضدفشاری و خطر کلیوی (NSAID + ARB)", "detail_fa": "NSAID اثر ARB را کاهش می‌دهد و خطر آسیب کلیوی را افزایش می‌دهد؛ پایش فشار خون و کرآتینین توصیه می‌شود." },
+    { "rule_id": "INT-006", "classes": ["nsaid", "loop", "acei"], "severity": "severe", "title_fa": "آسیب کلیوی حاد (تریپل وهامی)", "detail_fa": "هم‌مصرفی NSAID + دیورتیک لوپ + مهارکننده ACE (ترکیب سه‌گانه) خطر آسیب کلیوی حاد را به‌شدت افزایش می‌دهد." },
+    { "rule_id": "INT-007", "classes": ["nsaid", "loop", "arb"], "severity": "severe", "title_fa": "آسیب کلیوی حاد (ترکیب سه‌گانه)", "detail_fa": "هم‌مصرفی NSAID + دیورتیک لوپ + ARB خطر آسیب کلیوی حاد را به‌شدت افزایش می‌دهد." },
+    { "rule_id": "INT-008", "classes": ["warfarin", "macrolide"], "severity": "severe", "title_fa": "افزایش اثر وارفارین", "detail_fa": "ماکرولیدها (به‌ویژه اریترومایسین و کلاریترومایسین) غلظت وارفارین را افزایش می‌دهند؛ پایش دقیق INR لازم است." },
+    { "rule_id": "INT-009", "classes": ["warfarin", "quinolone"], "severity": "severe", "title_fa": "افزایش اثر وارفارین", "detail_fa": "فلوروکینولون‌ها اثر ضدانعقادی وارفارین را تقویت می‌کنند و خطر خونریزی را بالا می‌برند؛ پایش INR توصیه می‌شود." },
+    { "rule_id": "INT-010", "classes": ["warfarin", "sulfa_antibiotic"], "severity": "severe", "title_fa": "افزایش شدید اثر وارفارین", "detail_fa": "کو-تریموکسازول اثر وارفارین را به‌طور قابل‌توجهی افزایش می‌دهد (خطر خونریزی شدید)." },
+    { "rule_id": "INT-011", "classes": ["warfarin", "metronidazole"], "severity": "severe", "title_fa": "افزایش اثر وارفارین", "detail_fa": "مترونیدازول متابولیسم وارفارین را مهار می‌کند و INR را بالا می‌برد؛ پایش دقیق و احتمالاً کاهش دوز لازم است." },
+    { "rule_id": "INT-012", "classes": ["warfarin", "ssri"], "severity": "moderate", "title_fa": "افزایش خطر خونریزی", "detail_fa": "SSRIها عملکرد پلاکتی را تغییر می‌دهند و همراه وارفارین خطر خونریزی را افزایش می‌دهند." },
+    { "rule_id": "INT-013", "classes": ["statin", "macrolide"], "severity": "severe", "title_fa": "خطر میوپاتی (استاتین + ماکرولید)", "detail_fa": "اریترومایسین و کلاریترومایسین متابولیسم استاتین‌ها را مهار می‌کنند و خیر آسیب عضلانی (میوپاتی/رابدومیولیز) را افزایش می‌دهند." },
+    { "rule_id": "INT-014", "classes": ["statin", "fibrate"], "severity": "moderate", "title_fa": "خطر میوپاتی (استاتین + فیبرات)", "detail_fa": "هم‌مصرفی استاتین و فیبرات (به‌ویژه جمفیبروزیل) خیر آسیب عضلانی را افزایش می‌دهد؛ در صورت ضرورت با پایش آنزیم‌های کبدی و CK." },
+    { "rule_id": "INT-015", "classes": ["acei", "potassium_sparing"], "severity": "severe", "title_fa": "خطر هیپرکالمی", "detail_fa": "مهارکننده ACE همراه دیورتیک نگهدارنده پتاسیم خیر افزایش خطرناک پتاسیم خون را ایجاد می‌کند؛ پایش پتاسیم سرم لازم است." },
+    { "rule_id": "INT-016", "classes": ["arb", "potassium_sparing"], "severity": "severe", "title_fa": "خطر هیپرکالمی", "detail_fa": "ARB همراه دیورتیک نگهدارنده پتاسیم خطر هیپرکالمی را افزایش می‌دهد؛ پایش پتاسیم سرم لازم است." },
+    { "rule_id": "INT-017", "classes": ["acei", "potassium"], "severity": "severe", "title_fa": "خطر هیپرکالمی", "detail_fa": "مکمل پتاسیم همراه مهارکننده ACE می‌تواند به هیپرکالمی شدید منجر شود." },
+    { "rule_id": "INT-018", "classes": ["arb", "potassium"], "severity": "severe", "title_fa": "خطر هیپرکالمی", "detail_fa": "مکمل پتاسیم همراه ARB می‌تواند به هیپرکالمی شدید منجر شود." },
+    { "rule_id": "INT-019", "classes": ["potassium_sparing", "potassium"], "severity": "severe", "title_fa": "خطر هیپرکالمی", "detail_fa": "مکمل پتاسیم همراه دیورتیک نگهدارنده پتاسیم خطر هیپرکالمی شدید را بالا می‌برد." },
+    { "rule_id": "INT-020", "classes": ["acei", "arb"], "severity": "moderate", "title_fa": "بلوک دوگانه سیستم RAAS", "detail_fa": "تجویز همزمان ACEI و ARB معمولاً توصیه نمی‌شود (افزایش خطر هیپوتانسیون، هیپرکالمی و آسیب کلیوی)." },
+    { "rule_id": "INT-021", "classes": ["metformin", "corticosteroid"], "severity": "moderate", "title_fa": "کاهش کنترل قند خون", "detail_fa": "کورتیکواستروئیدهای سیستمیک قند خون را بالا می‌برند و ممکن است نیاز به تنظیم دوز داروهای دیابت افزایش یابد." },
+    { "rule_id": "INT-022", "classes": ["sulfonylurea", "insulin"], "severity": "moderate", "title_fa": "خطر هیپوگلیسمی", "detail_fa": "هم‌مصرفی سولفونیل‌اوره با انسولین خطر افت قند خون را افزایش می‌دهد؛ آموزش علائم هیپوگلیسمی و پایش قند توصیه می‌شود." },
+    { "rule_id": "INT-023", "classes": ["sulfonylurea", "quinolone"], "severity": "moderate", "title_fa": "نوسان قند خون", "detail_fa": "فلوروکینولون‌ها می‌توانند هم هیپوگلیسمی و هم هیپرگلیسمی ایجاد کنند؛ در بیمار تحت درمان با سولفونیل‌اوره پایش قند لازم است." },
+    { "rule_id": "INT-024", "classes": ["methotrexate", "nsaid"], "severity": "severe", "title_fa": "خطر سمیت متوترکسات", "detail_fa": "NSAIDها دفع متوترکسات را کاهش می‌دهند و خیر سمیت مغز استخوانی را افزایش می‌دهند." },
+    { "rule_id": "INT-025", "classes": ["methotrexate", "sulfa_antibiotic"], "severity": "severe", "title_fa": "خطر شدید سمیت هماتولوژیک", "detail_fa": "کو-تریموکسازول همراه متوترکسات می‌تواند به پان‌سیتوپنی شدید منجر شود؛ این ترکیب به‌طور معمول منع مصرف دارد." },
+    { "rule_id": "INT-026", "classes": ["lithium", "nsaid"], "severity": "severe", "title_fa": "خطر سمیت لیتیم", "detail_fa": "NSAIDها دفع لیتیم را کاهش می‌دهند و غلظت سرمی آن را بالا می‌برند؛ پایش سطح لیتیم لازم است." },
+    { "rule_id": "INT-027", "classes": ["lithium", "acei"], "severity": "moderate", "title_fa": "افزایش سطح لیتیم", "detail_fa": "مهارکننده‌های ACE سطح لیتیم را افزایش می‌دهند؛ پایش سطح سرمی توصیه می‌شود." },
+    { "rule_id": "INT-028", "classes": ["lithium", "arb"], "severity": "moderate", "title_fa": "افزایش سطح لیتیم", "detail_fa": "ARBها می‌توانند سطح لیتیم را افزایش دهند؛ پایش سطح سرمی توصیه می‌شود." },
+    { "rule_id": "INT-029", "classes": ["digoxin", "loop"], "severity": "moderate", "title_fa": "خطر سمیت دیگوکسین", "detail_fa": "دیورتیک لوپ با ایجاد هیپوکالمی حساسیت به دیگوکسین را افزایش می‌دهد؛ پایش پتاسیم و سطح دیگوکسین توصیه می‌شود." },
+    { "rule_id": "INT-030", "classes": ["ssri", "tramadol"], "severity": "severe", "title_fa": "خطر سندرم سروتونین", "detail_fa": "ترامادول همراه SSRI خیر سندرم سروتونین را افزایش می‌دهد؛ در صورت ضرورت هم‌مصرفی، آموزش علائم و پایش بالینی لازم است." },
+    { "rule_id": "INT-031", "classes": ["opioid", "benzodiazepine"], "severity": "severe", "title_fa": "خطر سرکوب تنفسی", "detail_fa": "هم‌مصرفی اوپیوئید و بنزودیازپین خیر سرکوب تنفسی و مرگ را افزایش می‌دهد؛ فقط با ضرورت بالینی و دوز حداقلی." },
+    { "rule_id": "INT-032", "classes": ["nsaid", "corticosteroid"], "severity": "moderate", "title_fa": "خطر زخم گوارشی", "detail_fa": "NSAID همراه کورتیکواستروئید سیستمیک خطر زخم و خونریزی گوارشی را افزایش می‌دهد؛ در صورت هم‌مصرفی، پوشش گاستروپروتکتیو در نظر بگیرید." }
+  ],
+  "cross_reactivity": [
+    { "rule_id": "XALL-001", "allergen_class": "penicillin", "candidate_class": "cephalosporin", "severity": "moderate", "title_fa": "احتمال حساسیت متقاطع (پنی‌سیلین ← سفالوسپورین)", "detail_fa": "حساسیت به پنی‌سیلین احتمال واکنش متقاطع با سفالوسپورین‌ها را افزایش می‌دهد (کم اما قابل‌توجه). انتخاب آنتی‌بیوتیک با احتیاط و بر اساس شدت واکنش قبلی انجام شود." },
+    { "rule_id": "XALL-002", "allergen_class": "sulfa_antibiotic", "candidate_class": "sulfa_antibiotic", "severity": "severe", "title_fa": "منع مصرف در حساسیت سولفونامیدی", "detail_fa": "بیمار به آنتی‌بیوتیک سولفونامیدی حساسیت دارد؛ تجویز مجدد همین کلاس منع مصرف دارد." }
+  ]
+}

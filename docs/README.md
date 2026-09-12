@@ -23,7 +23,4 @@ Current contents:
 - `task-09-context-timeline-report.md` — Task 9 (patient context builder + unified clinical timeline) implementation report
 - `task-10-ai-assistant-report.md` — Task 10 (clinical AI assistant: provider-agnostic chat grounded in patient context) implementation report
 - `task-10.5-gemini-report.md` — Task 10.5 (connecting the AI layer to Google Gemini) implementation report
-
-No documentation files have been added yet — the repository is currently at the
-foundation stage (Task 1: monorepo skeleton, backend/frontend skeletons,
-infrastructure, and environment setup).
+- `task-11-medication-safety-report.md` — Task 11 (deterministic medication-safety rule engine + optional LLM explanation) implementation report

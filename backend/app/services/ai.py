@@ -89,12 +89,31 @@ def _post_with_retries(
         except _RETRYABLE_TRANSPORT_ERRORS as error:
             last_error = error
             logger.warning(
-                "AI provider transport failure (attempt %d/%d): %s",
-                attempt, _HTTP_ATTEMPTS, error,
+                "AI provider transport failure (attempt %d/%d): %s: %s",
+                attempt, _HTTP_ATTEMPTS, type(error).__name__, error,
             )
             if attempt < _HTTP_ATTEMPTS:
                 time.sleep(_RETRY_BACKOFF_SECONDS * attempt)
     raise AIError(f"provider unreachable after {_HTTP_ATTEMPTS} attempts: {last_error}")
+
+
+def _log_request(provider: str, method: str, url: str, *, model: str, key_present: bool) -> None:
+    """One-line pre-request debug log — NEVER logs the API key itself."""
+    logger.info(
+        "[ai-request] provider=%s model=%s key_present=%s -> %s %s",
+        provider, model, key_present, method, url,
+    )
+
+
+def _log_response(provider: str, response: httpx.Response) -> None:
+    """Post-response debug log — status, headers of interest, body (≤1000 chars)."""
+    logger.info(
+        "[ai-response] provider=%s status=%s content-type=%s body[:1000]=%s",
+        provider,
+        response.status_code,
+        response.headers.get("content-type", ""),
+        response.text[:1000],
+    )
 
 
 def _http_client(timeout: float, proxy: str | None) -> httpx.Client:
@@ -144,12 +163,20 @@ class OpenAICompatibleProvider:
 
         client = _http_client(self.timeout, self.proxy)
         try:
+            _log_request(
+                "openai_compatible",
+                "POST",
+                f"{self.base_url}/chat/completions",
+                model=self.model,
+                key_present=bool(self.api_key),
+            )
             response = _post_with_retries(
                 client,
                 f"{self.base_url}/chat/completions",
                 headers={"Authorization": f"Bearer {self.api_key}"},
                 json_body={"model": self.model, "messages": messages},
             )
+            _log_response("openai_compatible", response)
         finally:
             client.close()
 
@@ -177,7 +204,7 @@ GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta"
 OPENAI_DEFAULT_MODEL = "gpt-4o-mini"
 # Fast, cheap, strong multilingual (Persian) support, large context window —
 # a good fit for grounded clinical Q&A.
-GEMINI_DEFAULT_MODEL = "gemini-2.5-flash"
+GEMINI_DEFAULT_MODEL = "gemini-3.6-flash"
 
 
 class GeminiProvider:
@@ -216,6 +243,13 @@ class GeminiProvider:
 
         client = _http_client(self.timeout, self.proxy)
         try:
+            _log_request(
+                "gemini",
+                "POST",
+                f"{GEMINI_BASE_URL}/models/{self.model}:generateContent",
+                model=self.model,
+                key_present=bool(self.api_key),
+            )
             response = _post_with_retries(
                 client,
                 f"{GEMINI_BASE_URL}/models/{self.model}:generateContent",
@@ -225,6 +259,7 @@ class GeminiProvider:
                     "contents": contents,
                 },
             )
+            _log_response("gemini", response)
         finally:
             client.close()
 
