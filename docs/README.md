@@ -24,3 +24,4 @@ Current contents:
 - `task-10-ai-assistant-report.md` — Task 10 (clinical AI assistant: provider-agnostic chat grounded in patient context) implementation report
 - `task-10.5-gemini-report.md` — Task 10.5 (connecting the AI layer to Google Gemini) implementation report
 - `task-11-medication-safety-report.md` — Task 11 (deterministic medication-safety rule engine + optional LLM explanation) implementation report
+- `task-12-document-analysis-report.md` — Task 12 (AI analysis of extracted document text) implementation report

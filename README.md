@@ -346,6 +346,16 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
   provider outage leaves the warnings fully intact
 - 31 new tests — full suite: 172 passing; live smoke verified
 
+**Done — Task 12 (document AI analysis):**
+
+- `POST /documents/{id}/analyze` — Persian clinical summary of a document's
+  deterministically extracted text via the existing Gemini/AI provider;
+  stored as derived data (`ai_summary` + `analysis_status`) that never
+  replaces the original file or extracted text
+- Migration `b309d1be6900` adds the two columns (fully reversible); Patient
+  Context automatically carries the analysis for the future copilot
+- 11 new tests — full suite: 183 passing; upload→extract→analyze smoke run
+
 **Not started (intentionally — later phases):** authentication,
 medical-evidence retrieval with citations, RAG/vector search, persisted
 conversations.

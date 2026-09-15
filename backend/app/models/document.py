@@ -9,7 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 from app.db.mixins import TimestampMixin
-from app.models.enums import DocumentType, ExtractionStatus
+from app.models.enums import AnalysisStatus, DocumentType, ExtractionStatus
 
 if TYPE_CHECKING:
     from app.models.patient import Patient
@@ -46,6 +46,15 @@ class Document(TimestampMixin, Base):
         server_default="pending",
     )
     extracted_text: Mapped[Optional[str]] = mapped_column(Text)
+
+    # --- optional AI analysis (derived data — NEVER replaces the original
+    # file or the extracted text; both remain the source of truth) ---
+    analysis_status: Mapped[AnalysisStatus] = mapped_column(
+        SAEnum(AnalysisStatus, name="analysis_status"),
+        default=AnalysisStatus.pending,
+        server_default="pending",
+    )
+    ai_summary: Mapped[Optional[str]] = mapped_column(Text)
 
     patient: Mapped[Patient] = relationship(back_populates="documents")
 

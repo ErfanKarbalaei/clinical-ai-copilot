@@ -4,7 +4,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.models.enums import DocumentType, ExtractionStatus
+from app.models.enums import AnalysisStatus, DocumentType, ExtractionStatus
 
 
 class DocumentUpdate(BaseModel):
@@ -33,6 +33,8 @@ class DocumentResponse(BaseModel):
     file_size_bytes: int
     extraction_status: ExtractionStatus
     extracted_text: str | None
+    analysis_status: AnalysisStatus
+    ai_summary: str | None
     created_at: datetime
     updated_at: datetime
 

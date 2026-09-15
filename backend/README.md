@@ -136,7 +136,7 @@ Provider-agnostic — two implementations behind one interface, switched by
 pure configuration (`AI_PROVIDER` in `.env`):
 
 - **`gemini`** — native Google Gemini API (`generateContent`, v1beta);
-  default model `gemini-2.5-flash`. Set `AI_API_KEY` to a Google AI Studio
+  default model `gemini-3.6-flash`. Set `AI_API_KEY` to a Google AI Studio
   key.
 - **`openai_compatible`** — any OpenAI-style `chat/completions` API
   (OpenAI, OpenRouter, local Ollama/vLLM/LM Studio via `AI_BASE_URL`);
@@ -157,6 +157,7 @@ in the patient's data only; the physician makes the final decision.
 | PATCH | `/api/v1/documents/{id}` | Update metadata (title/type) — the original file never changes |
 | DELETE | `/api/v1/documents/{id}` | Delete the file from MinIO + metadata + timeline event (204) |
 | POST | `/api/v1/documents/{id}/extract` | Re-run text extraction (202; 409 while already processing) |
+| POST | `/api/v1/documents/{id}/analyze` | **AI analysis** of the extracted text → Persian clinical summary (`ai_summary`, `analysis_status`); 409 if extraction not completed; 503/502 when the AI provider is unavailable |
 
 **Text extraction** (deterministic — no AI): runs automatically after each
 upload as a background task. `pending → processing → completed | failed`.

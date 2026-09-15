@@ -5,6 +5,7 @@ metadata. Extracted text is a later (AI) phase — uploads start as
 `extraction_status=pending`.
 """
 
+import logging
 from datetime import datetime, timezone
 
 from fastapi import (
@@ -27,14 +28,22 @@ from app.db.session import get_db
 from app.models import ClinicalEvent, Document, Patient
 from app.models.enums import DocumentType, ExtractionStatus
 from app.schemas.document import DocumentResponse, DocumentUpdate
-from app.services import storage
+from app.services import ai, storage
+from app.services.document_analysis import analyze_document, mark_analysis_failed
 from app.services.documents import process_document
 from app.services.storage import StorageError
 
 router = APIRouter(tags=["documents"])
 
+logger = logging.getLogger(__name__)
+
 DOCUMENT_NOT_FOUND_DETAIL = "سند یافت نشد."
 DOCUMENT_ALREADY_PROCESSING_DETAIL = "این سند هم‌اکنون در حال پردازش است."
+ANALYSIS_NEEDS_EXTRACTION_DETAIL = (
+    "ابتدا باید متن سند استخراج شود؛ ابتدا وضعیت استخراج را به «completed» برسانید."
+)
+AI_NOT_CONFIGURED_DETAIL = "سرویس هوش مصنوعی تنظیم نشده است (AI_API_KEY)."
+AI_PROVIDER_ERROR_DETAIL = "سرویس هوش مصنوعی پاسخ نداد؛ کمی بعد دوباره تلاش کنید."
 INVALID_FILE_TYPE_DETAIL = "نوع فایل مجاز نیست. فرمت‌های مجاز: PDF، تصاویر (PNG/JPEG/WebP) و متن ساده."
 FILE_TOO_LARGE_DETAIL = "حجم فایل بیش از حد مجاز است (حداکثر ۲۰ مگابایت)."
 FILE_NAME_TOO_LONG_DETAIL = "نام فایل بیش از حد طولانی است."
@@ -213,6 +222,56 @@ def reextract_document(
         )
     background_tasks.add_task(process_document, document.id)
     return document
+
+
+@router.post(
+    "/documents/{document_id}/analyze",
+    response_model=DocumentResponse,
+    summary="AI analysis of a document's extracted text",
+    description=(
+        "Summarizes the document's **deterministically extracted text** "
+        "(Task 7) with the configured AI provider into a Persian clinical "
+        "summary (`ai_summary`). The summary is derived data — the original "
+        "file and extracted text remain the source of truth. Requires the "
+        "extraction to be completed (409 otherwise)."
+    ),
+    responses={
+        status.HTTP_404_NOT_FOUND: {"description": DOCUMENT_NOT_FOUND_DETAIL},
+        status.HTTP_409_CONFLICT: {"description": ANALYSIS_NEEDS_EXTRACTION_DETAIL},
+        status.HTTP_503_SERVICE_UNAVAILABLE: {"description": AI_NOT_CONFIGURED_DETAIL},
+        status.HTTP_502_BAD_GATEWAY: {"description": AI_PROVIDER_ERROR_DETAIL},
+    },
+)
+def analyze_document_route(
+    document_id: int, db: Session = Depends(get_db)
+) -> Document:
+    document = _get_document_or_404(db, document_id)
+    if (
+        document.extraction_status != ExtractionStatus.completed
+        or not (document.extracted_text or "").strip()
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=ANALYSIS_NEEDS_EXTRACTION_DETAIL,
+        )
+
+    try:
+        return analyze_document(document, db)
+    except ai.AIUnavailableError:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=AI_NOT_CONFIGURED_DETAIL,
+        ) from None
+    except ai.AIError as error:
+        logger.error(
+            "AI provider failure (document analysis, document=%s): %s: %s",
+            document_id, type(error).__name__, error,
+        )
+        mark_analysis_failed(document, db)
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=AI_PROVIDER_ERROR_DETAIL,
+        ) from None
 
 
 @router.get(

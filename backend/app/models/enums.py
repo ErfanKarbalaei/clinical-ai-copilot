@@ -52,6 +52,14 @@ class ExtractionStatus(StrEnum):
     failed = "failed"
 
 
+class AnalysisStatus(StrEnum):
+    """Lifecycle of the optional AI analysis of a document's extracted text."""
+
+    pending = "pending"
+    completed = "completed"
+    failed = "failed"
+
+
 class TranscriptionStatus(StrEnum):
     """Lifecycle of speech-to-text processing for a voice note."""
 

@@ -15,6 +15,7 @@ export type DocumentType =
 export type ExtractionStatus = "pending" | "processing" | "completed" | "failed";
 export type ConversationType = "physician_note" | "doctor_patient";
 export type TranscriptionStatus = "pending" | "processing" | "completed" | "failed";
+export type AnalysisStatus = "pending" | "completed" | "failed";
 
 export interface Patient {
   id: number;
@@ -156,6 +157,8 @@ export interface Document {
   file_size_bytes: number;
   extraction_status: ExtractionStatus;
   extracted_text: string | null;
+  analysis_status: AnalysisStatus;
+  ai_summary: string | null;
   created_at: string;
   updated_at: string;
 }
