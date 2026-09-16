@@ -32,7 +32,9 @@ def _install_client(monkeypatch, handler) -> None:
 
 
 def test_no_api_key_raises_unavailable(monkeypatch):
-    monkeypatch.setattr(get_settings(), "SPEECHMATICS_API_KEY", "")
+    settings = get_settings()
+    monkeypatch.setattr(settings, "SPEECHMATICS_API_KEY", "")
+    monkeypatch.setattr(settings, "STT_API_KEY", "")
     with pytest.raises(SttUnavailableError):
         stt.transcribe_audio(
             data=FAKE_AUDIO, file_name="a.webm", mime_type="audio/webm"
@@ -154,3 +156,65 @@ def test_config_json_is_serializable_and_fa():
     }
     parsed = json.loads(json.dumps(config))
     assert parsed["transcription_config"]["language"] == "fa"
+
+
+# --- provider abstraction (Task 13: STT_PROVIDER / STT_API_KEY) ---
+
+
+def test_get_stt_provider_dispatch_and_key_fallback(monkeypatch):
+    settings = get_settings()
+    monkeypatch.setattr(settings, "STT_PROVIDER", "speechmatics")
+
+    monkeypatch.setattr(settings, "STT_API_KEY", "")
+    monkeypatch.setattr(settings, "SPEECHMATICS_API_KEY", "legacy-key")
+    provider = stt.get_stt_provider()
+    assert isinstance(provider, stt.SpeechmaticsProvider)
+    assert provider.api_key == "legacy-key"  # legacy spelling still works
+
+    monkeypatch.setattr(settings, "STT_API_KEY", "new-key")
+    assert stt.get_stt_provider().api_key == "new-key"  # takes precedence
+
+
+def test_get_stt_provider_unknown_name_raises(monkeypatch):
+    settings = get_settings()
+    monkeypatch.setattr(settings, "STT_PROVIDER", "deepgram")
+    monkeypatch.setattr(settings, "STT_API_KEY", "k")
+    with pytest.raises(TranscriptionError, match="unknown STT_PROVIDER"):
+        stt.get_stt_provider()
+
+
+def test_get_stt_provider_no_key_raises_unavailable(monkeypatch):
+    settings = get_settings()
+    monkeypatch.setattr(settings, "STT_API_KEY", "")
+    monkeypatch.setattr(settings, "SPEECHMATICS_API_KEY", "")
+    with pytest.raises(SttUnavailableError):
+        stt.get_stt_provider()
+
+
+def test_transcribe_audio_delegates_to_provider(monkeypatch):
+    calls: list[dict] = []
+
+    class RecordingProvider:
+        def transcribe(
+            self, *, data, file_name, mime_type, language="fa", diarize=False
+        ):
+            calls.append(
+                {
+                    "data": data,
+                    "file_name": file_name,
+                    "language": language,
+                    "diarize": diarize,
+                }
+            )
+            return "متن"
+
+    monkeypatch.setattr(stt, "get_stt_provider", lambda: RecordingProvider())
+
+    text = stt.transcribe_audio(
+        data=b"abc", file_name="a.wav", mime_type="audio/wav", diarize=True
+    )
+
+    assert text == "متن"
+    assert calls == [
+        {"data": b"abc", "file_name": "a.wav", "language": "fa", "diarize": True}
+    ]

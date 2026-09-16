@@ -2,6 +2,7 @@
 
 import type {
   AllergySeverity,
+  AnalysisStatus,
   ConditionStatus,
   ConversationType,
   DocumentType,
@@ -106,6 +107,12 @@ export const transcriptionStatusLabels: Record<TranscriptionStatus, string> = {
   processing: "در حال تبدیل به متن",
   completed: "تبدیل انجام شد",
   failed: "تبدیل ناموفق",
+};
+
+export const cleanupStatusLabels: Record<AnalysisStatus, string> = {
+  pending: "بدون پاک‌سازی",
+  completed: "پاک‌سازی شد",
+  failed: "پاک‌سازی ناموفق",
 };
 
 /** Duration as m:ss (e.g. 1:23). */

@@ -10,7 +10,7 @@ from app.api.v1.routes.voice_notes import (
     VOICE_NOTE_NOT_FOUND_DETAIL,
 )
 from app.models import ClinicalEvent, ClinicalNote
-from app.services import storage, voice_notes as voice_notes_service
+from app.services import ai, storage, voice_notes as voice_notes_service
 from app.services.stt import SttUnavailableError
 
 PATIENTS_URL = "/api/v1/patients"
@@ -55,6 +55,12 @@ def faked_storage_and_stt(monkeypatch, db_session):
     monkeypatch.setattr(
         "app.services.voice_notes.stt.transcribe_audio", fake_transcribe
     )
+    # deterministic regardless of the developer's .env: AI cleanup never runs
+    # in these tests (dedicated cleanup tests fake the provider instead)
+    def unavailable_provider():
+        raise ai.AIUnavailableError("AI_API_KEY is not configured")
+
+    monkeypatch.setattr(ai, "get_provider", unavailable_provider)
     # run the real pipeline against the isolated test session
     monkeypatch.setattr(
         voice_notes_routes,

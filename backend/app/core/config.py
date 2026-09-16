@@ -57,8 +57,13 @@ class Settings(BaseSettings):
     # Absolute path to the tesseract binary; leave empty to use PATH lookup.
     TESSERACT_CMD: str = ""
 
-    # --- Speech-to-Text (Speechmatics batch API) ---
-    SPEECHMATICS_API_KEY: str = ""  # empty → transcription marked failed with reason
+    # --- Speech-to-Text (provider-agnostic; Speechmatics batch API) ---
+    # STT_PROVIDER selects the implementation in services/stt.py (adding a
+    # provider = implement SpeechToTextProvider + one factory branch).
+    STT_PROVIDER: str = "speechmatics"
+    STT_API_KEY: str = ""  # empty → falls back to SPEECHMATICS_API_KEY
+    STT_LANGUAGE: str = "fa"  # default language for new voice notes
+    SPEECHMATICS_API_KEY: str = ""  # legacy spelling — kept as STT_API_KEY fallback
     SPEECHMATICS_BASE_URL: str = "https://asr.api.speechmatics.com/v2"
     STT_POLL_INTERVAL_SECONDS: float = 3.0
     STT_TIMEOUT_SECONDS: int = 300

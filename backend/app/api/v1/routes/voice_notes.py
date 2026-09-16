@@ -25,6 +25,7 @@ from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
 from app.api.v1.dependencies import patient_from_id
+from app.core.config import get_settings
 from app.db.session import get_db
 from app.models import ClinicalEvent, ClinicalNote, Patient, VoiceNote
 from app.models.enums import ConversationType, TranscriptionStatus
@@ -85,8 +86,11 @@ def _get_voice_note_or_404(db: Session, voice_note_id: int) -> VoiceNote:
         "`conversation_type` (physician_note | doctor_patient) and "
         "`duration_seconds`. The original audio is preserved unchanged; "
         "Persian speech-to-text (Speechmatics) runs automatically after the "
-        "upload — follow `transcription_status`. Doctor–patient recordings "
-        "are transcribed with speaker diarization."
+        "upload — follow `transcription_status`. When an AI provider is "
+        "configured, a best-effort cleanup then formats the raw transcript "
+        "into a concise clinical note (`cleaned_note`) — formatting only, "
+        "the raw transcript always stays the source of truth. Doctor–patient "
+        "recordings are transcribed with speaker diarization."
     ),
     responses={
         status.HTTP_404_NOT_FOUND: {"description": "بیمار یافت نشد"},
@@ -148,7 +152,7 @@ async def upload_voice_note(
         conversation_type=conversation_type,
         audio_storage_key=storage_key,
         duration_seconds=duration_seconds,
-        language="fa",
+        language=get_settings().STT_LANGUAGE or "fa",
     )
     db.add(voice_note)
     db.flush()

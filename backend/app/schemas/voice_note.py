@@ -4,7 +4,11 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.models.enums import ConversationType, TranscriptionStatus
+from app.models.enums import (
+    AnalysisStatus,
+    ConversationType,
+    TranscriptionStatus,
+)
 
 
 class VoiceNoteUpdate(BaseModel):
@@ -35,6 +39,10 @@ class VoiceNoteResponse(BaseModel):
     language: str
     transcription_status: TranscriptionStatus
     transcript: str | None
+    cleanup_status: AnalysisStatus
+    cleaned_note: str | None
+    error_message: str | None
+    processed_at: datetime | None
     created_at: datetime
     updated_at: datetime
 

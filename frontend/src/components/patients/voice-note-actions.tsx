@@ -9,6 +9,7 @@ import {
   MicIcon,
   PlayIcon,
   RotateCcwIcon,
+  SparklesIcon,
   Trash2Icon,
   UploadIcon,
 } from "lucide-react";
@@ -315,10 +316,12 @@ function CreateNoteFromVoiceDialog({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const initialContent = voiceNote.cleaned_note ?? voiceNote.transcript ?? "";
+
   useEffect(() => {
     if (!open) return;
     setTitle(voiceNote.title ?? "یادداشت صوتی");
-    setContent(voiceNote.transcript ?? "");
+    setContent(voiceNote.cleaned_note ?? voiceNote.transcript ?? "");
     setError(null);
     setSubmitting(false);
   }, [open, voiceNote]);
@@ -365,7 +368,21 @@ function CreateNoteFromVoiceDialog({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="note_content">متن یادداشت (رونوشت خام) *</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="note_content">متن یادداشت *</Label>
+              {voiceNote.cleaned_note && voiceNote.cleaned_note !== initialContent ? (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 gap-1 px-2 text-xs"
+                  onClick={() => setContent(voiceNote.cleaned_note ?? "")}
+                >
+                  <SparklesIcon className="size-3.5" />
+                  نسخهٔ پاک‌سازی‌شده
+                </Button>
+              ) : null}
+            </div>
             <Textarea
               id="note_content"
               value={content}
@@ -386,6 +403,42 @@ function CreateNoteFromVoiceDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+/** View the AI-cleaned clinical note (read-only, derived data). */
+export function ViewCleanedNoteButton({ voiceNote }: { voiceNote: VoiceNote }) {
+  const [open, setOpen] = useState(false);
+  if (!voiceNote.cleaned_note) return null;
+  return (
+    <>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        aria-label="مشاهدهٔ یادداشت پاک‌سازی‌شده"
+        title="یادداشت پاک‌سازی‌شده (هوش مصنوعی)"
+        onClick={() => setOpen(true)}
+      >
+        <SparklesIcon />
+      </Button>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>
+              یادداشت پاک‌سازی‌شده — {voiceNote.title ?? "بدون عنوان"}
+            </DialogTitle>
+            <DialogDescription>
+              نسخهٔ قالب‌بندی‌شدهٔ رونوشت توسط هوش مصنوعی — فقط مرتب‌سازی و شفاف‌سازی،
+              بدون افزودن هیچ اطلاعات بالینی. رونوشت خام و فایل صوتی معتبرترین منبع
+              هستند؛ ثبت نهایی پس از بازبینی پزشک انجام می‌شود.
+            </DialogDescription>
+          </DialogHeader>
+          <pre className="max-h-80 overflow-auto rounded-lg bg-muted/50 p-4 text-sm whitespace-pre-wrap">
+            {voiceNote.cleaned_note}
+          </pre>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 

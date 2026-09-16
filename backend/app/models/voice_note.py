@@ -2,14 +2,22 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 
-from sqlalchemy import Enum as SAEnum, ForeignKey, Integer, String, Text
+from sqlalchemy import (
+    DateTime,
+    Enum as SAEnum,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 from app.db.mixins import TimestampMixin
-from app.models.enums import ConversationType, TranscriptionStatus
+from app.models.enums import AnalysisStatus, ConversationType, TranscriptionStatus
 
 if TYPE_CHECKING:
     from app.models.patient import Patient
@@ -46,6 +54,19 @@ class VoiceNote(TimestampMixin, Base):
         server_default="pending",
     )
     transcript: Mapped[Optional[str]] = mapped_column(Text)
+
+    # --- optional AI cleanup of the transcript (derived data — the raw
+    # transcript always remains the source of truth and is never replaced) ---
+    cleanup_status: Mapped[AnalysisStatus] = mapped_column(
+        SAEnum(AnalysisStatus, name="cleanup_status"),
+        default=AnalysisStatus.pending,
+        server_default="pending",
+    )
+    cleaned_note: Mapped[Optional[str]] = mapped_column(Text)
+
+    # --- last processing outcome (transcription pipeline) ---
+    error_message: Mapped[Optional[str]] = mapped_column(Text)
+    processed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
 
     patient: Mapped[Patient] = relationship(back_populates="voice_notes")
 

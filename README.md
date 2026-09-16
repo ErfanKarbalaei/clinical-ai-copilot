@@ -171,7 +171,10 @@ backend) and `frontend/.env.example` (used by Next.js):
 | `MINIO_PORT` | compose | host port for the MinIO API |
 | `MINIO_CONSOLE_PORT` | compose | host port for the MinIO console UI |
 | `TESSERACT_CMD` | backend (optional) | absolute path to the Tesseract binary (empty = PATH lookup) |
-| `SPEECHMATICS_API_KEY` | backend | Speechmatics API key for Persian speech-to-text (empty = transcription fails with a logged reason) |
+| `STT_PROVIDER` | backend | speech-to-text implementation (`speechmatics` — the only one for now); the provider layer makes adding another a drop-in change |
+| `STT_API_KEY` | backend | speech-to-text API key (empty = falls back to `SPEECHMATICS_API_KEY`; both empty = transcription fails with a logged reason) |
+| `STT_LANGUAGE` | backend | default language for new voice notes (`fa`) |
+| `SPEECHMATICS_API_KEY` | backend (legacy) | legacy spelling of `STT_API_KEY` — still honored as a fallback |
 | `AI_PROVIDER` | backend | `gemini` (native Google API, default model `gemini-3.6-flash`) or `openai_compatible` (default `gpt-4o-mini`) |
 | `AI_API_KEY` | backend | Provider API key (Gemini key from Google AI Studio, or OpenAI-compatible key; empty = chat returns 503) |
 | `AI_BASE_URL` | backend (optional) | OpenAI-compatible base URL (default `https://api.openai.com/v1`; e.g. `http://localhost:11434/v1` for Ollama) |
@@ -355,6 +358,32 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
 - Migration `b309d1be6900` adds the two columns (fully reversible); Patient
   Context automatically carries the analysis for the future copilot
 - 11 new tests — full suite: 183 passing; upload→extract→analyze smoke run
+
+**Done — Task 13 (clinical voice documentation / STT provider layer):**
+
+- Provider-agnostic STT layer (`services/stt.py`): `SpeechToTextProvider`
+  protocol + `SpeechmaticsProvider`; selected by `STT_PROVIDER`
+  (`speechmatics`), key from `STT_API_KEY` with `SPEECHMATICS_API_KEY` as
+  the legacy fallback, `STT_LANGUAGE` (default `fa`) — adding a provider
+  later needs no voice-note workflow change
+- Optional AI cleanup after transcription: the existing Gemini provider
+  (`AI_PROVIDER`/`AI_MODEL`, default `gemini-3.6-flash`) formats the raw
+  Persian transcript into a concise clinical note (`cleaned_note`) under a
+  safety-scoped prompt — formatting/clarification only; it may not invent
+  diagnoses, medications, symptoms, or measurements and must preserve
+  uncertainty. The raw transcript always stays the source of truth
+- Failure semantics: STT failure → `failed` + `error_message` +
+  `processed_at`; Gemini failure → transcription stays `completed`,
+  `cleanup_status=failed`, transcript/audio untouched; AI unconfigured →
+  cleanup silently skipped (`pending`); re-transcribe discards the stale
+  cleaned note
+- Migration `fe6bf890d790` adds `cleanup_status`, `cleaned_note`,
+  `error_message`, `processed_at` (fully reversible); Patient Context and
+  Timeline carry voice notes (incl. cleaned note) unchanged
+- Frontend: cleaned-note view (sparkles) + «پاک‌سازی شد» badge + error
+  text on failure; review dialog starts from the cleaned note with a
+  one-click switch to the raw transcript
+- 13 new tests — full suite: 196 passing; `tsc` + `next build` clean
 
 **Not started (intentionally — later phases):** authentication,
 medical-evidence retrieval with citations, RAG/vector search, persisted

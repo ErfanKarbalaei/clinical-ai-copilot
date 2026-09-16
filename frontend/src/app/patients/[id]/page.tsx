@@ -34,6 +34,7 @@ import {
 } from "@/components/patients/medication-actions";
 import {
   AddVoiceNoteButton,
+  ViewCleanedNoteButton,
   ViewTranscriptButton,
   VoiceNoteRowActions,
 } from "@/components/patients/voice-note-actions";
@@ -58,6 +59,7 @@ import { ApiError, api } from "@/lib/api";
 import {
   allergySeverityLabels,
   calculateAge,
+  cleanupStatusLabels,
   conditionStatusLabels,
   conversationTypeLabels,
   documentTypeLabels,
@@ -559,6 +561,12 @@ export default async function PatientDetailPage({
                         {voiceNote.transcript.split("\n")[0]}
                       </p>
                     ) : null}
+                    {voiceNote.transcription_status === "failed" &&
+                    voiceNote.error_message ? (
+                      <p className="line-clamp-1 text-xs text-destructive">
+                        {voiceNote.error_message}
+                      </p>
+                    ) : null}
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
                     <Badge
@@ -569,6 +577,15 @@ export default async function PatientDetailPage({
                     >
                       {transcriptionStatusLabels[voiceNote.transcription_status]}
                     </Badge>
+                    {voiceNote.cleanup_status === "completed" ? (
+                      <Badge
+                        variant="outline"
+                        className="text-sky-600 dark:text-sky-400"
+                      >
+                        {cleanupStatusLabels[voiceNote.cleanup_status]}
+                      </Badge>
+                    ) : null}
+                    <ViewCleanedNoteButton voiceNote={voiceNote} />
                     <ViewTranscriptButton voiceNote={voiceNote} />
                     <VoiceNoteRowActions voiceNote={voiceNote} />
                   </div>

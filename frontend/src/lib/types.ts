@@ -172,6 +172,10 @@ export interface VoiceNote {
   language: string;
   transcription_status: TranscriptionStatus;
   transcript: string | null;
+  cleanup_status: AnalysisStatus;
+  cleaned_note: string | null;
+  error_message: string | null;
+  processed_at: string | null;
   created_at: string;
   updated_at: string;
 }
