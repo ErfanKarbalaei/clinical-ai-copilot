@@ -144,6 +144,15 @@ status fully intact (`cleanup_status=failed`).
 | POST | `/api/v1/conversations/{id}/messages` | Persisted exchange: saves the user message, builds the live Task-9 patient context + the last 20 messages as history, calls the existing AI provider (`medication_safety=true` → Task-14 safety prompt), persists the assistant answer, bumps `updated_at`. Provider failure → 502 with the user message kept for traceability, never a fabricated answer |
 | DELETE | `/api/v1/conversations/{id}` | Delete the conversation and all its messages (cascade) |
 
+Messages now carry **validated patient-record evidence** (Task 16): every
+context item is tagged with a stable evidence id (`MED-42`, `ALLERGY-8`,
+`COND-17`, `LAB-31`, `DOC-123`, `NOTE-45`, `VOICE-9`) sent to the model;
+each assistant message stores only the ids the backend could validate
+against that patient's real records. Document-backed evidence exposes
+`document_id` — the ORIGINAL file is opened through the existing
+`GET /documents/{id}/download` endpoint (307 → short-lived presigned URL);
+the model never sees URLs and no URL is ever persisted.
+
 Warnings cite a `rule_id` from the versioned knowledge base
 (`app/data/medication_rules.json`, ~30 drug classes with Persian/English
 brand+generic aliases, 32 interactions, cross-reactivity rules;

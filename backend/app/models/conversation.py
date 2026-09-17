@@ -17,6 +17,7 @@ from sqlalchemy import (
     String,
     Text,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -67,6 +68,12 @@ class ConversationMessage(TimestampMixin, Base):
         server_default="user",
     )
     content: Mapped[str] = mapped_column(Text)
+
+    # --- validated patient-record evidence for assistant answers (Task 16).
+    # Stable references to REAL records only ({source_id, source_type,
+    # description, document_id}) — URLs are never persisted; the original
+    # file is served through the existing secure download endpoint.
+    evidence: Mapped[list | None] = mapped_column(JSONB, nullable=True)
 
     conversation: Mapped[Conversation] = relationship(
         back_populates="messages"

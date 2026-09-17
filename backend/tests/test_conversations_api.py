@@ -221,16 +221,21 @@ def test_history_is_capped(api_client, make_patient, fake_provider):
 
 
 def test_medication_safety_flag_switches_prompt(api_client, make_patient, fake_provider):
-    from app.services.ai_medication_safety import MEDICATION_SAFETY_CHAT_PROMPT
+    # Task 16: both chat modes are now evidence-aware variants composed from
+    # the original Task-10/14 prompts
+    from app.services.evidence import (
+        EVIDENCE_CHAT_SYSTEM_PROMPT,
+        EVIDENCE_SAFETY_SYSTEM_PROMPT,
+    )
 
     patient = make_patient("۱۰")
     conversation = _make_conversation(api_client, patient["id"])
 
     _send(api_client, conversation["id"], "وارفارین تجویز کنم؟", safety=True)
-    assert CAPTURED["system"] == MEDICATION_SAFETY_CHAT_PROMPT
+    assert CAPTURED["system"] == EVIDENCE_SAFETY_SYSTEM_PROMPT
 
     _send(api_client, conversation["id"], "پرسش عادی")
-    assert CAPTURED["system"] == ai.SYSTEM_PROMPT
+    assert CAPTURED["system"] == EVIDENCE_CHAT_SYSTEM_PROMPT
 
 
 def test_ai_failure_keeps_user_message_without_fake_assistant(

@@ -3,7 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import {
+  ActivityIcon,
+  AlertCircleIcon,
+  ExternalLinkIcon,
+  FileTextIcon,
+  FlaskConicalIcon,
   LoaderIcon,
+  MicIcon,
+  PillIcon,
   PlusIcon,
   SendIcon,
   ShieldAlertIcon,
@@ -29,18 +36,44 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
-import type {
-  ChatTurn,
-  ConversationSummary,
-} from "@/lib/types";
+import type { ConversationSummary, EvidenceItem } from "@/lib/types";
 
 const MAX_QUESTION_LENGTH = 2000;
+
+/** One rendered chat turn — assistant turns may carry validated evidence. */
+interface RenderedTurn {
+  role: "user" | "assistant";
+  content: string;
+  evidence?: EvidenceItem[];
+}
+
+function evidenceIcon(sourceType: EvidenceItem["source_type"]) {
+  switch (sourceType) {
+    case "medication":
+      return <PillIcon className="size-3.5 shrink-0 text-muted-foreground" />;
+    case "allergy":
+      return (
+        <AlertCircleIcon className="size-3.5 shrink-0 text-muted-foreground" />
+      );
+    case "lab":
+      return (
+        <FlaskConicalIcon className="size-3.5 shrink-0 text-muted-foreground" />
+      );
+    case "document":
+    case "clinical_note":
+      return <FileTextIcon className="size-3.5 shrink-0 text-muted-foreground" />;
+    case "voice_note":
+      return <MicIcon className="size-3.5 shrink-0 text-muted-foreground" />;
+    default:
+      return <ActivityIcon className="size-3.5 shrink-0 text-muted-foreground" />;
+  }
+}
 
 /** AI assistant section — persisted conversations grounded in THIS patient's context. */
 export function ClinicalChat({ patientId }: { patientId: number }) {
   const [conversations, setConversations] = useState<ConversationSummary[]>([]);
   const [activeId, setActiveId] = useState<number | null>(null);
-  const [turns, setTurns] = useState<ChatTurn[]>([]);
+  const [turns, setTurns] = useState<RenderedTurn[]>([]);
   const [loadingConversations, setLoadingConversations] = useState(true);
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
@@ -67,6 +100,7 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
             detail.messages.map((message) => ({
               role: message.role,
               content: message.content,
+              evidence: message.evidence ?? undefined,
             }))
           );
         }
@@ -97,6 +131,7 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
         detail.messages.map((message) => ({
           role: message.role,
           content: message.content,
+          evidence: message.evidence ?? undefined,
         }))
       );
     } catch (cause) {
@@ -145,7 +180,11 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
 
       setTurns((previous) => [
         ...previous,
-        { role: "assistant", content: response.assistant_message.content },
+        {
+          role: "assistant",
+          content: response.assistant_message.content,
+          evidence: response.assistant_message.evidence ?? undefined,
+        },
       ]);
       // keep the selector ordered by latest activity (matching the backend)
       api
@@ -266,7 +305,44 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
               {turn.role === "user" ? (
                 turn.content
               ) : (
-                <p className="whitespace-pre-wrap">{turn.content}</p>
+                <>
+                  <p className="whitespace-pre-wrap">{turn.content}</p>
+                  {turn.evidence && turn.evidence.length > 0 ? (
+                    <div className="mt-2 space-y-1.5 border-t pt-2">
+                      <p className="text-[11px] font-medium text-muted-foreground">
+                        شواهد بالینی
+                      </p>
+                      <ul className="space-y-1.5">
+                        {turn.evidence.map((item) => (
+                          <li
+                            key={item.source_id}
+                            className="flex flex-wrap items-center gap-1.5 text-xs leading-5"
+                          >
+                            {evidenceIcon(item.source_type)}
+                            <span>{item.description}</span>
+                            <span
+                              className="text-muted-foreground/60"
+                              dir="ltr"
+                            >
+                              {item.source_id}
+                            </span>
+                            {item.document_id ? (
+                              <a
+                                href={api.documentDownloadUrl(item.document_id)}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-0.5 font-medium text-primary underline-offset-2 hover:underline"
+                              >
+                                مشاهده سند اصلی
+                                <ExternalLinkIcon className="size-3" />
+                              </a>
+                            ) : null}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </>
               )}
             </div>
           ))}

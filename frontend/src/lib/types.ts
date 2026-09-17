@@ -204,7 +204,23 @@ export interface ConversationMessage {
   conversation_id: number;
   role: "user" | "assistant";
   content: string;
+  evidence: EvidenceItem[] | null;
   created_at: string;
+}
+
+/** Patient-record evidence attached to assistant answers (Task 16). */
+export interface EvidenceItem {
+  source_id: string;
+  source_type:
+    | "medication"
+    | "allergy"
+    | "condition"
+    | "lab"
+    | "document"
+    | "clinical_note"
+    | "voice_note";
+  description: string;
+  document_id: number | null;
 }
 
 export interface ConversationDetail extends ConversationSummary {

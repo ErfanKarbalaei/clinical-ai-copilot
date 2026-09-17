@@ -432,6 +432,34 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
   lifecycle, title derivation, persistence after AI failure (502 → user
   message kept, no fake assistant), safety mode, cascade delete
 
+**Done — Task 16 (evidence & source documents):**
+
+- Patient-record provenance for the persistent chat: every Task-9 context
+  item carries a stable evidence id derived from its real database
+  primary key (`MED-42`, `ALLERGY-8`, `COND-17`, `LAB-31`, `DOC-123`,
+  `NOTE-45`, `VOICE-9`); prompts (normal + medication-safety, composed
+  from the existing Task-10/14 prompts) instruct the model to cite ONLY
+  supplied ids and never output URLs/PubMed/guideline citations
+- Backend never trusts the model: every cited id is validated against
+  this patient's actual context — foreign ids (another patient), fabrications,
+  URL-like strings are dropped, never transformed; prose (non-JSON)
+  answers fall back to plain text with no evidence
+- Document-backed evidence: `document_id` surfaces the ORIGINAL source
+  (a document itself, or a lab through its real `document_id` FK); the
+  file opens via the EXISTING `GET /documents/{id}/download` (307 →
+  short-lived presigned URL) — no second storage mechanism, no model
+  URLs, no persisted URLs (one nullable JSONB column on
+  `conversation_messages`, migration `ab22d66552c2`)
+- Frontend: assistant bubbles show a secondary «شواهد بالینی» block —
+  icon + human-readable description + subtle source id + «مشاهده سند
+  اصلی» link for document-backed items; old messages without evidence
+  render unchanged
+- 15 new tests — full suite: 244 passing; live smoke with a REAL MinIO
+  object: evidence ids built from real records, byte-identical original
+  via presigned URL, blocked Gemini → 502 with no fabricated answer
+- NOTE: this is patient-record provenance only — NO external medical
+  literature citations (explicitly out of scope)
+
 **Not started (intentionally — later phases):** authentication,
 medical-evidence retrieval with citations, RAG/vector search, persisted
 conversations.

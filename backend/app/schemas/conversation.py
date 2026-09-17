@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.models.enums import ChatRole
 
@@ -17,6 +17,22 @@ class ConversationCreate(BaseModel):
     )
 
 
+class EvidenceItemResponse(BaseModel):
+    """One validated piece of patient-record evidence (Task 16).
+
+    ``document_id`` points to the ORIGINAL source document when a real
+    relationship exists — the frontend opens it via the existing secure
+    document download endpoint. No URLs are stored or returned here.
+    """
+
+    source_id: str = Field(description="شناسهٔ پایدار شواهد، مثال LAB-31")
+    source_type: str = Field(description="نوع رکورد منبع")
+    description: str = Field(description="توصیف خوانا از رکورد واقعی")
+    document_id: int | None = Field(
+        default=None, description="سند منبع اصلی (در صورت وجود)"
+    )
+
+
 class ConversationMessageResponse(BaseModel):
     """One persisted message (user question or assistant answer)."""
 
@@ -24,9 +40,19 @@ class ConversationMessageResponse(BaseModel):
     conversation_id: int
     role: ChatRole
     content: str
+    evidence: list[EvidenceItemResponse] = Field(
+        default_factory=list,
+        description="شواهد اعتبارسنجی‌شدهٔ پاسخ (فقط برای پیام‌های دستیار)",
+    )
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+    @field_validator("evidence", mode="before")
+    @classmethod
+    def _none_becomes_empty(cls, value):
+        """Pre-Task-16 rows (and user messages) store NULL → render as []."""
+        return value or []
 
 
 class ConversationResponse(BaseModel):

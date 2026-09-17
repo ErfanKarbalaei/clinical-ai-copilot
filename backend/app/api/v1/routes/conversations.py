@@ -27,7 +27,7 @@ from app.schemas.conversation import (
     ConversationResponse,
     SendMessageResponse,
 )
-from app.services import ai, ai_medication_safety
+from app.services import ai, evidence
 from app.services.ai import AIError, AIUnavailableError
 from app.services.patient_context import build_patient_context
 
@@ -143,10 +143,16 @@ def get_conversation(
     description=(
         "Persists the user message, builds the patient's current context "
         "(Task 9, live) plus the recent conversation history, asks the "
-        "existing AI provider, and persists the assistant answer. "
-        "`medication_safety=true` switches to the Task-14 safety prompt. "
-        "If the provider fails, the user message stays persisted for "
-        "traceability and NO assistant message is fabricated (502)."
+        "existing AI provider, and persists the assistant answer. Every "
+        "context item carries a stable evidence id (`MED-42`, `LAB-31`, …) "
+        "and the answer may cite them; the backend validates every cited "
+        "id against this patient's actual records and persists the "
+        "validated evidence with the assistant message. Document-backed "
+        "evidence is opened through the existing secure download endpoint "
+        "(the model never sees URLs). `medication_safety=true` switches to "
+        "the Task-14 safety prompt. If the provider fails, the user "
+        "message stays persisted for traceability and NO assistant message "
+        "is fabricated (502)."
     ),
     responses={
         status.HTTP_404_NOT_FOUND: {"description": CONVERSATION_NOT_FOUND_DETAIL},
@@ -197,16 +203,23 @@ def send_conversation_message(
     # Patient context is ALWAYS rebuilt live (Task 9) — never snapshotted;
     # conversation history and patient context stay separate concepts.
     context = build_patient_context(db, conversation.patient)
+    context_dict = context.model_dump()
+
+    # Task 16: stable evidence ids from the REAL records + the valid-index
+    # used later to validate whatever the model claims.
+    evidence_index = evidence.build_evidence_index(context_dict)
+    evidence.annotate_context(context_dict)
+
     system_prompt = (
-        ai_medication_safety.MEDICATION_SAFETY_CHAT_PROMPT
+        evidence.EVIDENCE_SAFETY_SYSTEM_PROMPT
         if payload.medication_safety
-        else ai.SYSTEM_PROMPT
+        else evidence.EVIDENCE_CHAT_SYSTEM_PROMPT
     )
 
     try:
-        answer = provider.complete(
+        raw = provider.complete(
             system=system_prompt,
-            user=ai.build_user_message(context.model_dump(), content),
+            user=ai.build_user_message(context_dict, content),
             history=history,
         )
     except AIError as error:
@@ -221,10 +234,18 @@ def send_conversation_message(
             detail=AI_PROVIDER_ERROR_DETAIL,
         ) from None
 
+    # Never trust the model: only ids that exist in THIS patient's context
+    # survive; foreign/fabricated ids are dropped (never transformed).
+    answer, model_evidence_ids = evidence.parse_evidence_answer(raw)
+    validated_evidence = evidence.validate_evidence(
+        model_evidence_ids, evidence_index
+    )
+
     assistant_message = ConversationMessage(
         conversation=conversation,
         role=ChatRole.assistant,
-        content=answer.strip(),
+        content=answer,
+        evidence=[item.model_dump() for item in validated_evidence] or None,
     )
     db.add(assistant_message)
     # keep list ordering meaningful (newest activity first)
