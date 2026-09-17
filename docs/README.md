@@ -31,3 +31,4 @@ Current contents:
 - `task-16-evidence-source-documents-report.md` — Task 16 (patient-record evidence ids + validated citations + original source-document access) implementation report
 - `task-17-mcp-agent-spike-report.md` — Task 17 (local MCP server + clinical AI agent spike, with an honest keep/drop assessment) implementation report
 - `task-18-authentication-report.md` — Task 18 (JWT authentication + patient-level access control) implementation report
+- `task-19-final-integration-e2e-report.md` — Task 19 (final integration & end-to-end verification: 36/36 live E2E, zero integration bugs) implementation report
