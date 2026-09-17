@@ -27,3 +27,4 @@ Current contents:
 - `task-12-document-analysis-report.md` — Task 12 (AI analysis of extracted document text) implementation report
 - `task-13-voice-documentation-report.md` — Task 13 (STT provider abstraction + optional Gemini transcript cleanup) implementation report
 - `task-14-ai-medication-safety-report.md` — Task 14 (AI-assisted medication-safety analysis: structured endpoint + chat safety mode) implementation report
+- `task-15-persistent-clinical-chat-report.md` — Task 15 (persistent clinical conversations: DB-backed chat history + conversation UI) implementation report

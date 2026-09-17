@@ -11,6 +11,10 @@ import type {
   AiMedicationSafetyCheckPayload,
   AiMedicationSafetyResult,
   ChatResponse,
+  ConversationDetail,
+  ConversationSummary,
+  SendMessagePayload,
+  SendMessageResult,
   ChatTurn,
   ClinicalNoteFromVoicePayload,
   Condition,
@@ -283,5 +287,33 @@ export const api = {
       `/patients/${patientId}/medications/ai-safety-check`,
       { method: "POST", body: JSON.stringify(payload) }
     );
+  },
+
+  // --- persistent clinical conversations (Task 15) ---
+  listConversations(patientId: number) {
+    return request<ConversationSummary[]>(
+      `/patients/${patientId}/conversations`
+    );
+  },
+  createConversation(patientId: number, title?: string) {
+    return request<ConversationSummary>(`/patients/${patientId}/conversations`, {
+      method: "POST",
+      body: JSON.stringify(title ? { title } : {}),
+    });
+  },
+  getConversation(conversationId: number) {
+    return request<ConversationDetail>(`/conversations/${conversationId}`);
+  },
+  sendConversationMessage(
+    conversationId: number,
+    payload: SendMessagePayload
+  ) {
+    return request<SendMessageResult>(`/conversations/${conversationId}/messages`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  },
+  deleteConversation(conversationId: number) {
+    return request<void>(`/conversations/${conversationId}`, { method: "DELETE" });
   },
 };

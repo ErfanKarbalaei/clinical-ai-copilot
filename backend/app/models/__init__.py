@@ -9,6 +9,7 @@ from app.models.allergy import Allergy
 from app.models.clinical_event import ClinicalEvent
 from app.models.clinical_note import ClinicalNote
 from app.models.condition import Condition
+from app.models.conversation import Conversation, ConversationMessage
 from app.models.document import Document
 from app.models.lab_result import LabResult
 from app.models.medication import Medication, PatientMedication
@@ -20,6 +21,8 @@ __all__ = [
     "ClinicalEvent",
     "ClinicalNote",
     "Condition",
+    "Conversation",
+    "ConversationMessage",
     "Document",
     "LabResult",
     "Medication",

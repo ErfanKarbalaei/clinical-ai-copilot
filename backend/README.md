@@ -134,6 +134,16 @@ status fully intact (`cleanup_status=failed`).
 | --- | --- | --- |
 | POST | `/api/v1/patients/{id}/medications/ai-safety-check` | AI-assisted analysis of 1–5 candidate medications (`name` + optional `dose`, optional `question`) against the patient's full Task-9 context via the existing Gemini provider. Grounded prompt: distinguishes potential vs well-established interactions, surfaces patient-specific factors, missing information and uncertainty; strict JSON contract — malformed model output never reaches the client (502). Nothing persisted; never blocks saving. `medication_safety: true` on `/chat` switches the chat to the same safety analysis |
 
+**Persistent clinical conversations** (Task 15 — the stateless `/chat` endpoint above remains for compatibility)
+
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | `/api/v1/patients/{id}/conversations` | Create a conversation (optional `title`; default «گفتگوی جدید», later derived deterministically from the first message) |
+| GET | `/api/v1/patients/{id}/conversations` | List conversations, most recently updated first |
+| GET | `/api/v1/conversations/{id}` | Conversation metadata + messages (oldest first) |
+| POST | `/api/v1/conversations/{id}/messages` | Persisted exchange: saves the user message, builds the live Task-9 patient context + the last 20 messages as history, calls the existing AI provider (`medication_safety=true` → Task-14 safety prompt), persists the assistant answer, bumps `updated_at`. Provider failure → 502 with the user message kept for traceability, never a fabricated answer |
+| DELETE | `/api/v1/conversations/{id}` | Delete the conversation and all its messages (cascade) |
+
 Warnings cite a `rule_id` from the versioned knowledge base
 (`app/data/medication_rules.json`, ~30 drug classes with Persian/English
 brand+generic aliases, 32 interactions, cross-reactivity rules;

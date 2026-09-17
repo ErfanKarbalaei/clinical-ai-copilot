@@ -84,6 +84,13 @@ class ConversationType(StrEnum):
     doctor_patient = "doctor_patient"
 
 
+class ChatRole(StrEnum):
+    """Author of one message inside a persisted clinical conversation."""
+
+    user = "user"
+    assistant = "assistant"
+
+
 class ResultFlag(StrEnum):
     normal = "normal"
     abnormal = "abnormal"

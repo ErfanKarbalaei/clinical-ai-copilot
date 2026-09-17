@@ -409,6 +409,29 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
   real Gemini call attempted (403 network block → clean 502), medication
   save still 201 after the failure
 
+**Done — Task 15 (persistent clinical chat):**
+
+- Conversations + messages persisted in PostgreSQL (`conversations`,
+  `conversation_messages`; migration `03378aed5376`, fully reversible) —
+  messages store only role + content; patient context is NEVER
+  snapshotted, it is rebuilt live from Task 9 at every message
+- API: create/list/get/delete conversations + `POST
+  /conversations/{id}/messages` — persists the user message first
+  (traceable on provider failure), sends live Task-9 context + the last
+  20 messages as history + the current message to the existing Gemini
+  provider, persists the answer, bumps `updated_at`. No fabricated
+  answers: provider failure → 502, user message kept
+- `medication_safety=true` reuses the Task-14 safety prompt unchanged
+  inside persisted conversations; deterministic first-message title
+  derivation (no LLM); the stateless Task-10 `/chat` endpoint remains
+  untouched alongside
+- Frontend: the clinical-chat card gains a conversation selector,
+  «گفتگوی جدید» and delete buttons, persisted-message bubbles, and the
+  same safety-mode toggle — Persian RTL design unchanged
+- 16 new tests — full suite: 229 passing; live smoke: conversation
+  lifecycle, title derivation, persistence after AI failure (502 → user
+  message kept, no fake assistant), safety mode, cascade delete
+
 **Not started (intentionally — later phases):** authentication,
 medical-evidence retrieval with citations, RAG/vector search, persisted
 conversations.

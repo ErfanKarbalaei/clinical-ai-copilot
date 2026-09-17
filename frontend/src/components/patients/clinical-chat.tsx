@@ -4,11 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import {
   LoaderIcon,
+  PlusIcon,
   SendIcon,
   ShieldAlertIcon,
   SparklesIcon,
+  Trash2Icon,
 } from "lucide-react";
 
+import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,27 +20,103 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
-import type { ChatTurn } from "@/lib/types";
+import type {
+  ChatTurn,
+  ConversationSummary,
+} from "@/lib/types";
 
 const MAX_QUESTION_LENGTH = 2000;
 
-/** AI assistant section — grounded in THIS patient's structured context. */
+/** AI assistant section — persisted conversations grounded in THIS patient's context. */
 export function ClinicalChat({ patientId }: { patientId: number }) {
-  const [question, setQuestion] = useState("");
+  const [conversations, setConversations] = useState<ConversationSummary[]>([]);
+  const [activeId, setActiveId] = useState<number | null>(null);
   const [turns, setTurns] = useState<ChatTurn[]>([]);
+  const [loadingConversations, setLoadingConversations] = useState(true);
+  const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // explicit UI affordance (no keyword detection): when on, the same chat
-  // request is answered with the specialized medication-safety prompt
+  // explicit UI affordance (no keyword detection): when on, the message is
+  // answered with the specialized medication-safety prompt (Task 14)
   const [safetyMode, setSafetyMode] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // load the patient's previous conversations (most recently updated first)
+    let cancelled = false;
+    (async () => {
+      try {
+        const items = await api.listConversations(patientId);
+        if (cancelled) return;
+        setConversations(items);
+        if (items.length > 0) {
+          setActiveId(items[0].id);
+          const detail = await api.getConversation(items[0].id);
+          if (cancelled) return;
+          setTurns(
+            detail.messages.map((message) => ({
+              role: message.role,
+              content: message.content,
+            }))
+          );
+        }
+      } catch {
+        if (!cancelled) setError("بارگذاری گفتگوها با خطا مواجه شد.");
+      } finally {
+        if (!cancelled) setLoadingConversations(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [patientId]);
 
   useEffect(() => {
     // keep the newest message in view
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
   }, [turns, loading]);
+
+  async function selectConversation(conversationId: number) {
+    if (loading) return;
+    setActiveId(conversationId);
+    setTurns([]);
+    setError(null);
+    try {
+      const detail = await api.getConversation(conversationId);
+      setTurns(
+        detail.messages.map((message) => ({
+          role: message.role,
+          content: message.content,
+        }))
+      );
+    } catch (cause) {
+      setError(cause instanceof ApiError ? cause.message : "خطای ناشناخته رخ داد.");
+    }
+  }
+
+  async function handleNewConversation() {
+    if (loading) return;
+    try {
+      const conversation = await api.createConversation(patientId);
+      setConversations((previous) => [conversation, ...previous]);
+      setActiveId(conversation.id);
+      setTurns([]);
+      setError(null);
+      setQuestion("");
+    } catch (cause) {
+      setError(cause instanceof ApiError ? cause.message : "ساخت گفتگو با خطا مواجه شد.");
+    }
+  }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -50,18 +129,34 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
     setLoading(true);
 
     try {
-      const history = turns.slice(-6);
-      const response = await api.askClinicalQuestion(
-        patientId,
-        trimmed,
-        history,
-        safetyMode
-      );
+      // continue the active conversation (create one implicitly if none)
+      let conversationId = activeId;
+      if (conversationId == null) {
+        const conversation = await api.createConversation(patientId);
+        conversationId = conversation.id;
+        setActiveId(conversationId);
+        setConversations((previous) => [conversation, ...previous]);
+      }
+
+      const response = await api.sendConversationMessage(conversationId, {
+        content: trimmed,
+        medication_safety: safetyMode,
+      });
+
       setTurns((previous) => [
         ...previous,
-        { role: "assistant", content: response.answer },
+        { role: "assistant", content: response.assistant_message.content },
       ]);
+      // keep the selector ordered by latest activity (matching the backend)
+      api
+        .listConversations(patientId)
+        .then(setConversations)
+        .catch(() => undefined);
     } catch (cause) {
+      // the user message may already be persisted server-side (502) — it
+      // will reappear on reload; keep the input so nothing is lost visually
+      setTurns((previous) => previous.slice(0, -1));
+      setQuestion(trimmed);
       setError(
         cause instanceof ApiError ? cause.message : "خطای ناشناخته رخ داد."
       );
@@ -69,6 +164,14 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
       setLoading(false);
     }
   }
+
+  const conversationOptions = conversations.map((conversation) => ({
+    value: String(conversation.id),
+    label: conversation.title,
+  }));
+  const activeConversation = conversations.find(
+    (conversation) => conversation.id === activeId
+  );
 
   return (
     <Card>
@@ -78,19 +181,76 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
           دستیار هوشمند بالینی
         </CardTitle>
         <CardDescription>
-          پرسش شما دربارهٔ همین بیمار — پاسخ‌ها فقط بر اساس اطلاعات ثبت‌شدهٔ
-          پرونده ساخته می‌شوند.
+          گفتگوهای این بیمار ذخیره می‌شوند و پاسخ‌ها فقط بر اساس اطلاعات
+          ثبت‌شدهٔ پرونده ساخته می‌شوند.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Select
+            items={conversationOptions}
+            value={activeId == null ? null : String(activeId)}
+            onValueChange={(value) => selectConversation(Number(value))}
+            disabled={loadingConversations || conversations.length === 0}
+          >
+            <SelectTrigger
+              className="h-9 w-full min-w-0"
+              aria-label="انتخاب گفتگو"
+            >
+              <SelectValue
+                placeholder={
+                  loadingConversations
+                    ? "در حال بارگذاری…"
+                    : conversations.length === 0
+                      ? "گفتگویی ثبت نشده است"
+                      : "انتخاب گفتگو"
+                }
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {conversationOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button
+            type="button"
+            variant="outline"
+            size="icon-sm"
+            aria-label="گفتگوی جدید"
+            title="گفتگوی جدید"
+            onClick={handleNewConversation}
+            disabled={loading}
+          >
+            <PlusIcon />
+          </Button>
+          {activeConversation ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              aria-label="حذف گفتگو"
+              title="حذف گفتگو"
+              className="text-destructive hover:text-destructive"
+              onClick={() => setDeleteOpen(true)}
+              disabled={loading}
+            >
+              <Trash2Icon />
+            </Button>
+          ) : null}
+        </div>
+
         <div
           ref={listRef}
           className="max-h-96 space-y-3 overflow-y-auto scroll-smooth"
         >
           {turns.length === 0 && !loading ? (
             <p className="rounded-lg bg-muted/50 px-4 py-6 text-center text-sm text-muted-foreground">
-              از وضعیت بیمار بپرسید — مثلاً: «خلاصهٔ وضعیت بالینی بیمار چیست؟»
-              یا «کدام داروها با حساسیت ثبت‌شده تداخل احتمالی دارند؟»
+              {conversations.length === 0
+                ? "با نوشتن اولین پرسش، گفتگوی جدیدی برای این بیمار ساخته می‌شود — مثلاً: «خلاصهٔ وضعیت بالینی بیمار چیست؟»"
+                : "گفتگو خالی است — پرسش خود را بنویسید."}
             </p>
           ) : null}
 
@@ -179,6 +339,28 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
           نادرست باشند؛ تصمیم نهایی و مسئولیت آن همیشه با پزشک است.
         </p>
       </CardContent>
+
+      <ConfirmDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        title="حذف گفتگو"
+        description={`گفتگوی «${activeConversation?.title ?? "بدون عنوان"}» و همهٔ پیام‌های آن حذف می‌شود.`}
+        confirmLabel="حذف قطعی"
+        onConfirm={async () => {
+          if (activeId == null) return;
+          await api.deleteConversation(activeId);
+          const remaining = conversations.filter(
+            (conversation) => conversation.id !== activeId
+          );
+          setConversations(remaining);
+          if (remaining.length > 0) {
+            await selectConversation(remaining[0].id);
+          } else {
+            setActiveId(null);
+            setTurns([]);
+          }
+        }}
+      />
     </Card>
   );
 }

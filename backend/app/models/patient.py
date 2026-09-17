@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from app.models.clinical_event import ClinicalEvent
     from app.models.clinical_note import ClinicalNote
     from app.models.condition import Condition
+    from app.models.conversation import Conversation
     from app.models.document import Document
     from app.models.lab_result import LabResult
     from app.models.medication import PatientMedication
@@ -69,6 +70,9 @@ class Patient(TimestampMixin, Base):
         back_populates="patient", cascade="all, delete-orphan", passive_deletes=True
     )
     clinical_events: Mapped[list[ClinicalEvent]] = relationship(
+        back_populates="patient", cascade="all, delete-orphan", passive_deletes=True
+    )
+    conversations: Mapped[list[Conversation]] = relationship(
         back_populates="patient", cascade="all, delete-orphan", passive_deletes=True
     )
 

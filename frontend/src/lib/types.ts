@@ -190,6 +190,37 @@ export interface ChatTurn {
   content: string;
 }
 
+/** Persistent clinical conversations (Task 15). */
+export interface ConversationSummary {
+  id: number;
+  patient_id: number;
+  title: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ConversationMessage {
+  id: number;
+  conversation_id: number;
+  role: "user" | "assistant";
+  content: string;
+  created_at: string;
+}
+
+export interface ConversationDetail extends ConversationSummary {
+  messages: ConversationMessage[];
+}
+
+export interface SendMessagePayload {
+  content: string;
+  medication_safety: boolean;
+}
+
+export interface SendMessageResult {
+  user_message: ConversationMessage;
+  assistant_message: ConversationMessage;
+}
+
 /** AI-assisted medication safety (decision support — never blocks saving). */
 export interface MedicationCandidate {
   name: string;
