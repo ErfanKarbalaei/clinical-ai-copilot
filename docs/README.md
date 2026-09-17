@@ -30,3 +30,4 @@ Current contents:
 - `task-15-persistent-clinical-chat-report.md` — Task 15 (persistent clinical conversations: DB-backed chat history + conversation UI) implementation report
 - `task-16-evidence-source-documents-report.md` — Task 16 (patient-record evidence ids + validated citations + original source-document access) implementation report
 - `task-17-mcp-agent-spike-report.md` — Task 17 (local MCP server + clinical AI agent spike, with an honest keep/drop assessment) implementation report
+- `task-18-authentication-report.md` — Task 18 (JWT authentication + patient-level access control) implementation report
