@@ -180,6 +180,8 @@ backend) and `frontend/.env.example` (used by Next.js):
 | `AI_BASE_URL` | backend (optional) | OpenAI-compatible base URL (default `https://api.openai.com/v1`; e.g. `http://localhost:11434/v1` for Ollama) |
 | `AI_MODEL` | backend (optional) | Model override (empty = provider default: `gemini-3.6-flash` / `gpt-4o-mini`) |
 | `BACKEND_PORT` | backend (reference) | backend port (default `8000`) |
+| `JWT_SECRET_KEY` | backend | JWT signing secret — MUST be changed outside development |
+| `JWT_ALGORITHM` / `JWT_EXPIRE_MINUTES` | backend | token algorithm (`HS256`) and lifetime (default 480 min) |
 | `NEXT_PUBLIC_API_URL` | frontend | public backend API base URL, inlined at build time |
 
 The backend additionally supports an optional `CORS_ORIGINS` variable
@@ -482,6 +484,25 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
   becomes worthwhile only for much larger records, many more tools, or
   external agent clients
 
-**Not started (intentionally — later phases):** authentication,
+**Done — Task 18 (authentication & patient access control):**
+
+- JWT auth layer: bcrypt password hashing (`core/security.py`), bearer
+  tokens, `/auth/register` (doctor-only self-registration), `/auth/login`
+  (identical 401 for wrong email/password), `/auth/me`; `GET /health`
+  stays public
+- Patient-level authorization through the existing `patient_from_id`
+  choke point + `ensure_patient_access` on every flat child route —
+  admin sees all patients, doctors only their assigned ones
+  (`patient_user_access`); creating a patient auto-assigns the doctor;
+  patient lists are role-scoped; document presigned URLs are generated
+  only AFTER authorization
+- Migration `9a1c78a56f1a` (users + patient_user_access, fully
+  reversible); demo seed users (dev-only passwords documented in
+  `.env.example`); frontend: `/login` page, bearer attach (client) +
+  cookie forwarding (server components), 401 → login redirect, logout
+- 56 new tests — full suite: 327 passing (all 271 pre-existing tests
+  untouched, running as an admin test context)
+
+**Not started (intentionally — later phases):**
 medical-evidence retrieval with citations, RAG/vector search, persisted
 conversations.

@@ -8,6 +8,7 @@ from fastapi import APIRouter
 
 from app.api.v1.routes.ai_medication_safety import router as ai_medication_safety_router
 from app.api.v1.routes.agent import router as agent_router
+from app.api.v1.routes.auth import router as auth_router
 from app.api.v1.routes.allergies import router as allergies_router
 from app.api.v1.routes.chat import router as chat_router
 from app.api.v1.routes.conditions import router as conditions_router
@@ -21,6 +22,7 @@ from app.api.v1.routes.voice_notes import router as voice_notes_router
 
 api_router = APIRouter()
 api_router.include_router(health_router)
+api_router.include_router(auth_router)
 api_router.include_router(patients_router)
 api_router.include_router(conditions_router)
 api_router.include_router(allergies_router)

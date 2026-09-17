@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ChevronLeftIcon, ChevronRightIcon, SearchIcon, UsersIcon } from "lucide-react";
 
 import { AddPatientButton } from "@/components/patients/patient-actions";
+import { LogoutButton } from "@/components/shared/logout-button";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ErrorState } from "@/components/shared/error-state";
 import { Button } from "@/components/ui/button";
@@ -48,6 +50,9 @@ export default async function PatientsPage({ searchParams }: PatientsPageProps) 
       offset: (page - 1) * PAGE_SIZE,
     });
   } catch (cause) {
+    if (cause instanceof ApiError && cause.status === 401) {
+      redirect("/login");
+    }
     errorMessage = cause instanceof ApiError ? cause.message : "خطای ناشناخته";
   }
 
@@ -73,7 +78,10 @@ export default async function PatientsPage({ searchParams }: PatientsPageProps) 
               : `در مجموع ${total} بیمار ثبت شده است`}
           </p>
         </div>
-        <AddPatientButton />
+        <div className="flex items-center gap-2">
+          <AddPatientButton />
+          <LogoutButton />
+        </div>
       </div>
 
       <Card>

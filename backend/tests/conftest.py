@@ -14,10 +14,14 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
 import app.models  # noqa: F401  (register models on Base.metadata)
+from app.api.v1.dependencies import get_current_user
 from app.core.config import get_settings
+from app.core.security import hash_password
 from app.db.base import Base
 from app.db.session import get_db
 from app.main import app
+from app.models import User
+from app.models.enums import UserRole
 
 settings = get_settings()
 
@@ -33,8 +37,23 @@ def client() -> TestClient:
 
 @pytest.fixture()
 def api_client(db_session) -> TestClient:
-    """HTTP test client whose DB dependency uses the isolated test session."""
+    """HTTP test client whose DB dependency uses the isolated test session.
+
+    Task 18: all pre-existing tests run authenticated as an ADMIN user so
+    their behavior is unchanged (admins bypass patient access). Dedicated
+    auth/access tests use their own clients with the real auth dependency.
+    """
+    admin = User(
+        email="suite-admin@test.local",
+        password_hash=hash_password("suite-admin-password"),
+        full_name="Suite Admin",
+        role=UserRole.admin,
+    )
+    db_session.add(admin)
+    db_session.commit()
+
     app.dependency_overrides[get_db] = lambda: db_session
+    app.dependency_overrides[get_current_user] = lambda: admin
     try:
         yield TestClient(app)
     finally:

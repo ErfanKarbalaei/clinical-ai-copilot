@@ -24,10 +24,14 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
-from app.api.v1.dependencies import patient_from_id
+from app.api.v1.dependencies import (
+    ensure_patient_access,
+    get_current_user,
+    patient_from_id,
+)
 from app.core.config import get_settings
 from app.db.session import get_db
-from app.models import ClinicalEvent, ClinicalNote, Patient, VoiceNote
+from app.models import ClinicalEvent, ClinicalNote, Patient, User, VoiceNote
 from app.models.enums import ConversationType, TranscriptionStatus
 from app.schemas.clinical_note import ClinicalNoteResponse
 from app.schemas.voice_note import (
@@ -66,13 +70,16 @@ MAX_AUDIO_SIZE_BYTES = 50 * 1024 * 1024
 MAX_AUDIO_NAME_LENGTH = 300
 
 
-def _get_voice_note_or_404(db: Session, voice_note_id: int) -> VoiceNote:
+def _get_voice_note_or_404(
+    db: Session, user: User, voice_note_id: int
+) -> VoiceNote:
     voice_note = db.get(VoiceNote, voice_note_id)
     if voice_note is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=VOICE_NOTE_NOT_FOUND_DETAIL,
         )
+    ensure_patient_access(db, user, voice_note.patient_id)
     return voice_note
 
 
@@ -200,8 +207,12 @@ def list_voice_notes(
     summary="Get a voice note by id",
     responses={status.HTTP_404_NOT_FOUND: {"description": VOICE_NOTE_NOT_FOUND_DETAIL}},
 )
-def get_voice_note(voice_note_id: int, db: Session = Depends(get_db)) -> VoiceNote:
-    return _get_voice_note_or_404(db, voice_note_id)
+def get_voice_note(
+    voice_note_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> VoiceNote:
+    return _get_voice_note_or_404(db, user, voice_note_id)
 
 
 @router.get(
@@ -215,9 +226,11 @@ def get_voice_note(voice_note_id: int, db: Session = Depends(get_db)) -> VoiceNo
     },
 )
 def download_voice_note(
-    voice_note_id: int, db: Session = Depends(get_db)
+    voice_note_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> RedirectResponse:
-    voice_note = _get_voice_note_or_404(db, voice_note_id)
+    voice_note = _get_voice_note_or_404(db, user, voice_note_id)
     try:
         url = storage.presigned_download_url(voice_note.audio_storage_key)
     except StorageError:
@@ -236,9 +249,12 @@ def download_voice_note(
     responses={status.HTTP_404_NOT_FOUND: {"description": VOICE_NOTE_NOT_FOUND_DETAIL}},
 )
 def update_voice_note(
-    voice_note_id: int, payload: VoiceNoteUpdate, db: Session = Depends(get_db)
+    voice_note_id: int,
+    payload: VoiceNoteUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> VoiceNote:
-    voice_note = _get_voice_note_or_404(db, voice_note_id)
+    voice_note = _get_voice_note_or_404(db, user, voice_note_id)
     for field, value in payload.model_dump(exclude_unset=True).items():
         setattr(voice_note, field, value)
     db.commit()
@@ -260,8 +276,9 @@ def retranscribe_voice_note(
     voice_note_id: int,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> VoiceNote:
-    voice_note = _get_voice_note_or_404(db, voice_note_id)
+    voice_note = _get_voice_note_or_404(db, user, voice_note_id)
     if voice_note.transcription_status == TranscriptionStatus.processing:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -288,8 +305,9 @@ def create_note_from_transcript(
     voice_note_id: int,
     payload: CreateNoteFromTranscript,
     db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> ClinicalNote:
-    voice_note = _get_voice_note_or_404(db, voice_note_id)
+    voice_note = _get_voice_note_or_404(db, user, voice_note_id)
     note = ClinicalNote(
         patient_id=voice_note.patient_id,
         voice_note_id=voice_note.id,
@@ -322,8 +340,12 @@ def create_note_from_transcript(
     description="Removes the original audio, the row, and its timeline event. Clinical notes derived from it are kept (link set to null).",
     responses={status.HTTP_404_NOT_FOUND: {"description": VOICE_NOTE_NOT_FOUND_DETAIL}},
 )
-def delete_voice_note(voice_note_id: int, db: Session = Depends(get_db)) -> None:
-    voice_note = _get_voice_note_or_404(db, voice_note_id)
+def delete_voice_note(
+    voice_note_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> None:
+    voice_note = _get_voice_note_or_404(db, user, voice_note_id)
     try:
         storage.delete_object(voice_note.audio_storage_key)
     except StorageError:

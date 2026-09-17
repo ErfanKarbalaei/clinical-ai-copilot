@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import {
   ActivityIcon,
   AlertCircleIcon,
@@ -170,6 +170,7 @@ export default async function PatientDetailPage({
       api.getPatientTimeline(patientId),
     ]);
   } catch (cause) {
+    if (cause instanceof ApiError && cause.status === 401) redirect("/login");
     if (cause instanceof ApiError && cause.status === 404) notFound();
     return (
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">

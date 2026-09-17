@@ -95,3 +95,10 @@ class ResultFlag(StrEnum):
     normal = "normal"
     abnormal = "abnormal"
     critical = "critical"
+
+
+class UserRole(StrEnum):
+    """MVP application roles (no complex RBAC)."""
+
+    doctor = "doctor"
+    admin = "admin"

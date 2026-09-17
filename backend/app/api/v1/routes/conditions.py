@@ -5,9 +5,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import case, select
 from sqlalchemy.orm import Session
 
-from app.api.v1.dependencies import patient_from_id
+from app.api.v1.dependencies import (
+    ensure_patient_access,
+    get_current_user,
+    patient_from_id,
+)
 from app.db.session import get_db
-from app.models import Condition, Patient
+from app.models import Condition, Patient, User
 from app.models.enums import ConditionStatus
 from app.schemas.condition import ConditionCreate, ConditionResponse, ConditionUpdate
 
@@ -23,12 +27,15 @@ _condition_order = (
 )
 
 
-def _get_condition_or_404(db: Session, condition_id: int) -> Condition:
+def _get_condition_or_404(
+    db: Session, user: User, condition_id: int
+) -> Condition:
     condition = db.get(Condition, condition_id)
     if condition is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=CONDITION_NOT_FOUND_DETAIL
         )
+    ensure_patient_access(db, user, condition.patient_id)
     return condition
 
 
@@ -76,8 +83,12 @@ def list_conditions(
     summary="Get a condition by id",
     responses={status.HTTP_404_NOT_FOUND: {"description": "مشکل بالینی یافت نشد"}},
 )
-def get_condition(condition_id: int, db: Session = Depends(get_db)) -> Condition:
-    return _get_condition_or_404(db, condition_id)
+def get_condition(
+    condition_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> Condition:
+    return _get_condition_or_404(db, user, condition_id)
 
 
 @router.patch(
@@ -87,9 +98,12 @@ def get_condition(condition_id: int, db: Session = Depends(get_db)) -> Condition
     responses={status.HTTP_404_NOT_FOUND: {"description": "مشکل بالینی یافت نشد"}},
 )
 def update_condition(
-    condition_id: int, payload: ConditionUpdate, db: Session = Depends(get_db)
+    condition_id: int,
+    payload: ConditionUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> Condition:
-    condition = _get_condition_or_404(db, condition_id)
+    condition = _get_condition_or_404(db, user, condition_id)
     for field, value in payload.model_dump(exclude_unset=True).items():
         setattr(condition, field, value)
     db.commit()
@@ -103,7 +117,11 @@ def update_condition(
     summary="Delete a condition",
     responses={status.HTTP_404_NOT_FOUND: {"description": "مشکل بالینی یافت نشد"}},
 )
-def delete_condition(condition_id: int, db: Session = Depends(get_db)) -> None:
-    condition = _get_condition_or_404(db, condition_id)
+def delete_condition(
+    condition_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> None:
+    condition = _get_condition_or_404(db, user, condition_id)
     db.delete(condition)
     db.commit()

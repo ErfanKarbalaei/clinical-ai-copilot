@@ -58,6 +58,26 @@ uvicorn app.main:app --reload --port 8000
 
 ### API endpoints
 
+**Authentication (Task 18)** — all clinical endpoints require
+`Authorization: Bearer <JWT>`; `GET /health` and `/auth/login|register` stay
+public. Roles: `admin` sees every patient; `doctor` only patients assigned
+via `patient_user_access` (creating a patient auto-assigns the doctor).
+Flat child resources (documents/voice-notes/conversations/…) verify access
+through their owning patient BEFORE doing anything (download presigned URLs
+are only generated after authorization).
+
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | `/api/v1/auth/register` | Development-friendly registration — always creates a `doctor` (admin self-registration rejected); password stored as bcrypt hash, never returned |
+| POST | `/api/v1/auth/login` | Email + password → `{access_token, token_type: bearer}`; identical 401 for unknown email and wrong password |
+| GET | `/api/v1/auth/me` | Current authenticated user (no password hash) |
+
+Demo users (seeded by `python -m scripts.seed`, development ONLY):
+`admin@example.com / admin-dev-12345` and
+`doctor@example.com / doctor-dev-12345` (the demo doctor gets access to all
+seeded patients). Configure `JWT_SECRET_KEY` / `JWT_EXPIRE_MINUTES` in
+`.env` (never commit real secrets).
+
 **Patients**
 
 | Method | Path | Description |

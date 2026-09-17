@@ -18,10 +18,11 @@ import argparse
 from datetime import date, datetime, timezone
 from typing import Optional
 
-from sqlalchemy import delete
+from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
 from app.db.session import SessionLocal
+from app.core.security import hash_password
 from app.models import (
     Allergy,
     ClinicalEvent,
@@ -34,6 +35,8 @@ from app.models import (
     PatientMedication,
     VoiceNote,
 )
+from app.models import PatientUserAccess, User
+from app.models.enums import UserRole
 from app.models.enums import (
     AllergySeverity,
     ConversationType,
@@ -439,6 +442,57 @@ def run(session: Session | None = None, reset: bool = False) -> dict[str, int]:
             session.close()
 
 
+# ---- DEMO USERS (development only — never use in production) ----
+# Passwords are intentionally documented dev-only values.
+DEMO_ADMIN_EMAIL = "admin@example.com"
+DEMO_ADMIN_PASSWORD = "admin-dev-12345"
+DEMO_DOCTOR_EMAIL = "doctor@example.com"
+DEMO_DOCTOR_PASSWORD = "doctor-dev-12345"
+
+
+def seed_users(session: Session) -> dict[str, User]:
+    """Create the demo admin + doctor and grant the doctor every patient."""
+    users: dict[str, User] = {}
+    for email, password, name, role in [
+        (DEMO_ADMIN_EMAIL, DEMO_ADMIN_PASSWORD, "مدیر دمو", UserRole.admin),
+        (DEMO_DOCTOR_EMAIL, DEMO_DOCTOR_PASSWORD, "پزشک دمو", UserRole.doctor),
+    ]:
+        user = session.scalars(
+            select(User).where(User.email == email)
+        ).one_or_none()
+        if user is None:
+            user = User(
+                email=email,
+                password_hash=hash_password(password),
+                full_name=name,
+                role=role,
+            )
+            session.add(user)
+            session.flush()
+            print(f"  demo user created: {email} (role={role.value})")
+        users[email] = user
+
+    doctor = users[DEMO_DOCTOR_EMAIL]
+    for patient_id in session.scalars(
+        select(Patient.id)
+    ):
+        exists = session.scalars(
+            select(PatientUserAccess.id).where(
+                PatientUserAccess.patient_id == patient_id,
+                PatientUserAccess.user_id == doctor.id,
+            )
+        ).first()
+        if exists is None:
+            session.add(
+                PatientUserAccess(patient_id=patient_id, user_id=doctor.id)
+            )
+    session.commit()
+    print(
+        f"  demo doctor {DEMO_DOCTOR_EMAIL} now has access to all seeded patients"
+    )
+    return users
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Seed the development database with sample clinical data."
@@ -453,8 +507,12 @@ def main() -> None:
     try:
         counts = run(reset=args.reset)
     except RuntimeError as error:
-        print(f"ERROR: {error}")
-        raise SystemExit(1) from None
+        # clinical data already exists — demo users are still seeded
+        # (they are idempotent and independent of the clinical rows)
+        print(f"NOTE: {error}")
+        counts = {}
+    with SessionLocal() as session:
+        seed_users(session)
 
     print("Seed completed. Row counts:")
     for table, count in counts.items():

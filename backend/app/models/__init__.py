@@ -14,6 +14,8 @@ from app.models.document import Document
 from app.models.lab_result import LabResult
 from app.models.medication import Medication, PatientMedication
 from app.models.patient import Patient
+from app.models.patient_user_access import PatientUserAccess
+from app.models.user import User
 from app.models.voice_note import VoiceNote
 
 __all__ = [
@@ -28,5 +30,7 @@ __all__ = [
     "Medication",
     "Patient",
     "PatientMedication",
+    "PatientUserAccess",
     "VoiceNote",
+    "User",
 ]

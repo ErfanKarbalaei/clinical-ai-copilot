@@ -14,9 +14,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
-from app.api.v1.dependencies import patient_from_id
+from app.api.v1.dependencies import (
+    ensure_patient_access,
+    get_current_user,
+    patient_from_id,
+)
 from app.db.session import get_db
-from app.models import Conversation, ConversationMessage, Patient
+from app.models import Conversation, ConversationMessage, Patient, User
 from app.models.enums import ChatRole
 from app.schemas.conversation import (
     DEFAULT_CONVERSATION_TITLE,
@@ -47,13 +51,16 @@ MAX_HISTORY_MESSAGES = 20
 _DERIVED_TITLE_MAX_CHARS = 50
 
 
-def _get_conversation_or_404(db: Session, conversation_id: int) -> Conversation:
+def _get_conversation_or_404(
+    db: Session, user: User, conversation_id: int
+) -> Conversation:
     conversation = db.get(Conversation, conversation_id)
     if conversation is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=CONVERSATION_NOT_FOUND_DETAIL,
         )
+    ensure_patient_access(db, user, conversation.patient_id)
     return conversation
 
 
@@ -121,7 +128,9 @@ def list_conversations(
     },
 )
 def get_conversation(
-    conversation_id: int, db: Session = Depends(get_db)
+    conversation_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> Conversation:
     conversation = db.scalars(
         select(Conversation)
@@ -133,6 +142,7 @@ def get_conversation(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=CONVERSATION_NOT_FOUND_DETAIL,
         )
+    ensure_patient_access(db, user, conversation.patient_id)
     return conversation
 
 
@@ -165,8 +175,9 @@ def send_conversation_message(
     conversation_id: int,
     payload: ConversationMessageCreate,
     db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> SendMessageResponse:
-    conversation = _get_conversation_or_404(db, conversation_id)
+    conversation = _get_conversation_or_404(db, user, conversation_id)
     content = payload.content.strip()
 
     # history BEFORE the current message: most recent N, restored to
@@ -270,9 +281,11 @@ def send_conversation_message(
     },
 )
 def delete_conversation(
-    conversation_id: int, db: Session = Depends(get_db)
+    conversation_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> None:
-    conversation = _get_conversation_or_404(db, conversation_id)
+    conversation = _get_conversation_or_404(db, user, conversation_id)
     db.delete(conversation)
     db.commit()
     return None

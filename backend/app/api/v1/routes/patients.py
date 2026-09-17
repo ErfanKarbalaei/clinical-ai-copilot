@@ -5,7 +5,11 @@ from sqlalchemy import case, func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.api.v1.dependencies import PATIENT_NOT_FOUND_DETAIL, patient_from_id
+from app.api.v1.dependencies import (
+    PATIENT_NOT_FOUND_DETAIL,
+    get_current_user,
+    patient_from_id,
+)
 from app.db.session import get_db
 from app.models import (
     Allergy,
@@ -14,11 +18,14 @@ from app.models import (
     LabResult,
     Patient,
     PatientMedication,
+    PatientUserAccess,
+    User,
 )
 from app.models.enums import (
     AllergySeverity,
     ConditionStatus,
     MedicationStatus,
+    UserRole,
 )
 from app.schemas.allergy import AllergyResponse
 from app.schemas.clinical_note import ClinicalNoteResponse
@@ -52,7 +59,11 @@ RECENT_ITEMS_LIMIT = 5
     summary="Create a patient",
     responses={status.HTTP_409_CONFLICT: {"description": "کد ملی تکراری"}},
 )
-def create_patient(payload: PatientCreate, db: Session = Depends(get_db)) -> Patient:
+def create_patient(
+    payload: PatientCreate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> Patient:
     patient = Patient(**payload.model_dump())
     db.add(patient)
     try:
@@ -63,6 +74,11 @@ def create_patient(payload: PatientCreate, db: Session = Depends(get_db)) -> Pat
             status_code=status.HTTP_409_CONFLICT,
             detail=DUPLICATE_NATIONAL_CODE_DETAIL,
         ) from None
+    # the creating doctor is granted access to their new patient
+    # (admins already see everything)
+    if user.role == UserRole.doctor:
+        db.add(PatientUserAccess(patient_id=patient.id, user_id=user.id))
+        db.commit()
     db.refresh(patient)
     return patient
 
@@ -75,8 +91,14 @@ def list_patients(
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> PatientListResponse:
     statement = select(Patient)
+    if user.role == UserRole.doctor:
+        # doctors see ONLY their explicitly assigned patients
+        statement = statement.join(PatientUserAccess).where(
+            PatientUserAccess.user_id == user.id
+        )
     if q:
         pattern = f"%{q}%"
         statement = statement.where(

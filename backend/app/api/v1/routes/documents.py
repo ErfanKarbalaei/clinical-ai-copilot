@@ -23,9 +23,13 @@ from sqlalchemy import delete, select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from app.api.v1.dependencies import patient_from_id
+from app.api.v1.dependencies import (
+    ensure_patient_access,
+    get_current_user,
+    patient_from_id,
+)
 from app.db.session import get_db
-from app.models import ClinicalEvent, Document, Patient
+from app.models import ClinicalEvent, Document, Patient, User
 from app.models.enums import DocumentType, ExtractionStatus
 from app.schemas.document import DocumentResponse, DocumentUpdate
 from app.services import ai, storage
@@ -60,12 +64,15 @@ MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024
 MAX_FILE_NAME_LENGTH = 300
 
 
-def _get_document_or_404(db: Session, document_id: int) -> Document:
+def _get_document_or_404(
+    db: Session, user: User, document_id: int
+) -> Document:
     document = db.get(Document, document_id)
     if document is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=DOCUMENT_NOT_FOUND_DETAIL
         )
+    ensure_patient_access(db, user, document.patient_id)
     return document
 
 
@@ -190,8 +197,12 @@ def list_documents(
     summary="Get document metadata by id",
     responses={status.HTTP_404_NOT_FOUND: {"description": DOCUMENT_NOT_FOUND_DETAIL}},
 )
-def get_document(document_id: int, db: Session = Depends(get_db)) -> Document:
-    return _get_document_or_404(db, document_id)
+def get_document(
+    document_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> Document:
+    return _get_document_or_404(db, user, document_id)
 
 
 @router.post(
@@ -213,8 +224,9 @@ def reextract_document(
     document_id: int,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> Document:
-    document = _get_document_or_404(db, document_id)
+    document = _get_document_or_404(db, user, document_id)
     if document.extraction_status == ExtractionStatus.processing:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -243,9 +255,11 @@ def reextract_document(
     },
 )
 def analyze_document_route(
-    document_id: int, db: Session = Depends(get_db)
+    document_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> Document:
-    document = _get_document_or_404(db, document_id)
+    document = _get_document_or_404(db, user, document_id)
     if (
         document.extraction_status != ExtractionStatus.completed
         or not (document.extracted_text or "").strip()
@@ -288,9 +302,11 @@ def analyze_document_route(
     },
 )
 def download_document(
-    document_id: int, db: Session = Depends(get_db)
+    document_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> RedirectResponse:
-    document = _get_document_or_404(db, document_id)
+    document = _get_document_or_404(db, user, document_id)
     try:
         url = storage.presigned_download_url(document.storage_key)
     except StorageError:
@@ -309,9 +325,12 @@ def download_document(
     responses={status.HTTP_404_NOT_FOUND: {"description": DOCUMENT_NOT_FOUND_DETAIL}},
 )
 def update_document(
-    document_id: int, payload: DocumentUpdate, db: Session = Depends(get_db)
+    document_id: int,
+    payload: DocumentUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> Document:
-    document = _get_document_or_404(db, document_id)
+    document = _get_document_or_404(db, user, document_id)
     for field, value in payload.model_dump(exclude_unset=True).items():
         setattr(document, field, value)
     db.commit()
@@ -326,8 +345,12 @@ def update_document(
     description="Removes the file from object storage, the metadata row, and its timeline event.",
     responses={status.HTTP_404_NOT_FOUND: {"description": DOCUMENT_NOT_FOUND_DETAIL}},
 )
-def delete_document(document_id: int, db: Session = Depends(get_db)) -> None:
-    document = _get_document_or_404(db, document_id)
+def delete_document(
+    document_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> None:
+    document = _get_document_or_404(db, user, document_id)
     try:
         storage.delete_object(document.storage_key)
     except StorageError:

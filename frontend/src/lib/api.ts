@@ -46,12 +46,44 @@ export class ApiError extends Error {
   }
 }
 
+async function authHeaders(): Promise<Headers | null> {
+  // Client side: attach the stored access token (Task 18).
+  if (typeof window !== "undefined") {
+    const token = window.localStorage.getItem("clinical_copilot_token");
+    if (token) {
+      const headers = new Headers();
+      headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    }
+    return null;
+  }
+  // Server side (server components): forward the request's access_token
+  // cookie as the Bearer header — the backend stays header-only.
+  try {
+    const { cookies } = await import("next/headers");
+    const jar = await cookies();
+    const token = jar.get("access_token")?.value;
+    if (token) {
+      const headers = new Headers();
+      headers.set("Authorization", `Bearer ${decodeURIComponent(token)}`);
+      return headers;
+    }
+  } catch {
+    // no cookie context available (e.g. build time) — unauthenticated
+  }
+  return null;
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   // For FormData bodies the Content-Type header must NOT be set manually —
   // the browser generates it including the multipart boundary.
   const headers = new Headers(init?.headers);
   if (!(init?.body instanceof FormData)) {
     headers.set("Content-Type", headers.get("Content-Type") ?? "application/json");
+  }
+  const bearer = await authHeaders();
+  if (bearer) {
+    headers.set("Authorization", bearer.get("Authorization") ?? "");
   }
 
   let response: Response;
@@ -76,6 +108,11 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       } catch {
         // keep the generic message
       }
+    }
+    if (response.status === 401 && typeof window !== "undefined") {
+      // expired/invalid session → back to the login page
+      window.localStorage.removeItem("clinical_copilot_token");
+      window.location.href = "/login";
     }
     throw new ApiError(detail, response.status);
   }

@@ -4,9 +4,13 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import case, select
 from sqlalchemy.orm import Session, selectinload
 
-from app.api.v1.dependencies import patient_from_id
+from app.api.v1.dependencies import (
+    ensure_patient_access,
+    get_current_user,
+    patient_from_id,
+)
 from app.db.session import get_db
-from app.models import Medication, Patient, PatientMedication
+from app.models import Medication, Patient, PatientMedication, User
 from app.models.enums import MedicationStatus
 from app.schemas.medication import (
     PatientMedicationCreate,
@@ -34,7 +38,7 @@ _medication_order = (
 
 
 def _get_patient_medication_or_404(
-    db: Session, patient_medication_id: int
+    db: Session, user: User, patient_medication_id: int
 ) -> PatientMedication:
     record = db.scalars(
         select(PatientMedication)
@@ -46,6 +50,7 @@ def _get_patient_medication_or_404(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=PATIENT_MEDICATION_NOT_FOUND_DETAIL,
         )
+    ensure_patient_access(db, user, record.patient_id)
     return record
 
 
@@ -127,9 +132,11 @@ def list_patient_medications(
     responses={status.HTTP_404_NOT_FOUND: {"description": "داروی بیمار یافت نشد"}},
 )
 def get_patient_medication(
-    patient_medication_id: int, db: Session = Depends(get_db)
+    patient_medication_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> PatientMedication:
-    return _get_patient_medication_or_404(db, patient_medication_id)
+    return _get_patient_medication_or_404(db, user, patient_medication_id)
 
 
 @router.patch(
@@ -146,8 +153,9 @@ def update_patient_medication(
     patient_medication_id: int,
     payload: PatientMedicationUpdate,
     db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> PatientMedication:
-    record = _get_patient_medication_or_404(db, patient_medication_id)
+    record = _get_patient_medication_or_404(db, user, patient_medication_id)
     for field, value in payload.model_dump(exclude_unset=True).items():
         setattr(record, field, value)
     db.commit()
@@ -166,8 +174,10 @@ def update_patient_medication(
     responses={status.HTTP_404_NOT_FOUND: {"description": "داروی بیمار یافت نشد"}},
 )
 def delete_patient_medication(
-    patient_medication_id: int, db: Session = Depends(get_db)
+    patient_medication_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> None:
-    record = _get_patient_medication_or_404(db, patient_medication_id)
+    record = _get_patient_medication_or_404(db, user, patient_medication_id)
     db.delete(record)
     db.commit()

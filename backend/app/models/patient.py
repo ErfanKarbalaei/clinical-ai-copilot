@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from app.models.document import Document
     from app.models.lab_result import LabResult
     from app.models.medication import PatientMedication
+    from app.models.patient_user_access import PatientUserAccess
     from app.models.voice_note import VoiceNote
 
 
@@ -73,6 +74,9 @@ class Patient(TimestampMixin, Base):
         back_populates="patient", cascade="all, delete-orphan", passive_deletes=True
     )
     conversations: Mapped[list[Conversation]] = relationship(
+        back_populates="patient", cascade="all, delete-orphan", passive_deletes=True
+    )
+    user_access: Mapped[list[PatientUserAccess]] = relationship(
         back_populates="patient", cascade="all, delete-orphan", passive_deletes=True
     )
 

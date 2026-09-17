@@ -4,9 +4,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import case, select
 from sqlalchemy.orm import Session
 
-from app.api.v1.dependencies import patient_from_id
+from app.api.v1.dependencies import (
+    ensure_patient_access,
+    get_current_user,
+    patient_from_id,
+)
 from app.db.session import get_db
-from app.models import Allergy, Patient
+from app.models import Allergy, Patient, User
 from app.models.enums import AllergySeverity
 from app.schemas.allergy import AllergyCreate, AllergyResponse, AllergyUpdate
 
@@ -26,12 +30,15 @@ _allergy_order = (
 )
 
 
-def _get_allergy_or_404(db: Session, allergy_id: int) -> Allergy:
+def _get_allergy_or_404(
+    db: Session, user: User, allergy_id: int
+) -> Allergy:
     allergy = db.get(Allergy, allergy_id)
     if allergy is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=ALLERGY_NOT_FOUND_DETAIL
         )
+    ensure_patient_access(db, user, allergy.patient_id)
     return allergy
 
 
@@ -79,8 +86,12 @@ def list_allergies(
     summary="Get an allergy by id",
     responses={status.HTTP_404_NOT_FOUND: {"description": "حساسیت یافت نشد"}},
 )
-def get_allergy(allergy_id: int, db: Session = Depends(get_db)) -> Allergy:
-    return _get_allergy_or_404(db, allergy_id)
+def get_allergy(
+    allergy_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> Allergy:
+    return _get_allergy_or_404(db, user, allergy_id)
 
 
 @router.patch(
@@ -90,9 +101,12 @@ def get_allergy(allergy_id: int, db: Session = Depends(get_db)) -> Allergy:
     responses={status.HTTP_404_NOT_FOUND: {"description": "حساسیت یافت نشد"}},
 )
 def update_allergy(
-    allergy_id: int, payload: AllergyUpdate, db: Session = Depends(get_db)
+    allergy_id: int,
+    payload: AllergyUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> Allergy:
-    allergy = _get_allergy_or_404(db, allergy_id)
+    allergy = _get_allergy_or_404(db, user, allergy_id)
     for field, value in payload.model_dump(exclude_unset=True).items():
         setattr(allergy, field, value)
     db.commit()
@@ -106,7 +120,11 @@ def update_allergy(
     summary="Delete an allergy",
     responses={status.HTTP_404_NOT_FOUND: {"description": "حساسیت یافت نشد"}},
 )
-def delete_allergy(allergy_id: int, db: Session = Depends(get_db)) -> None:
-    allergy = _get_allergy_or_404(db, allergy_id)
+def delete_allergy(
+    allergy_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> None:
+    allergy = _get_allergy_or_404(db, user, allergy_id)
     db.delete(allergy)
     db.commit()

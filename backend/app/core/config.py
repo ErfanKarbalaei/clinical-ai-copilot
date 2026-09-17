@@ -68,6 +68,13 @@ class Settings(BaseSettings):
     STT_POLL_INTERVAL_SECONDS: float = 3.0
     STT_TIMEOUT_SECONDS: int = 300
 
+    # --- Authentication (Task 18) ---
+    # JWT_SECRET_KEY MUST be changed for any non-development deployment
+    # (see .env.example). The default is an explicitly-labeled dev-only value.
+    JWT_SECRET_KEY: str = "dev-only-insecure-secret-change-me"
+    JWT_ALGORITHM: str = "HS256"
+    JWT_EXPIRE_MINUTES: int = 480  # 8-hour clinical shift
+
     # --- AI assistant (provider-agnostic) ---
     # AI_PROVIDER: "openai_compatible" (any OpenAI-style chat/completions API)
     #              or "gemini" (native Google Gemini generateContent API)
