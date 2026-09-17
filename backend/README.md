@@ -153,6 +153,12 @@ against that patient's real records. Document-backed evidence exposes
 `GET /documents/{id}/download` endpoint (307 → short-lived presigned URL);
 the model never sees URLs and no URL is ever persisted.
 
+**Clinical AI agent — MCP spike** (Task 17; separate from the chat above)
+
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | `/api/v1/patients/{id}/agent/chat` | Stateless agent path: the existing AI provider picks 1–3 read-only tools (`get_patient`, `get_patient_context`, `get_patient_labs`, `get_patient_medications`, `get_patient_documents`, `get_patient_timeline`) executed through a LOCAL MCP server (`app/mcp_server.py`, official `mcp` SDK over stdio) that reuses the Task-9 builders against real PostgreSQL. `patient_id` is always injected server-side; documents are metadata-only. Answers are not persisted. Requires `pip install -r requirements.txt` (adds `mcp`) |
+
 Warnings cite a `rule_id` from the versioned knowledge base
 (`app/data/medication_rules.json`, ~30 drug classes with Persian/English
 brand+generic aliases, 32 interactions, cross-reactivity rules;

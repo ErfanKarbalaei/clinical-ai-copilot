@@ -460,6 +460,28 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
 - NOTE: this is patient-record provenance only — NO external medical
   literature citations (explicitly out of scope)
 
+**Done — Task 17 (MCP + clinical AI agent spike):**
+
+- Local read-only MCP server (`app/mcp_server.py`, official `mcp` SDK over
+  stdio) exposing 6 patient tools that REUSE the Task-9 context/timeline
+  builders against real PostgreSQL — no duplicate query logic, no write
+  tools, documents as metadata only (no storage keys/URLs)
+- Agent adapter (`services/agent.py`): question → Gemini (existing
+  provider, `gemini-3.6-flash`) selects 1–3 tools via a text-JSON plan →
+  MCP fetches real data (`patient_id` always injected server-side, never
+  by the model) → Gemini writes the grounded answer
+- Separate stateless endpoint `POST /patients/{id}/agent/chat` + a
+  «حالت Agent» toggle in the chat UI showing the tools used — the
+  Task-15 persistent chat and Tasks 14/16 stay untouched and green
+- 27 new tests — full suite: 271 passing; live smoke: MCP over stdio
+  serving real patient data (meds/labs/metadata, clean unknown-patient
+  errors); real Gemini planner attempts blocked by the known network
+  filter (honest 502s, never mocked as success)
+- Honest spike verdict (see `docs/task-17-…-report.md`): keep as an
+  experimental path; do NOT replace the current full-context chat — MCP
+  becomes worthwhile only for much larger records, many more tools, or
+  external agent clients
+
 **Not started (intentionally — later phases):** authentication,
 medical-evidence retrieval with citations, RAG/vector search, persisted
 conversations.

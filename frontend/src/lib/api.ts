@@ -7,6 +7,7 @@
 
 import type {
   Allergy,
+  AgentChatResponse,
   AllergyPayload,
   AiMedicationSafetyCheckPayload,
   AiMedicationSafetyResult,
@@ -315,5 +316,13 @@ export const api = {
   },
   deleteConversation(conversationId: number) {
     return request<void>(`/conversations/${conversationId}`, { method: "DELETE" });
+  },
+
+  // --- clinical AI agent (MCP spike — stateless) ---
+  agentChat(patientId: number, content: string) {
+    return request<AgentChatResponse>(`/patients/${patientId}/agent/chat`, {
+      method: "POST",
+      body: JSON.stringify({ content }),
+    });
   },
 };

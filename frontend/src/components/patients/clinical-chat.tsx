@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import {
   ActivityIcon,
+  BotIcon,
   AlertCircleIcon,
   ExternalLinkIcon,
   FileTextIcon,
@@ -45,6 +46,7 @@ interface RenderedTurn {
   role: "user" | "assistant";
   content: string;
   evidence?: EvidenceItem[];
+  toolsUsed?: { name: string; label: string }[];
 }
 
 function evidenceIcon(sourceType: EvidenceItem["source_type"]) {
@@ -81,6 +83,8 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
   // explicit UI affordance (no keyword detection): when on, the message is
   // answered with the specialized medication-safety prompt (Task 14)
   const [safetyMode, setSafetyMode] = useState(false);
+  // MCP/agent spike: stateless path — answers are not saved to conversations
+  const [agentMode, setAgentMode] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -171,6 +175,20 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
         conversationId = conversation.id;
         setActiveId(conversationId);
         setConversations((previous) => [conversation, ...previous]);
+      }
+
+      if (agentMode) {
+        // stateless agent path (MCP spike) — no conversation persistence
+        const response = await api.agentChat(patientId, trimmed);
+        setTurns((previous) => [
+          ...previous,
+          {
+            role: "assistant",
+            content: response.answer,
+            toolsUsed: response.tools_used,
+          },
+        ]);
+        return;
       }
 
       const response = await api.sendConversationMessage(conversationId, {
@@ -307,6 +325,12 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
               ) : (
                 <>
                   <p className="whitespace-pre-wrap">{turn.content}</p>
+                  {turn.toolsUsed && turn.toolsUsed.length > 0 ? (
+                    <p className="mt-1.5 text-[11px] leading-5 text-muted-foreground">
+                      ابزارهای استفاده‌شده:{" "}
+                      {turn.toolsUsed.map((tool) => tool.label).join("، ")}
+                    </p>
+                  ) : null}
                   {turn.evidence && turn.evidence.length > 0 ? (
                     <div className="mt-2 space-y-1.5 border-t pt-2">
                       <p className="text-[11px] font-medium text-muted-foreground">
@@ -359,20 +383,39 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
           <p className="text-sm text-destructive">{error}</p>
         ) : null}
 
-        <div className="flex items-center justify-between gap-2">
-          <Button
-            type="button"
-            variant={safetyMode ? "secondary" : "outline"}
-            size="sm"
-            className="gap-1.5"
-            aria-pressed={safetyMode}
-            onClick={() => setSafetyMode((value) => !value)}
-            disabled={loading}
-          >
-            <ShieldAlertIcon />
-            بررسی ایمنی دارو
-          </Button>
-          {safetyMode ? (
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant={agentMode ? "secondary" : "outline"}
+              size="sm"
+              className="gap-1.5"
+              aria-pressed={agentMode}
+              onClick={() => setAgentMode((value) => !value)}
+              disabled={loading}
+            >
+              <BotIcon />
+              حالت Agent
+            </Button>
+            <Button
+              type="button"
+              variant={safetyMode ? "secondary" : "outline"}
+              size="sm"
+              className="gap-1.5"
+              aria-pressed={safetyMode}
+              onClick={() => setSafetyMode((value) => !value)}
+              disabled={loading}
+            >
+              <ShieldAlertIcon />
+              بررسی ایمنی دارو
+            </Button>
+          </div>
+          {agentMode ? (
+            <p className="text-xs text-muted-foreground">
+              حالت Agent فعال است — پاسخ‌ها با ابزارهای فقط-خواندنی از پروندهٔ
+              واقعی ساخته می‌شوند و در گفتگو ذخیره نمی‌شوند.
+            </p>
+          ) : safetyMode ? (
             <p className="text-xs text-muted-foreground">
               حالت ایمنی دارو فعال است — نام داروی کاندید (و در صورت تمایل دوز
               و چند دارو) را همراه پرسش خود بنویسید.

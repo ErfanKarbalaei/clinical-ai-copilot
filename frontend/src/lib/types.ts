@@ -237,6 +237,20 @@ export interface SendMessageResult {
   assistant_message: ConversationMessage;
 }
 
+/** Clinical AI agent (MCP spike) — stateless, not persisted. */
+export interface AgentToolUsed {
+  name: string;
+  label: string;
+}
+
+export interface AgentChatResponse {
+  patient_id: number;
+  question: string;
+  answer: string;
+  tools_used: AgentToolUsed[];
+  generated_at: string;
+}
+
 /** AI-assisted medication safety (decision support — never blocks saving). */
 export interface MedicationCandidate {
   name: string;
