@@ -2,7 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
-import { LoaderIcon, SendIcon, SparklesIcon } from "lucide-react";
+import {
+  LoaderIcon,
+  SendIcon,
+  ShieldAlertIcon,
+  SparklesIcon,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +29,9 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
   const [turns, setTurns] = useState<ChatTurn[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // explicit UI affordance (no keyword detection): when on, the same chat
+  // request is answered with the specialized medication-safety prompt
+  const [safetyMode, setSafetyMode] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,7 +54,8 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
       const response = await api.askClinicalQuestion(
         patientId,
         trimmed,
-        history
+        history,
+        safetyMode
       );
       setTurns((previous) => [
         ...previous,
@@ -114,11 +123,36 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
           <p className="text-sm text-destructive">{error}</p>
         ) : null}
 
+        <div className="flex items-center justify-between gap-2">
+          <Button
+            type="button"
+            variant={safetyMode ? "secondary" : "outline"}
+            size="sm"
+            className="gap-1.5"
+            aria-pressed={safetyMode}
+            onClick={() => setSafetyMode((value) => !value)}
+            disabled={loading}
+          >
+            <ShieldAlertIcon />
+            بررسی ایمنی دارو
+          </Button>
+          {safetyMode ? (
+            <p className="text-xs text-muted-foreground">
+              حالت ایمنی دارو فعال است — نام داروی کاندید (و در صورت تمایل دوز
+              و چند دارو) را همراه پرسش خود بنویسید.
+            </p>
+          ) : null}
+        </div>
+
         <form onSubmit={handleSubmit} className="flex items-end gap-2">
           <Textarea
             value={question}
             onChange={(event) => setQuestion(event.target.value)}
-            placeholder="پرسش خود را دربارهٔ بیمار بنویسید…"
+            placeholder={
+              safetyMode
+                ? "مثال: می‌خواهم وارفارین ۵ میلی‌گرم تجویز کنم؛ با داروهای فعلی بیمار تداخل دارد؟"
+                : "پرسش خود را دربارهٔ بیمار بنویسید…"
+            }
             rows={2}
             maxLength={MAX_QUESTION_LENGTH}
             disabled={loading}

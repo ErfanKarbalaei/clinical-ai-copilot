@@ -385,6 +385,30 @@ The backend additionally supports an optional `CORS_ORIGINS` variable
   one-click switch to the raw transcript
 - 13 new tests — full suite: 196 passing; `tsc` + `next build` clean
 
+**Done — Task 14 (AI-assisted medication safety):**
+
+- `POST /patients/{id}/medications/ai-safety-check` — LLM decision-support
+  analysis of 1–5 candidate medications (name + optional dose + optional
+  question) against the patient's full Task-9 context, via the existing
+  Gemini provider (no new client/SDK). Grounded prompt: never invents
+  medications/diagnoses/labs/allergies, distinguishes «تداخل احتمالی» from
+  «تداخل شناخته‌شده», surfaces patient-specific factors, missing
+  information and uncertainty; no fabricated citations
+- Strict JSON response contract, parsed/validated server-side — malformed
+  model output becomes a clean 502, never raw exposure; 503 unconfigured;
+  synchronous and on-demand, nothing persisted
+- Chat extension: `medication_safety: true` on `POST /patients/{id}/chat`
+  swaps in the specialized safety prompt (same context/history — no second
+  chat system, no keyword detection)
+- Frontend: «بررسی ایمنی دارو» panel inside the add-medication dialog
+  (structured sections + fixed disclaimer; loading/error states) —
+  analysis NEVER blocks saving; safety-mode toggle in the clinical chat
+- Task 11's rule engine untouched (separate files/endpoint; not called,
+  expanded, or duplicated); zero migrations/dependencies
+- 17 new tests — full suite: 213 passing; live smoke: context loaded,
+  real Gemini call attempted (403 network block → clean 502), medication
+  save still 201 after the failure
+
 **Not started (intentionally — later phases):** authentication,
 medical-evidence retrieval with citations, RAG/vector search, persisted
 conversations.

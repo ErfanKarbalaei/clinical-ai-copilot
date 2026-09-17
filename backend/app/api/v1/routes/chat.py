@@ -16,7 +16,7 @@ from app.core.config import get_settings
 from app.db.session import get_db
 from app.models import Patient
 from app.schemas.chat import ChatRequest, ChatResponse
-from app.services import ai
+from app.services import ai, ai_medication_safety
 from app.services.ai import AIError, AIUnavailableError
 from app.services.patient_context import build_patient_context
 
@@ -66,8 +66,16 @@ def ask_clinical_question(
     ]
 
     try:
+        # medication_safety=true swaps in the specialized safety prompt
+        # (interaction concerns, patient-specific risks, missing info,
+        # uncertainty) — same context, same chat, no keyword detection.
+        system_prompt = (
+            ai_medication_safety.MEDICATION_SAFETY_CHAT_PROMPT
+            if payload.medication_safety
+            else ai.SYSTEM_PROMPT
+        )
         answer = provider.complete(
-            system=ai.SYSTEM_PROMPT,
+            system=system_prompt,
             user=ai.build_user_message(context.model_dump(), payload.question),
             history=history,
         )

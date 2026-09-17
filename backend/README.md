@@ -128,6 +128,12 @@ status fully intact (`cleanup_status=failed`).
 | --- | --- | --- |
 | POST | `/api/v1/patients/{id}/medications/check` | Check a candidate (`medication_id` **or** `medication_name`, optional `dosage`) against the patient's active meds + allergies: drug–drug interactions, allergy conflicts, duplicate therapy. `explain=true` adds an optional Persian LLM *explanation* of the warnings (never new ones); provider outage leaves warnings intact |
 
+**AI medication safety** (LLM decision support — independent of the rule engine above)
+
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | `/api/v1/patients/{id}/medications/ai-safety-check` | AI-assisted analysis of 1–5 candidate medications (`name` + optional `dose`, optional `question`) against the patient's full Task-9 context via the existing Gemini provider. Grounded prompt: distinguishes potential vs well-established interactions, surfaces patient-specific factors, missing information and uncertainty; strict JSON contract — malformed model output never reaches the client (502). Nothing persisted; never blocks saving. `medication_safety: true` on `/chat` switches the chat to the same safety analysis |
+
 Warnings cite a `rule_id` from the versioned knowledge base
 (`app/data/medication_rules.json`, ~30 drug classes with Persian/English
 brand+generic aliases, 32 interactions, cross-reactivity rules;

@@ -190,6 +190,29 @@ export interface ChatTurn {
   content: string;
 }
 
+/** AI-assisted medication safety (decision support — never blocks saving). */
+export interface MedicationCandidate {
+  name: string;
+  dose: string | null;
+}
+
+export interface AiMedicationSafetyCheckPayload {
+  medications: MedicationCandidate[];
+  question?: string | null;
+}
+
+export interface AiMedicationSafetyResult {
+  patient_id: number;
+  medications: MedicationCandidate[];
+  overall_assessment: string;
+  interactions: string[];
+  patient_factors: string[];
+  missing_information: string[];
+  uncertainty: string | null;
+  disclaimer: string;
+  generated_at: string;
+}
+
 export interface ChatResponse {
   patient_id: number;
   question: string;

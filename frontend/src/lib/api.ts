@@ -8,6 +8,8 @@
 import type {
   Allergy,
   AllergyPayload,
+  AiMedicationSafetyCheckPayload,
+  AiMedicationSafetyResult,
   ChatResponse,
   ChatTurn,
   ClinicalNoteFromVoicePayload,
@@ -263,11 +265,23 @@ export const api = {
   askClinicalQuestion(
     patientId: number,
     question: string,
-    history: ChatTurn[] = []
+    history: ChatTurn[] = [],
+    medicationSafety = false
   ) {
     return request<ChatResponse>(`/patients/${patientId}/chat`, {
       method: "POST",
-      body: JSON.stringify({ question, history }),
+      body: JSON.stringify({ question, history, medication_safety: medicationSafety }),
     });
+  },
+
+  // --- AI-assisted medication safety (decision support) ---
+  aiMedicationSafetyCheck(
+    patientId: number,
+    payload: AiMedicationSafetyCheckPayload
+  ) {
+    return request<AiMedicationSafetyResult>(
+      `/patients/${patientId}/medications/ai-safety-check`,
+      { method: "POST", body: JSON.stringify(payload) }
+    );
   },
 };

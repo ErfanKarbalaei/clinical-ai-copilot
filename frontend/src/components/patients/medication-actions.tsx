@@ -3,7 +3,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
-import { PencilIcon, PlusIcon, SquareIcon, Trash2Icon } from "lucide-react";
+import {
+  LoaderIcon,
+  PencilIcon,
+  PlusIcon,
+  ShieldAlertIcon,
+  SquareIcon,
+  Trash2Icon,
+} from "lucide-react";
 
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
@@ -28,11 +35,34 @@ import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
 import { medicationStatusOptions, todayIsoDate } from "@/lib/format";
 import type {
+  AiMedicationSafetyResult,
   MedicationStatus,
   PatientMedication,
 } from "@/lib/types";
 
 const FORM_ID = "medication-form";
+
+function SafetySection({
+  title,
+  items,
+  className,
+}: {
+  title: string;
+  items: string[];
+  className?: string;
+}) {
+  if (items.length === 0) return null;
+  return (
+    <div className={`space-y-1 ${className ?? ""}`}>
+      <p className="text-xs font-medium">{title}</p>
+      <ul className="list-inside list-disc space-y-0.5 text-xs leading-5">
+        {items.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 function MedicationFormDialog({
   patientId,
@@ -55,6 +85,11 @@ function MedicationFormDialog({
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [safetyResult, setSafetyResult] = useState<AiMedicationSafetyResult | null>(
+    null
+  );
+  const [safetyLoading, setSafetyLoading] = useState(false);
+  const [safetyError, setSafetyError] = useState<string | null>(null);
 
   const isEdit = record !== undefined;
 
@@ -69,7 +104,33 @@ function MedicationFormDialog({
     setNotes(record?.notes ?? "");
     setError(null);
     setSubmitting(false);
+    setSafetyResult(null);
+    setSafetyError(null);
+    setSafetyLoading(false);
   }, [open, record]);
+
+  // AI decision support — never blocks the save flow (physician decides).
+  async function runSafetyCheck() {
+    const name = medicationName.trim();
+    if (!name || safetyLoading) return;
+    setSafetyLoading(true);
+    setSafetyError(null);
+    setSafetyResult(null);
+    try {
+      const result = await api.aiMedicationSafetyCheck(patientId, {
+        medications: [{ name, dose: dosage.trim() === "" ? null : dosage.trim() }],
+      });
+      setSafetyResult(result);
+    } catch (cause) {
+      setSafetyError(
+        cause instanceof ApiError
+          ? cause.message
+          : "تحلیل ایمنی دارو انجام نشد."
+      );
+    } finally {
+      setSafetyLoading(false);
+    }
+  }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -211,6 +272,68 @@ function MedicationFormDialog({
               rows={2}
             />
           </div>
+
+          {!isEdit ? (
+            <div className="space-y-2 rounded-lg border p-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="gap-1.5"
+                onClick={runSafetyCheck}
+                disabled={medicationName.trim() === "" || safetyLoading}
+              >
+                {safetyLoading ? (
+                  <LoaderIcon className="animate-spin" />
+                ) : (
+                  <ShieldAlertIcon />
+                )}
+                {safetyLoading ? "در حال بررسی…" : "بررسی ایمنی دارو"}
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                تحلیل هوش مصنوعیِ تداخل با داروها، آلرژی‌ها و شرایط فعلی بیمار —
+                اختیاری و بدون مانع شدن برای ذخیره.
+              </p>
+
+              {safetyError ? (
+                <p className="text-sm text-destructive">{safetyError}</p>
+              ) : null}
+
+              {safetyResult ? (
+                <div className="space-y-3 rounded-lg bg-muted/50 p-3">
+                  <div className="flex items-start gap-1.5">
+                    <ShieldAlertIcon className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                    <div className="space-y-3">
+                      <p className="text-sm font-medium leading-6">
+                        {safetyResult.overall_assessment}
+                      </p>
+                      <SafetySection
+                        title="تداخل‌ها"
+                        items={safetyResult.interactions}
+                        className="text-amber-700 dark:text-amber-400"
+                      />
+                      <SafetySection
+                        title="نکات خاص این بیمار"
+                        items={safetyResult.patient_factors}
+                      />
+                      <SafetySection
+                        title="اطلاعات ناقص"
+                        items={safetyResult.missing_information}
+                      />
+                      {safetyResult.uncertainty ? (
+                        <p className="text-xs italic leading-5 text-muted-foreground">
+                          عدم‌قطعیت: {safetyResult.uncertainty}
+                        </p>
+                      ) : null}
+                      <p className="text-[11px] leading-5 text-muted-foreground">
+                        {safetyResult.disclaimer}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
 
           {error ? <p className="text-sm text-destructive">{error}</p> : null}
         </form>

@@ -18,6 +18,13 @@ class ChatRequest(BaseModel):
     history: list[ChatHistoryItem] = Field(
         default_factory=list, max_length=20, description="نوبت‌های قبلی گفتگو"
     )
+    medication_safety: bool = Field(
+        default=False,
+        description=(
+            "حالت تحلیل ایمنی دارو: با true بودن، همان گفتگو با پرامپت تخصصی "
+            "ایمنی دارو (تداخل، عدم‌قطعیت، اطلاعات ناقص) پاسخ داده می‌شود"
+        ),
+    )
 
 
 class ChatResponse(BaseModel):
