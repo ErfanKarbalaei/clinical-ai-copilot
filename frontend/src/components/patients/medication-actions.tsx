@@ -300,10 +300,13 @@ function MedicationFormDialog({
               ) : null}
 
               {safetyResult ? (
-                <div className="space-y-3 rounded-lg bg-muted/50 p-3">
+                <div className="ai-content space-y-3 rounded-lg p-3">
                   <div className="flex items-start gap-1.5">
                     <ShieldAlertIcon className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" />
                     <div className="space-y-3">
+                      <p className="text-[10px] font-medium text-muted-foreground">
+                        تحلیل هوش مصنوعی — کمک به تصمیم، نه حکم نهایی
+                      </p>
                       <p className="text-sm font-medium leading-6">
                         {safetyResult.overall_assessment}
                       </p>

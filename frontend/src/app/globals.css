@@ -134,3 +134,51 @@
     @apply font-sans;
   }
 }
+/* ===== Task 20 — clinical polish layer (calm, professional) ===== */
+
+/* Subtle clinical background instead of pure white */
+body {
+  background-color: color-mix(in oklab, var(--muted) 35%, var(--background));
+}
+
+/* Calm, consistent focus states */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--primary) 55%, transparent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Restrained text selection */
+::selection {
+  background: color-mix(in oklab, var(--primary) 18%, transparent);
+}
+
+/* Slim, quiet scrollbars for dense clinical lists */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--foreground) 22%, transparent)
+    transparent;
+}
+
+/* AI-generated content distinction: a quiet dotted border + faint tint,
+   used for assistant bubbles and AI-analysis panels (never record data) */
+.ai-content {
+  border-style: dashed;
+  background-color: color-mix(in oklab, var(--primary) 3%, var(--card));
+}
+
+/* Skeleton shimmer for loading states */
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.skeleton {
+  border-radius: var(--radius-md);
+  background: var(--muted);
+  animation: skeleton-pulse 1.6s ease-in-out infinite;
+}

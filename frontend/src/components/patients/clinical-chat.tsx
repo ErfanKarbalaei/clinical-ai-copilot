@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { FormEvent } from "react";
+import type { FormEvent, KeyboardEvent } from "react";
 import {
   ActivityIcon,
   BotIcon,
@@ -157,6 +157,16 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
     }
   }
 
+  // Enter sends (Shift+Enter = newline) — matches the hint under the input
+  function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
+      event.preventDefault();
+      if (question.trim() && !loading) {
+        handleSubmit(event);
+      }
+    }
+  }
+
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     const trimmed = question.trim();
@@ -238,8 +248,8 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
           دستیار هوشمند بالینی
         </CardTitle>
         <CardDescription>
-          گفتگوهای این بیمار ذخیره می‌شوند و پاسخ‌ها فقط بر اساس اطلاعات
-          ثبت‌شدهٔ پرونده ساخته می‌شوند.
+          پرسش دربارهٔ همین بیمار — گفتگوها ذخیره می‌شوند و پاسخ‌ها بر اساس
+          اطلاعات ثبت‌شدهٔ پرونده ساخته می‌شوند.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -317,13 +327,17 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
               className={
                 turn.role === "user"
                   ? "ms-auto max-w-[85%] rounded-lg bg-primary/10 px-3 py-2 text-sm leading-6"
-                  : "max-w-[95%] rounded-lg border bg-background px-3 py-2 text-sm leading-7"
+                  : "ai-content max-w-[95%] rounded-lg border px-3 py-2.5 text-sm leading-7"
               }
             >
               {turn.role === "user" ? (
                 turn.content
               ) : (
                 <>
+                  <p className="mb-1.5 flex items-center gap-1 text-[10px] font-medium text-muted-foreground">
+                    <SparklesIcon className="size-3" />
+                    پاسخ هوش مصنوعی
+                  </p>
                   <p className="whitespace-pre-wrap">{turn.content}</p>
                   {turn.toolsUsed && turn.toolsUsed.length > 0 ? (
                     <p className="mt-1.5 text-[11px] leading-5 text-muted-foreground">
@@ -423,9 +437,11 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
           ) : null}
         </div>
 
-        <form onSubmit={handleSubmit} className="flex items-end gap-2">
+        <form onSubmit={handleSubmit} className="space-y-1.5">
+          <div className="flex items-end gap-2">
           <Textarea
             value={question}
+            onKeyDown={handleKeyDown}
             onChange={(event) => setQuestion(event.target.value)}
             placeholder={
               safetyMode
@@ -449,8 +465,13 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
             ) : (
               <SendIcon className="rtl:-scale-x-100" />
             )}
-            ارسال
-          </Button>
+              ارسال
+            </Button>
+          </div>
+          <p className="px-1 text-[11px] leading-5 text-muted-foreground">
+            Enter برای ارسال · Shift+Enter برای خط جدید · پاسخ‌ها فقط بر اساس
+            پروندهٔ واقعی همین بیمار
+          </p>
         </form>
 
         <p className="text-center text-xs leading-6 text-muted-foreground">

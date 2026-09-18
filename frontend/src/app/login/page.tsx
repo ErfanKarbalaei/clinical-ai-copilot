@@ -42,11 +42,30 @@ export default function LoginPage() {
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 items-center px-4 py-16">
       <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="text-lg">ورود به دستیار هوشمند بالینی</CardTitle>
-          <CardDescription>
-            برای دسترسی به پروندهٔ بیماران، با حساب کاربری خود وارد شوید.
-          </CardDescription>
+        <CardHeader className="space-y-3 text-center">
+          <div className="flex justify-center">
+            <span
+              aria-hidden="true"
+              className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="size-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                strokeLinecap="round"
+              >
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </span>
+          </div>
+          <div className="space-y-1">
+            <CardTitle className="text-lg">ورود به سامانه</CardTitle>
+            <CardDescription>
+              دستیار هوشمند بالینی — برای دسترسی به پروندهٔ بیماران وارد شوید.
+            </CardDescription>
+          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

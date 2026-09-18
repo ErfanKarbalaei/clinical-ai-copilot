@@ -192,7 +192,7 @@ export default async function PatientDetailPage({
   const age = calculateAge(patient.date_of_birth);
 
   return (
-    <main className="mx-auto w-full max-w-6xl flex-1 space-y-6 px-4 py-8">
+    <main className="mx-auto w-full max-w-7xl flex-1 space-y-6 px-4 py-8">
       <Button variant="ghost" size="sm" render={<Link href="/patients" />}>
         <ArrowRightIcon />
         بازگشت به فهرست بیماران
@@ -222,23 +222,56 @@ export default async function PatientDetailPage({
             </div>
           </CardAction>
         </CardHeader>
-        <CardContent className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-muted-foreground">
-          <span>
-            تاریخ تولد: {formatDate(patient.date_of_birth)}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <PhoneIcon className="size-4" />
-            {patient.phone ? (
-              <span dir="ltr" className="font-mono">
-                {patient.phone}
-              </span>
-            ) : (
-              "—"
-            )}
-          </span>
-          {patient.address ? <span>نشانی: {patient.address}</span> : null}
+        <CardContent className="space-y-4">
+          <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-muted-foreground">
+            <span>
+              تاریخ تولد: {formatDate(patient.date_of_birth)}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <PhoneIcon className="size-4" />
+              {patient.phone ? (
+                <span dir="ltr" className="font-mono">
+                  {patient.phone}
+                </span>
+              ) : (
+                "—"
+              )}
+            </span>
+            {patient.address ? <span>نشانی: {patient.address}</span> : null}
+          </div>
+          {/* at-a-glance record summary — counts from the live context */}
+          <dl className="flex flex-wrap gap-x-6 gap-y-1 border-t pt-3 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1.5">
+              <dt>تشخیص‌ها:</dt>
+              <dd className="font-medium text-foreground">{conditions.length}</dd>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <dt>آلرژی‌ها:</dt>
+              <dd className="font-medium text-foreground">{allergies.length}</dd>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <dt>داروهای فعال:</dt>
+              <dd className="font-medium text-foreground">{active_medications.length}</dd>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <dt>آزمایش‌ها:</dt>
+              <dd className="font-medium text-foreground">{context.lab_results.length}</dd>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <dt>اسناد:</dt>
+              <dd className="font-medium text-foreground">{documents.length}</dd>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <dt>یادداشت صوتی:</dt>
+              <dd className="font-medium text-foreground">{voiceNotes.length}</dd>
+            </div>
+          </dl>
         </CardContent>
       </Card>
+
+      {/* --- clinical workspace: record (main) + AI copilot (sticky aside) --- */}
+      <div className="grid items-start gap-6 xl:grid-cols-12">
+        <div className="order-2 space-y-6 xl:order-1 xl:col-span-8">
 
       {/* --- unified clinical timeline --- */}
       <Card>
@@ -679,8 +712,15 @@ export default async function PatientDetailPage({
         </Card>
       </div>
 
-      {/* --- clinical AI assistant (decision support, grounded in context) --- */}
-      <ClinicalChat patientId={patient.id} />
+        </div>
+
+        {/* --- AI copilot: always reachable, sticky beside the record --- */}
+        <aside className="order-1 xl:order-2 xl:col-span-4">
+          <div className="xl:sticky xl:top-6">
+            <ClinicalChat patientId={patient.id} />
+          </div>
+        </aside>
+      </div>
     </main>
   );
 }

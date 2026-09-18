@@ -1,7 +1,12 @@
 import Link from "next/link";
-import { UsersIcon } from "lucide-react";
+import {
+  FileTextIcon,
+  MicIcon,
+  ShieldAlertIcon,
+  SparklesIcon,
+  UsersIcon,
+} from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,12 +16,32 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
+const CAPABILITIES = [
+  {
+    icon: UsersIcon,
+    title: "پروندهٔ بالینی بیمار",
+    description: "شرایط، آلرژی‌ها، داروها، آزمایش‌ها و یادداشت‌ها در یک نگاه",
+  },
+  {
+    icon: FileTextIcon,
+    title: "اسناد و استخراج متن",
+    description: "آپلود اسناد، استخراج متن و تحلیل هوشمند با ذکر منبع",
+  },
+  {
+    icon: MicIcon,
+    title: "مستندسازی صوتی فارسی",
+    description: "ضبط گفتار پزشک، تبدیل به متن و یادداشت بالینی پاک‌سازی‌شده",
+  },
+  {
+    icon: ShieldAlertIcon,
+    title: "بررسی ایمنی دارو",
+    description: "تحلیل تداخل‌های دارویی بر اساس پروندهٔ واقعی بیمار",
+  },
+];
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-svh flex-1 items-center justify-center bg-muted/40 px-6 py-12">
+    <main className="flex min-h-svh flex-1 items-center justify-center px-6 py-12">
       <div className="w-full max-w-2xl space-y-8">
         {/* Brand */}
         <header className="space-y-3 text-center">
@@ -43,46 +68,48 @@ export default function HomePage() {
               Clinical AI Copilot
             </h1>
           </div>
-          <p className="text-muted-foreground">
+          <p className="text-lg text-muted-foreground">
             دستیار هوشمند بالینی برای پزشکان
           </p>
         </header>
 
-        {/* Entry point */}
-        <Card>
-          <CardHeader>
-            <CardTitle>محیط توسعه پروژه با موفقیت اجرا شده است.</CardTitle>
-            <CardDescription>
-              بخش مدیریت بیماران آماده است؛ قابلیت‌های دیگر در مراحل بعدی اضافه می‌شوند.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <dl className="divide-y overflow-hidden rounded-lg border">
-              <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
-                <dt className="text-muted-foreground">نشانی پایه سرویس (API)</dt>
-                <dd dir="ltr" className="font-mono text-xs">
-                  {API_BASE_URL}
-                </dd>
-              </div>
-              <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
-                <dt className="text-muted-foreground">وضعیت پروژه</dt>
-                <dd>
-                  <Badge variant="secondary">مدیریت بیماران فعال است</Badge>
-                </dd>
-              </div>
-            </dl>
+        {/* Entry */}
+        <div className="flex items-center justify-center gap-3">
+          <Button size="lg" render={<Link href="/login" />}>ورود به سامانه</Button>
+          <Button size="lg" variant="ghost" render={<Link href="/patients" />}>
+            <UsersIcon />
+            فهرست بیماران
+          </Button>
+        </div>
 
-            <Button size="lg" className="w-full" render={<Link href="/patients" />}>
-              <UsersIcon />
-              ورود به فهرست بیماران
-            </Button>
+        {/* Capabilities */}
+        <div className="grid gap-4 sm:grid-cols-2">
+          {CAPABILITIES.map((capability) => (
+            <Card key={capability.title} className="border-border/70">
+              <CardHeader className="gap-2 pb-3">
+                <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+                  <capability.icon className="size-4 text-muted-foreground" />
+                  {capability.title}
+                </CardTitle>
+                <CardDescription className="text-xs leading-5">
+                  {capability.description}
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
+
+        {/* Clinical responsibility note */}
+        <Card className="ai-content">
+          <CardContent className="flex items-start gap-3 py-4">
+            <SparklesIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+            <p className="text-xs leading-6 text-muted-foreground">
+              این سامانه صرفاً ابزار کمک به تصمیم‌گیری پزشک است؛ پاسخ‌های
+              هوش مصنوعی بر اساس اطلاعات ثبت‌شدهٔ پروندهٔ بیمار تولید می‌شوند و
+              جایگزین معاینه، قضاوت و تصمیم نهایی پزشک نیستند.
+            </p>
           </CardContent>
         </Card>
-
-        <p className="text-center text-sm leading-7 text-muted-foreground">
-          این سامانه فقط ابزار کمک به تصمیم‌گیری است و جایگزین پزشک نیست؛
-          تصمیم نهایی همیشه با پزشک است.
-        </p>
       </div>
     </main>
   );
