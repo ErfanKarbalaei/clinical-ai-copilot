@@ -81,3 +81,30 @@ export async function fetchMe(): Promise<AuthUser> {
   }
   return (await response.json()) as AuthUser;
 }
+
+/** Register a new doctor account, then log in immediately. */
+export async function register(
+  email: string,
+  password: string,
+  fullName: string
+): Promise<AuthUser> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1"}/auth/register`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, full_name: fullName }),
+    }
+  );
+  if (!response.ok) {
+    let detail = "ثبت‌نام ناموفق بود.";
+    try {
+      const body = await response.json();
+      if (typeof body?.detail === "string") detail = body.detail;
+    } catch {
+      // keep the generic message
+    }
+    throw new Error(detail);
+  }
+  return login(email, password);
+}

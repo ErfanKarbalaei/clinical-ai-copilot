@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
-import { LoaderIcon, LogInIcon } from "lucide-react";
+import { LoaderIcon, LogInIcon, UserPlusIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,14 +15,23 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { login } from "@/lib/auth";
+import { login, register } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const isRegister = mode === "register";
+
+  function switchMode(next: "login" | "register") {
+    setMode(next);
+    setError(null);
+  }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -30,11 +39,16 @@ export default function LoginPage() {
     setSubmitting(true);
     setError(null);
     try {
-      await login(email.trim(), password);
+      if (isRegister) {
+        // register creates a doctor account, then logs in immediately
+        await register(email.trim(), password, fullName.trim());
+      } else {
+        await login(email.trim(), password);
+      }
       router.push("/patients");
       router.refresh();
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "ورود ناموفق بود.");
+      setError(cause instanceof Error ? cause.message : "عملیات ناموفق بود.");
       setSubmitting(false);
     }
   }
@@ -61,16 +75,34 @@ export default function LoginPage() {
             </span>
           </div>
           <div className="space-y-1">
-            <CardTitle className="text-lg">ورود به سامانه</CardTitle>
+            <CardTitle className="text-lg">
+              {isRegister ? "ثبت‌نام پزشک" : "ورود به سامانه"}
+            </CardTitle>
             <CardDescription>
-              دستیار هوشمند بالینی — برای دسترسی به پروندهٔ بیماران وارد شوید.
+              {isRegister
+                ? "ساخت حساب پزشک — پس از ثبت‌نام به‌طور خودکار وارد می‌شوید."
+                : "دستیار هوشمند بالینی — برای دسترسی به پروندهٔ بیماران وارد شوید."}
             </CardDescription>
           </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {isRegister ? (
+              <div className="space-y-2">
+                <Label htmlFor="fullName">نام و نام خانوادگی *</Label>
+                <Input
+                  id="fullName"
+                  value={fullName}
+                  onChange={(event) => setFullName(event.target.value)}
+                  required
+                  maxLength={200}
+                  autoComplete="name"
+                  placeholder="مثال: دکتر سارا محمدی"
+                />
+              </div>
+            ) : null}
             <div className="space-y-2">
-              <Label htmlFor="email">ایمیل</Label>
+              <Label htmlFor="email">ایمیل *</Label>
               <Input
                 id="email"
                 type="email"
@@ -83,7 +115,7 @@ export default function LoginPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">گذرواژه</Label>
+              <Label htmlFor="password">گذرواژه *</Label>
               <Input
                 id="password"
                 type="password"
@@ -91,19 +123,43 @@ export default function LoginPage() {
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 required
-                autoComplete="current-password"
+                minLength={8}
+                autoComplete={isRegister ? "new-password" : "current-password"}
               />
+              {isRegister ? (
+                <p className="text-[11px] text-muted-foreground">
+                  حداقل ۸ کاراکتر — نقش پیش‌فرض «پزشک» است.
+                </p>
+              ) : null}
             </div>
             {error ? <p className="text-sm text-destructive">{error}</p> : null}
             <Button type="submit" className="w-full" disabled={submitting}>
               {submitting ? (
                 <LoaderIcon className="animate-spin" />
+              ) : isRegister ? (
+                <UserPlusIcon />
               ) : (
                 <LogInIcon />
               )}
-              ورود
+              {submitting
+                ? "در حال پردازش…"
+                : isRegister
+                  ? "ثبت‌نام و ورود"
+                  : "ورود"}
             </Button>
           </form>
+
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            {isRegister ? "حساب کاربری دارید؟" : "حساب کاربری ندارید؟"}{" "}
+            <Button
+              type="button"
+              variant="link"
+              className="h-auto p-0"
+              onClick={() => switchMode(isRegister ? "login" : "register")}
+            >
+              {isRegister ? "ورود" : "ثبت‌نام"}
+            </Button>
+          </p>
         </CardContent>
       </Card>
     </main>
