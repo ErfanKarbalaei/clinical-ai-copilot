@@ -68,6 +68,13 @@ class Settings(BaseSettings):
     STT_POLL_INTERVAL_SECONDS: float = 3.0
     STT_TIMEOUT_SECONDS: int = 300
 
+    # --- Uniom messaging (Soroush Plus OTP delivery) ---
+    # UNIOM_API_KEY: a `uniom_...` API key from the Uniom dashboard bound to
+    # the linked Soroush Plus credential, scope `bot:send`. NOT the MCP PAT.
+    UNIOM_API_KEY: str = ""  # empty → OTP requests return 503
+    UNIOM_API_BASE_URL: str = "https://api.uniom.ir"
+    UNIOM_TIMEOUT_SECONDS: float = 15.0
+
     # --- Authentication (Task 18) ---
     # JWT_SECRET_KEY MUST be changed for any non-development deployment
     # (see .env.example). The default is an explicitly-labeled dev-only value.

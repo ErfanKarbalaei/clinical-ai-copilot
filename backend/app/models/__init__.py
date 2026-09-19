@@ -12,6 +12,7 @@ from app.models.condition import Condition
 from app.models.conversation import Conversation, ConversationMessage
 from app.models.document import Document
 from app.models.lab_result import LabResult
+from app.models.otp_request import OtpRequest
 from app.models.medication import Medication, PatientMedication
 from app.models.patient import Patient
 from app.models.patient_user_access import PatientUserAccess
@@ -27,6 +28,7 @@ __all__ = [
     "ConversationMessage",
     "Document",
     "LabResult",
+    "OtpRequest",
     "Medication",
     "Patient",
     "PatientMedication",

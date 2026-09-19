@@ -44,7 +44,7 @@ def api_client(db_session) -> TestClient:
     auth/access tests use their own clients with the real auth dependency.
     """
     admin = User(
-        email="suite-admin@test.local",
+        email="suite-admin@testcompany.com",
         password_hash=hash_password("suite-admin-password"),
         full_name="Suite Admin",
         role=UserRole.admin,

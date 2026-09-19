@@ -28,6 +28,7 @@ class UserResponse(BaseModel):
 
     id: int
     email: EmailStr
+    phone: str | None = None
     full_name: str
     role: UserRole
     is_active: bool

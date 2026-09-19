@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import Boolean, Enum as SAEnum, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -25,7 +25,10 @@ class User(TimestampMixin, Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
-    password_hash: Mapped[str] = mapped_column(String(200))
+    # optional phone (E.164) for OTP login — unique when present
+    phone: Mapped[Optional[str]] = mapped_column(String(20), unique=True, index=True)
+    # nullable: OTP-only accounts may never set a password
+    password_hash: Mapped[Optional[str]] = mapped_column(String(200))
     full_name: Mapped[str] = mapped_column(String(200))
     role: Mapped[UserRole] = mapped_column(
         SAEnum(UserRole, name="user_role"),
