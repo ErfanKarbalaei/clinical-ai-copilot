@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import { DirectionProvider } from "@/components/ui/direction";
 
 import "vazirmatn/Vazirmatn-Variable-font-face.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
+import "@fontsource/ibm-plex-mono/600.css";
 import "./globals.css";
 
 export const metadata: Metadata = {

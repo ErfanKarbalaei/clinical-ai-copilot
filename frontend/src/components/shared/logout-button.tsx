@@ -12,8 +12,9 @@ export function LogoutButton() {
   return (
     <Button
       variant="ghost"
-      size="sm"
-      className="gap-1.5"
+      size="icon-sm"
+      aria-label="خروج از حساب کاربری"
+      title="خروج"
       onClick={() => {
         clearToken();
         router.push("/login");
@@ -21,7 +22,6 @@ export function LogoutButton() {
       }}
     >
       <LogOutIcon />
-      خروج
     </Button>
   );
 }

@@ -5,9 +5,11 @@
  * (mutations), always with `cache: "no-store"` so data is fresh.
  */
 
+import type { AuthUser } from "@/lib/auth";
 import type {
   Allergy,
   AgentChatResponse,
+  AIProvidersResponse,
   AllergyPayload,
   AiMedicationSafetyCheckPayload,
   AiMedicationSafetyResult,
@@ -342,6 +344,9 @@ export const api = {
   getConversation(conversationId: number) {
     return request<ConversationDetail>(`/conversations/${conversationId}`);
   },
+  getAIProviders() {
+    return request<AIProvidersResponse>("/ai/providers");
+  },
   sendConversationMessage(
     conversationId: number,
     payload: SendMessagePayload
@@ -361,5 +366,10 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ content }),
     });
+  },
+
+  // --- current user (App Shell — server components forward the cookie) ---
+  getMe() {
+    return request<AuthUser>("/auth/me");
   },
 };

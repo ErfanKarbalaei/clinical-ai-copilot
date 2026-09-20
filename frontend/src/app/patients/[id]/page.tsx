@@ -1,33 +1,19 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import {
   ActivityIcon,
-  AlertCircleIcon,
-  ArrowRightIcon,
   DownloadIcon,
   FileTextIcon,
   FileUpIcon,
   FlaskConicalIcon,
-  HistoryIcon,
   MicIcon,
-  PhoneIcon,
   PillIcon,
 } from "lucide-react";
 
-import {
-  AddAllergyButton,
-  AllergyRowActions,
-} from "@/components/patients/allergy-actions";
-import {
-  AddConditionButton,
-  ConditionRowActions,
-} from "@/components/patients/condition-actions";
 import {
   AddDocumentButton,
   DocumentRowActions,
   ViewExtractedTextButton,
 } from "@/components/patients/document-actions";
-import { ClinicalChat } from "@/components/patients/clinical-chat";
 import {
   AddMedicationButton,
   MedicationRowActions,
@@ -38,81 +24,75 @@ import {
   ViewTranscriptButton,
   VoiceNoteRowActions,
 } from "@/components/patients/voice-note-actions";
+import { ClinicalChat } from "@/components/patients/clinical-chat";
 import {
-  DeletePatientButton,
-  EditPatientButton,
-} from "@/components/patients/patient-actions";
+  PatientIdentityBar,
+} from "@/components/patients/patient-identity-bar";
+import {
+  SectionHeader,
+} from "@/components/patients/summary/section-header";
+import { SummaryView } from "@/components/patients/summary/summary-view";
+import {
+  WorkspaceTabs,
+  parseWorkspaceTab,
+} from "@/components/patients/workspace-tabs";
+import { AppShell } from "@/components/shared/app-shell";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ErrorState } from "@/components/shared/error-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ApiError, api } from "@/lib/api";
 import {
-  allergySeverityLabels,
-  calculateAge,
   cleanupStatusLabels,
-  conditionStatusLabels,
   conversationTypeLabels,
   documentTypeLabels,
   extractionStatusLabels,
+  faNum,
   formatBytes,
   formatDate,
   formatDateTime,
   formatDuration,
-  genderLabels,
   medicationStatusLabels,
   noteSourceLabels,
   resultFlagLabels,
   transcriptionStatusLabels,
 } from "@/lib/format";
 import type {
-  AllergySeverity,
+  ClinicalNote,
+  Document,
   ExtractionStatus,
+  PatientContext,
+  PatientMedication,
+  PatientTimeline,
   ResultFlag,
   TranscriptionStatus,
+  VoiceNote,
 } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = { title: "پروندهٔ بالینی بیمار" };
 
-function severityBadgeClass(severity: AllergySeverity): string {
-  switch (severity) {
-    case "severe":
-      return "text-destructive";
-    case "moderate":
-      return "text-amber-600 dark:text-amber-400";
-    default:
-      return "text-muted-foreground";
-  }
-}
-
-function flagBadgeVariant(flag: ResultFlag): string {
+function flagClass(flag: ResultFlag | null): string {
   switch (flag) {
     case "critical":
-      return "text-destructive";
+      return "text-critical";
     case "abnormal":
-      return "text-amber-600 dark:text-amber-400";
+      return "text-warning";
+    case "normal":
+      return "text-success";
     default:
-      return "text-emerald-600 dark:text-emerald-400";
+      return "text-faint";
   }
 }
 
 function extractionStatusBadgeClass(status: ExtractionStatus): string {
   switch (status) {
     case "completed":
-      return "text-emerald-600 dark:text-emerald-400";
+      return "text-success";
     case "failed":
-      return "text-destructive";
+      return "text-critical";
     case "processing":
       return "animate-pulse";
     default:
@@ -123,9 +103,9 @@ function extractionStatusBadgeClass(status: ExtractionStatus): string {
 function transcriptionStatusBadgeClass(status: TranscriptionStatus): string {
   switch (status) {
     case "completed":
-      return "text-emerald-600 dark:text-emerald-400";
+      return "text-success";
     case "failed":
-      return "text-destructive";
+      return "text-critical";
     case "processing":
       return "animate-pulse";
     default:
@@ -151,16 +131,409 @@ function timelineIcon(eventType: string) {
   }
 }
 
+/* --- tab views (all existing functionality, reorganized into tabs) --- */
+
+const MED_GRID =
+  "grid grid-cols-[minmax(0,1fr)_110px_100px_100px] items-center gap-2";
+const LAB_GRID =
+  "grid grid-cols-[minmax(0,1fr)_110px_120px_92px_88px] items-center gap-2";
+
+function TimelineView({ timeline }: { timeline: PatientTimeline }) {
+  return (
+    <section className="space-y-2">
+      <SectionHeader
+        title="تایم‌لاین بالینی"
+        count={
+          timeline.total > 0 ? `${faNum(timeline.total)} رویداد` : undefined
+        }
+      />
+      {timeline.items.length === 0 ? (
+        <EmptyState
+          title="رویداد بالینی ثبت نشده است"
+          description="با ثبت دارو، سند، یادداشت یا آزمایش، رویدادها به‌صورت خودکار به تایم‌لاین اضافه می‌شوند."
+        />
+      ) : (
+        <ol className="border-s ps-7">
+          {timeline.items.map((item, index) => (
+            <li
+              key={`${item.source_type}-${item.source_id}-${item.event_type}-${index}`}
+              className="relative pb-5 last:pb-0"
+            >
+              <span className="absolute -start-[35px] top-0 flex size-[22px] items-center justify-center rounded-full bg-surface-2 text-muted-foreground">
+                {timelineIcon(item.event_type)}
+              </span>
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+                <p className="text-[13px] font-medium">{item.title}</p>
+                <span className="text-xs text-faint">
+                  {formatDateTime(item.date)}
+                </span>
+              </div>
+              {item.description ? (
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  {item.description}
+                </p>
+              ) : null}
+            </li>
+          ))}
+        </ol>
+      )}
+    </section>
+  );
+}
+
+function MedicationsView({
+  patientId,
+  medications,
+}: {
+  patientId: number;
+  medications: PatientMedication[];
+}) {
+  // active first, then the historical records
+  const sorted = [...medications].sort(
+    (a, b) =>
+      (a.status === "active" ? 0 : 1) - (b.status === "active" ? 0 : 1)
+  );
+  return (
+    <section className="space-y-2">
+      <SectionHeader
+        title="داروها"
+        count={
+          medications.length > 0
+            ? `${faNum(medications.length)} رکورد`
+            : undefined
+        }
+        action={<AddMedicationButton patientId={patientId} />}
+      />
+      {sorted.length === 0 ? (
+        <EmptyState
+          title="دارویی ثبت نشده است"
+          description="با دکمهٔ + داروی جدیدی اضافه کنید."
+        />
+      ) : (
+        <>
+          <div className={`${MED_GRID} px-1.5 text-[11px] text-faint`}>
+            <span>نام دارو</span>
+            <span>دوز</span>
+            <span>شروع</span>
+            <span>وضعیت</span>
+          </div>
+          <ul>
+            {sorted.map((record) => (
+              <li
+                key={record.id}
+                className={`${MED_GRID} border-b border-border/60 px-1.5 py-2 last:border-0 hover:bg-surface-2/60`}
+              >
+                <div className="flex min-w-0 items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="truncate text-[13px] font-medium">
+                      {record.medication.name}
+                    </p>
+                    {record.medication.generic_name ? (
+                      <p
+                        dir="ltr"
+                        className="truncate text-right font-mono text-[10px] text-faint"
+                      >
+                        {record.medication.generic_name}
+                      </p>
+                    ) : null}
+                  </div>
+                  <MedicationRowActions patientId={patientId} record={record} />
+                </div>
+                <span
+                  dir="ltr"
+                  className="truncate font-mono text-[13px] tabular-nums"
+                >
+                  {record.dosage ?? "—"}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {record.start_date ? formatDate(record.start_date) : "—"}
+                </span>
+                <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <span
+                    className={`size-1.5 shrink-0 rounded-full ${
+                      record.status === "active" ? "bg-success" : "bg-faint"
+                    }`}
+                  />
+                  {medicationStatusLabels[record.status]}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+    </section>
+  );
+}
+
+function LabsView({
+  labResults,
+}: {
+  labResults: PatientContext["lab_results"];
+}) {
+  return (
+    <section className="space-y-2">
+      <SectionHeader
+        title="آزمایش‌ها"
+        count={
+          labResults.length > 0
+            ? `${faNum(labResults.length)} نتیجه`
+            : undefined
+        }
+      />
+      {labResults.length === 0 ? (
+        <EmptyState
+          title="نتیجهٔ آزمایشی ثبت نشده است"
+          description="نتایج آزمایش از اسناد بارگذاری‌شده استخراج می‌شوند."
+        />
+      ) : (
+        <>
+          <div className={`${LAB_GRID} px-1.5 text-[11px] text-faint`}>
+            <span>آزمایش</span>
+            <span>مقدار</span>
+            <span>محدودهٔ مرجع</span>
+            <span>وضعیت</span>
+            <span>تاریخ</span>
+          </div>
+          <ul>
+            {labResults.map((lab) => (
+              <li
+                key={lab.id}
+                className={`${LAB_GRID} border-b border-border/60 px-1.5 py-2 last:border-0 hover:bg-surface-2/60`}
+              >
+                <span className="truncate text-[13px] font-medium">
+                  {lab.test_name}
+                </span>
+                <span
+                  dir="ltr"
+                  className="truncate text-left font-mono text-[13px] font-semibold tabular-nums"
+                >
+                  {lab.value}
+                  {lab.unit ? ` ${lab.unit}` : ""}
+                </span>
+                <span
+                  dir="ltr"
+                  className="truncate text-left font-mono text-[11px] text-faint tabular-nums"
+                >
+                  {lab.reference_range ?? "—"}
+                </span>
+                {lab.flag ? (
+                  <span
+                    className={`flex items-center gap-1.5 text-xs ${flagClass(lab.flag)}`}
+                  >
+                    <span className="size-1.5 shrink-0 rounded-full bg-current" />
+                    {resultFlagLabels[lab.flag]}
+                  </span>
+                ) : (
+                  <span className="text-xs text-faint">—</span>
+                )}
+                <span className="text-xs text-faint">
+                  {lab.result_date ? formatDate(lab.result_date) : "—"}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+    </section>
+  );
+}
+
+function DocumentsView({
+  patientId,
+  documents,
+  voiceNotes,
+  clinicalNotes,
+}: {
+  patientId: number;
+  documents: Document[];
+  voiceNotes: VoiceNote[];
+  clinicalNotes: ClinicalNote[];
+}) {
+  return (
+    <div className="space-y-8">
+      {/* --- documents --- */}
+      <section className="space-y-2">
+        <SectionHeader
+          title="اسناد"
+          count={
+            documents.length > 0 ? `${faNum(documents.length)} سند` : undefined
+          }
+          action={<AddDocumentButton patientId={patientId} />}
+        />
+        {documents.length === 0 ? (
+          <EmptyState
+            title="سندی بارگذاری نشده است"
+            description="گزارش آزمایش، تصویر یا فایل بالینی بیمار را بارگذاری کنید."
+          />
+        ) : (
+          <ul>
+            {documents.map((document) => (
+              <li
+                key={document.id}
+                className="flex items-start justify-between gap-2 border-b border-border/60 px-1.5 py-2.5 last:border-0 hover:bg-surface-2/60"
+              >
+                <div className="min-w-0 space-y-0.5">
+                  <p className="truncate text-[13px] font-medium">
+                    {document.title}
+                  </p>
+                  <p className="text-xs text-faint" dir="ltr">
+                    {document.file_name} — {formatBytes(document.file_size_bytes)}
+                  </p>
+                  <p className="text-xs text-faint">
+                    {documentTypeLabels[document.doc_type]} —{" "}
+                    {formatDateTime(document.created_at)}
+                  </p>
+                </div>
+                <div className="flex shrink-0 items-center gap-2">
+                  <Badge
+                    variant="outline"
+                    className={extractionStatusBadgeClass(
+                      document.extraction_status
+                    )}
+                  >
+                    {extractionStatusLabels[document.extraction_status]}
+                  </Badge>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label="دانلود فایل اصلی"
+                    title="دانلود فایل اصلی"
+                    render={
+                      <a
+                        href={api.documentDownloadUrl(document.id)}
+                        target="_blank"
+                        rel="noreferrer"
+                      />
+                    }
+                  >
+                    <DownloadIcon />
+                  </Button>
+                  <ViewExtractedTextButton document={document} />
+                  <DocumentRowActions document={document} />
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {/* --- voice notes (Persian speech-to-text) --- */}
+      <section className="space-y-2">
+        <SectionHeader
+          title="یادداشت‌های صوتی"
+          count={
+            voiceNotes.length > 0 ? `${faNum(voiceNotes.length)} مورد` : undefined
+          }
+          action={<AddVoiceNoteButton patientId={patientId} />}
+        />
+        {voiceNotes.length === 0 ? (
+          <EmptyState
+            title="یادداشت صوتی ثبت نشده است"
+            description="با دکمهٔ میکروفون، گفتار خود را ضبط یا فایل صوتی بارگذاری کنید."
+          />
+        ) : (
+          <ul>
+            {voiceNotes.map((voiceNote) => (
+              <li
+                key={voiceNote.id}
+                className="flex items-start justify-between gap-2 border-b border-border/60 px-1.5 py-2.5 last:border-0 hover:bg-surface-2/60"
+              >
+                <div className="min-w-0 space-y-0.5">
+                  <p className="truncate text-[13px] font-medium">
+                    {voiceNote.title ?? "بدون عنوان"}
+                  </p>
+                  <p className="text-xs text-faint">
+                    {conversationTypeLabels[voiceNote.conversation_type]} —{" "}
+                    {formatDuration(voiceNote.duration_seconds)} —{" "}
+                    {formatDateTime(voiceNote.created_at)}
+                  </p>
+                  {voiceNote.transcript ? (
+                    <p className="line-clamp-1 text-xs text-muted-foreground">
+                      {voiceNote.transcript.split("\n")[0]}
+                    </p>
+                  ) : null}
+                  {voiceNote.transcription_status === "failed" &&
+                  voiceNote.error_message ? (
+                    <p className="line-clamp-1 text-xs text-critical">
+                      {voiceNote.error_message}
+                    </p>
+                  ) : null}
+                </div>
+                <div className="flex shrink-0 items-center gap-2">
+                  <Badge
+                    variant="outline"
+                    className={transcriptionStatusBadgeClass(
+                      voiceNote.transcription_status
+                    )}
+                  >
+                    {transcriptionStatusLabels[voiceNote.transcription_status]}
+                  </Badge>
+                  {voiceNote.cleanup_status === "completed" ? (
+                    <Badge variant="outline" className="text-brand">
+                      {cleanupStatusLabels[voiceNote.cleanup_status]}
+                    </Badge>
+                  ) : null}
+                  <ViewCleanedNoteButton voiceNote={voiceNote} />
+                  <ViewTranscriptButton voiceNote={voiceNote} />
+                  <VoiceNoteRowActions voiceNote={voiceNote} />
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {/* --- clinical notes --- */}
+      <section className="space-y-2">
+        <SectionHeader
+          title="یادداشت‌های بالینی"
+          count={
+            clinicalNotes.length > 0
+              ? `${faNum(clinicalNotes.length)} یادداشت`
+              : undefined
+          }
+        />
+        {clinicalNotes.length === 0 ? (
+          <EmptyState title="یادداشتی ثبت نشده است" />
+        ) : (
+          <div className="space-y-4">
+            {clinicalNotes.map((note) => (
+              <div key={note.id} className="space-y-1.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="text-[13px] font-medium">{note.title}</p>
+                  <Badge variant="outline">{noteSourceLabels[note.source]}</Badge>
+                  <span className="text-xs text-faint">
+                    {formatDateTime(note.created_at)}
+                  </span>
+                </div>
+                <p className="text-sm leading-7 text-muted-foreground">
+                  {note.content}
+                </p>
+                <Separator />
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------- */
+
 interface PatientDetailPageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ tab?: string }>;
 }
 
 export default async function PatientDetailPage({
   params,
+  searchParams,
 }: PatientDetailPageProps) {
-  const { id } = await params;
+  const [{ id }, { tab: tabParam }] = await Promise.all([params, searchParams]);
   const patientId = Number(id);
   if (!Number.isInteger(patientId) || patientId <= 0) notFound();
+  const tab = parseWorkspaceTab(tabParam);
 
   let context: Awaited<ReturnType<typeof api.getPatientContext>>;
   let timeline: Awaited<ReturnType<typeof api.getPatientTimeline>>;
@@ -173,554 +546,84 @@ export default async function PatientDetailPage({
     if (cause instanceof ApiError && cause.status === 401) redirect("/login");
     if (cause instanceof ApiError && cause.status === 404) notFound();
     return (
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
-        <ErrorState
-          message={cause instanceof ApiError ? cause.message : "خطای ناشناخته"}
-        />
-      </main>
+      <div className="flex min-h-svh flex-1 flex-col">
+        <AppShell />
+        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
+          <ErrorState
+            message={cause instanceof ApiError ? cause.message : "خطای ناشناخته"}
+          />
+        </main>
+      </div>
     );
   }
 
-  const { patient, conditions, allergies, documents, voice_notes: voiceNotes } =
-    context;
-  // the context carries the full medication history; the card shows active ones
-  const active_medications = context.medications.filter(
-    (record) => record.status === "active"
-  );
-  const recent_lab_results = context.lab_results.slice(0, 5);
-  const recent_clinical_notes = context.clinical_notes.slice(0, 5);
-  const age = calculateAge(patient.date_of_birth);
+  const {
+    patient,
+    conditions,
+    allergies,
+    medications,
+    lab_results: labResults,
+    documents,
+    voice_notes: voiceNotes,
+    clinical_notes: clinicalNotes,
+  } = context;
 
   return (
-    <main className="mx-auto w-full max-w-7xl flex-1 space-y-6 px-4 py-8">
-      <Button variant="ghost" size="sm" render={<Link href="/patients" />}>
-        <ArrowRightIcon />
-        بازگشت به فهرست بیماران
-      </Button>
+    <div className="flex min-h-svh flex-1 flex-col">
+      <AppShell />
+      <PatientIdentityBar
+        patient={patient}
+        allergies={allergies}
+        activeConditionCount={
+          conditions.filter((condition) => condition.status === "active").length
+        }
+      />
 
-      {/* --- profile --- */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">
-            {patient.first_name} {patient.last_name}
-          </CardTitle>
-          <CardDescription className="flex flex-wrap items-center gap-2">
-            <Badge variant="secondary">{genderLabels[patient.gender]}</Badge>
-            {age !== null ? <Badge variant="secondary">{age} ساله</Badge> : null}
-            {patient.national_code ? (
-              <Badge variant="outline">
-                <span dir="ltr" className="font-mono">
-                  {patient.national_code}
-                </span>
-              </Badge>
-            ) : null}
-          </CardDescription>
-          <CardAction>
-            <div className="flex items-center gap-2">
-              <EditPatientButton patient={patient} />
-              <DeletePatientButton patient={patient} />
-            </div>
-          </CardAction>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-muted-foreground">
-            <span>
-              تاریخ تولد: {formatDate(patient.date_of_birth)}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <PhoneIcon className="size-4" />
-              {patient.phone ? (
-                <span dir="ltr" className="font-mono">
-                  {patient.phone}
-                </span>
-              ) : (
-                "—"
-              )}
-            </span>
-            {patient.address ? <span>نشانی: {patient.address}</span> : null}
+      {/* clinical workspace: record (right — source of truth) + copilot
+          (left — interpretation). In RTL the first grid column is on the
+          right, so the record column comes first in the DOM. */}
+      <div className="grid flex-1 grid-cols-1 items-start xl:grid-cols-[minmax(0,1fr)_min(36%,520px)]">
+        <div className="min-w-0">
+          <WorkspaceTabs
+            patientId={patient.id}
+            active={tab}
+            updatedAt={patient.updated_at}
+          />
+          <div className="px-4 py-4 lg:px-6">
+            {tab === "summary" ? (
+              <SummaryView
+                patientId={patient.id}
+                conditions={conditions}
+                allergies={allergies}
+                medications={medications}
+                labResults={labResults}
+                documents={documents}
+              />
+            ) : tab === "timeline" ? (
+              <TimelineView timeline={timeline} />
+            ) : tab === "medications" ? (
+              <MedicationsView
+                patientId={patient.id}
+                medications={medications}
+              />
+            ) : tab === "labs" ? (
+              <LabsView labResults={labResults} />
+            ) : (
+              <DocumentsView
+                patientId={patient.id}
+                documents={documents}
+                voiceNotes={voiceNotes}
+                clinicalNotes={clinicalNotes}
+              />
+            )}
           </div>
-          {/* at-a-glance record summary — counts from the live context */}
-          <dl className="flex flex-wrap gap-x-6 gap-y-1 border-t pt-3 text-xs text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <dt>تشخیص‌ها:</dt>
-              <dd className="font-medium text-foreground">{conditions.length}</dd>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <dt>آلرژی‌ها:</dt>
-              <dd className="font-medium text-foreground">{allergies.length}</dd>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <dt>داروهای فعال:</dt>
-              <dd className="font-medium text-foreground">{active_medications.length}</dd>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <dt>آزمایش‌ها:</dt>
-              <dd className="font-medium text-foreground">{context.lab_results.length}</dd>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <dt>اسناد:</dt>
-              <dd className="font-medium text-foreground">{documents.length}</dd>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <dt>یادداشت صوتی:</dt>
-              <dd className="font-medium text-foreground">{voiceNotes.length}</dd>
-            </div>
-          </dl>
-        </CardContent>
-      </Card>
-
-      {/* --- clinical workspace: record (main) + AI copilot (sticky aside) --- */}
-      <div className="grid items-start gap-6 xl:grid-cols-12">
-        <div className="order-2 space-y-6 xl:order-1 xl:col-span-8">
-
-      {/* --- unified clinical timeline --- */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base">
-            <HistoryIcon className="size-4 text-muted-foreground" />
-            تایم‌لاین بالینی
-          </CardTitle>
-          <CardDescription>
-            {timeline.total > 0
-              ? `${timeline.total} رویداد — جدیدترین اول`
-              : "رویدادی ثبت نشده است"}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {timeline.items.length === 0 ? (
-            <EmptyState
-              title="رویداد بالینی ثبت نشده است"
-              description="با ثبت دارو، سند، یادداشت یا آزمایش، رویدادها به‌صورت خودکار به تایم‌لاین اضافه می‌شوند."
-            />
-          ) : (
-            <ol className="border-s ps-7">
-              {timeline.items.map((item, index) => (
-                <li
-                  key={`${item.source_type}-${item.source_id}-${item.event_type}-${index}`}
-                  className="relative pb-5 last:pb-0"
-                >
-                  <span className="absolute -start-[35px] top-0 flex size-[22px] items-center justify-center rounded-full bg-muted text-muted-foreground">
-                    {timelineIcon(item.event_type)}
-                  </span>
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-                    <p className="font-medium">{item.title}</p>
-                    <span className="text-xs text-muted-foreground">
-                      {formatDateTime(item.date)}
-                    </span>
-                  </div>
-                  {item.description ? (
-                    <p className="mt-0.5 text-xs text-muted-foreground">
-                      {item.description}
-                    </p>
-                  ) : null}
-                </li>
-              ))}
-            </ol>
-          )}
-        </CardContent>
-      </Card>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* --- conditions --- */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <ActivityIcon className="size-4 text-muted-foreground" />
-              مشکلات بالینی
-            </CardTitle>
-            <CardDescription>
-              {conditions.length > 0
-                ? `${conditions.length} مورد — فعال‌ها در ابتدا`
-                : "موردی ثبت نشده است"}
-            </CardDescription>
-            <CardAction>
-              <AddConditionButton patientId={patient.id} />
-            </CardAction>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {conditions.length === 0 ? (
-              <EmptyState title="مشکل بالینی ثبت نشده است" />
-            ) : (
-              conditions.map((condition) => (
-                <div
-                  key={condition.id}
-                  className="flex items-start justify-between gap-2 rounded-lg px-2 py-2.5 hover:bg-muted/50"
-                >
-                  <div className="min-w-0 space-y-0.5">
-                    <p className="truncate font-medium">{condition.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      شروع: {formatDate(condition.onset_date)}
-                      {condition.status === "resolved"
-                        ? ` — رفع: ${formatDate(condition.resolved_date)}`
-                        : ""}
-                    </p>
-                    {condition.notes ? (
-                      <p className="text-xs text-muted-foreground">
-                        {condition.notes}
-                      </p>
-                    ) : null}
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    <Badge
-                      variant={condition.status === "active" ? "secondary" : "outline"}
-                    >
-                      {conditionStatusLabels[condition.status]}
-                    </Badge>
-                    <ConditionRowActions patientId={patient.id} condition={condition} />
-                  </div>
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
-
-        {/* --- allergies --- */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <AlertCircleIcon className="size-4 text-muted-foreground" />
-              حساسیت‌ها
-            </CardTitle>
-            <CardDescription>
-              {allergies.length > 0
-                ? `${allergies.length} مورد — شدیدترها در ابتدا`
-                : "موردی ثبت نشده است"}
-            </CardDescription>
-            <CardAction>
-              <AddAllergyButton patientId={patient.id} />
-            </CardAction>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {allergies.length === 0 ? (
-              <EmptyState title="حساسیتی ثبت نشده است" />
-            ) : (
-              allergies.map((allergy) => (
-                <div
-                  key={allergy.id}
-                  className="flex items-start justify-between gap-2 rounded-lg px-2 py-2.5 hover:bg-muted/50"
-                >
-                  <div className="min-w-0">
-                    <p className="truncate font-medium">{allergy.allergen}</p>
-                    {allergy.reaction ? (
-                      <p className="text-xs text-muted-foreground">
-                        واکنش: {allergy.reaction}
-                      </p>
-                    ) : null}
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    <Badge
-                      variant="outline"
-                      className={severityBadgeClass(allergy.severity)}
-                    >
-                      {allergySeverityLabels[allergy.severity]}
-                    </Badge>
-                    <AllergyRowActions patientId={patient.id} allergy={allergy} />
-                  </div>
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
-
-        {/* --- active medications --- */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <PillIcon className="size-4 text-muted-foreground" />
-              داروهای فعال
-            </CardTitle>
-            <CardDescription>
-              {active_medications.length > 0
-                ? `${active_medications.length} داروی در حال مصرف`
-                : "داروی فعالی ثبت نشده است"}
-            </CardDescription>
-            <CardAction>
-              <AddMedicationButton patientId={patient.id} />
-            </CardAction>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {active_medications.length === 0 ? (
-              <EmptyState
-                title="داروی فعالی ثبت نشده است"
-                description="با دکمهٔ + داروی جدیدی اضافه کنید."
-              />
-            ) : (
-              active_medications.map((record) => (
-                <div
-                  key={record.id}
-                  className="flex items-start justify-between gap-2 rounded-lg px-2 py-2.5 hover:bg-muted/50"
-                >
-                  <div className="min-w-0 space-y-0.5">
-                    <p className="truncate font-medium">
-                      {record.medication.name}
-                      {record.medication.generic_name ? (
-                        <span className="text-xs font-normal text-muted-foreground">
-                          {" "}
-                          ({record.medication.generic_name})
-                        </span>
-                      ) : null}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {record.dosage ?? ""}
-                      {record.dosage && record.frequency ? " — " : ""}
-                      {record.frequency ?? ""}
-                      {record.start_date ? ` — از ${formatDate(record.start_date)}` : ""}
-                    </p>
-                    {record.notes ? (
-                      <p className="text-xs text-muted-foreground">{record.notes}</p>
-                    ) : null}
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    <Badge variant="secondary">
-                      {medicationStatusLabels[record.status]}
-                    </Badge>
-                    <MedicationRowActions patientId={patient.id} record={record} />
-                  </div>
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
-
-        {/* --- documents --- */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <FileUpIcon className="size-4 text-muted-foreground" />
-              اسناد
-            </CardTitle>
-            <CardDescription>
-              {documents.length > 0
-                ? `${documents.length} سند — جدیدترین اول`
-                : "سندی بارگذاری نشده است"}
-            </CardDescription>
-            <CardAction>
-              <AddDocumentButton patientId={patient.id} />
-            </CardAction>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {documents.length === 0 ? (
-              <EmptyState
-                title="سندی بارگذاری نشده است"
-                description="گزارش آزمایش، تصویر یا فایل بالینی بیمار را بارگذاری کنید."
-              />
-            ) : (
-              documents.map((document) => (
-                <div
-                  key={document.id}
-                  className="flex items-start justify-between gap-2 rounded-lg px-2 py-2.5 hover:bg-muted/50"
-                >
-                  <div className="min-w-0 space-y-0.5">
-                    <p className="truncate font-medium">{document.title}</p>
-                    <p className="text-xs text-muted-foreground" dir="ltr">
-                      {document.file_name} — {formatBytes(document.file_size_bytes)}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {documentTypeLabels[document.doc_type]} —{" "}
-                      {formatDateTime(document.created_at)}
-                    </p>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    <Badge
-                      variant="outline"
-                      className={extractionStatusBadgeClass(
-                        document.extraction_status
-                      )}
-                    >
-                      {extractionStatusLabels[document.extraction_status]}
-                    </Badge>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      aria-label="دانلود فایل اصلی"
-                      title="دانلود فایل اصلی"
-                      render={
-                        <a
-                          href={api.documentDownloadUrl(document.id)}
-                          target="_blank"
-                          rel="noreferrer"
-                        />
-                      }
-                    >
-                      <DownloadIcon />
-                    </Button>
-                    <ViewExtractedTextButton document={document} />
-                    <DocumentRowActions document={document} />
-                  </div>
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
-
-        {/* --- voice notes (Persian speech-to-text) --- */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <MicIcon className="size-4 text-muted-foreground" />
-              یادداشت‌های صوتی
-            </CardTitle>
-            <CardDescription>
-              {voiceNotes.length > 0
-                ? `${voiceNotes.length} مورد — گفتار فارسی، متن خام حفظ می‌شود`
-                : "موردی ثبت نشده است"}
-            </CardDescription>
-            <CardAction>
-              <AddVoiceNoteButton patientId={patient.id} />
-            </CardAction>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {voiceNotes.length === 0 ? (
-              <EmptyState
-                title="یادداشت صوتی ثبت نشده است"
-                description="با دکمهٔ میکروفون، گفتار خود را ضبط یا فایل صوتی بارگذاری کنید."
-              />
-            ) : (
-              voiceNotes.map((voiceNote) => (
-                <div
-                  key={voiceNote.id}
-                  className="flex items-start justify-between gap-2 rounded-lg px-2 py-2.5 hover:bg-muted/50"
-                >
-                  <div className="min-w-0 space-y-0.5">
-                    <p className="truncate font-medium">
-                      {voiceNote.title ?? "بدون عنوان"}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {conversationTypeLabels[voiceNote.conversation_type]} —{" "}
-                      {formatDuration(voiceNote.duration_seconds)} —{" "}
-                      {formatDateTime(voiceNote.created_at)}
-                    </p>
-                    {voiceNote.transcript ? (
-                      <p className="line-clamp-1 text-xs text-muted-foreground">
-                        {voiceNote.transcript.split("\n")[0]}
-                      </p>
-                    ) : null}
-                    {voiceNote.transcription_status === "failed" &&
-                    voiceNote.error_message ? (
-                      <p className="line-clamp-1 text-xs text-destructive">
-                        {voiceNote.error_message}
-                      </p>
-                    ) : null}
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    <Badge
-                      variant="outline"
-                      className={transcriptionStatusBadgeClass(
-                        voiceNote.transcription_status
-                      )}
-                    >
-                      {transcriptionStatusLabels[voiceNote.transcription_status]}
-                    </Badge>
-                    {voiceNote.cleanup_status === "completed" ? (
-                      <Badge
-                        variant="outline"
-                        className="text-sky-600 dark:text-sky-400"
-                      >
-                        {cleanupStatusLabels[voiceNote.cleanup_status]}
-                      </Badge>
-                    ) : null}
-                    <ViewCleanedNoteButton voiceNote={voiceNote} />
-                    <ViewTranscriptButton voiceNote={voiceNote} />
-                    <VoiceNoteRowActions voiceNote={voiceNote} />
-                  </div>
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
-
-        {/* --- recent labs --- */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <FlaskConicalIcon className="size-4 text-muted-foreground" />
-              نتایج آزمایش اخیر
-            </CardTitle>
-            <CardDescription>۵ نتیجهٔ آخر</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {recent_lab_results.length === 0 ? (
-              <EmptyState title="نتیجهٔ آزمایشی ثبت نشده است" />
-            ) : (
-              recent_lab_results.map((lab) => (
-                <div
-                  key={lab.id}
-                  className="flex items-center justify-between gap-2 rounded-lg px-2 py-2 hover:bg-muted/50"
-                >
-                  <div className="min-w-0">
-                    <p className="truncate font-medium">
-                      {lab.test_name}:
-                      <span className="font-mono" dir="ltr">
-                        {" "}
-                        {lab.value}
-                      </span>
-                      {lab.unit ? (
-                        <span className="text-xs text-muted-foreground">
-                          {" "}
-                          {lab.unit}
-                        </span>
-                      ) : null}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatDate(lab.result_date)}
-                      {lab.reference_range
-                        ? ` — محدودهٔ طبیعی: ${lab.reference_range}`
-                        : ""}
-                    </p>
-                  </div>
-                  {lab.flag ? (
-                    <Badge variant="outline" className={flagBadgeVariant(lab.flag)}>
-                      {resultFlagLabels[lab.flag]}
-                    </Badge>
-                  ) : null}
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
-
-        {/* --- recent notes --- */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <FileTextIcon className="size-4 text-muted-foreground" />
-              یادداشت‌های بالینی اخیر
-            </CardTitle>
-            <CardDescription>۵ یادداشت آخر</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {recent_clinical_notes.length === 0 ? (
-              <EmptyState title="یادداشتی ثبت نشده است" />
-            ) : (
-              recent_clinical_notes.map((note) => (
-                <div key={note.id} className="space-y-1.5">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <p className="font-medium">{note.title}</p>
-                    <Badge variant="outline">{noteSourceLabels[note.source]}</Badge>
-                    <span className="text-xs text-muted-foreground">
-                      {formatDateTime(note.created_at)}
-                    </span>
-                  </div>
-                  <p className="text-sm leading-7 text-muted-foreground">
-                    {note.content}
-                  </p>
-                  <Separator />
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
         </div>
 
-        {/* --- AI copilot: always reachable, sticky beside the record --- */}
-        <aside className="order-1 xl:order-2 xl:col-span-4">
-          <div className="xl:sticky xl:top-6">
-            <ClinicalChat patientId={patient.id} />
-          </div>
+        {/* AI copilot — full-height supporting panel on the left */}
+        <aside className="order-first min-w-0 xl:order-none">
+          <ClinicalChat patientId={patient.id} />
         </aside>
       </div>
-    </main>
+    </div>
   );
 }

@@ -39,6 +39,20 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  /* ===== clinical design tokens (Phase 1 — pen.dev source of truth) ===== */
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-border: var(--brand-border);
+  --color-critical: var(--critical);
+  --color-critical-soft: var(--critical-soft);
+  --color-critical-border: var(--critical-border);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-faint: var(--faint);
+  --color-surface-2: var(--surface-2);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -50,77 +64,105 @@
 
 :root {
   /* Persian-first font stack (Vazirmatn is bundled via the `vazirmatn` npm
-     package — no external font CDN required). */
+     package — no external font CDN required). IBM Plex Mono is bundled via
+     `@fontsource/ibm-plex-mono` for LTR clinical/technical values. */
   --font-sans: "Vazirmatn", "Segoe UI", Tahoma, ui-sans-serif, system-ui,
     sans-serif;
-  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas,
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas,
     "Liberation Mono", monospace;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --background: #f4f7f6;
+  --foreground: #1c2b2a;
+  --card: #ffffff;
+  --card-foreground: #1c2b2a;
+  --popover: #ffffff;
+  --popover-foreground: #1c2b2a;
+  --primary: #0f766e;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f4;
+  --secondary-foreground: #1c2b2a;
+  --muted: #f1f5f4;
+  --muted-foreground: #5a6e6c;
+  --accent: #ebf4f2;
+  --accent-foreground: #0b5d57;
+  --destructive: #b42318;
+  --border: #e2e9e7;
+  --input: #e2e9e7;
+  --ring: #0f766e;
+  --chart-1: #0f766e;
+  --chart-2: #15803d;
+  --chart-3: #b54708;
+  --chart-4: #3572d9;
+  --chart-5: #b42318;
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #f9fbfa;
+  --sidebar-foreground: #1c2b2a;
+  --sidebar-primary: #0f766e;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ebf4f2;
+  --sidebar-accent-foreground: #0b5d57;
+  --sidebar-border: #e2e9e7;
+  --sidebar-ring: #0f766e;
+  /* clinical semantic palette (calm, meaning-bearing color only) */
+  --brand: #0f766e;
+  --brand-strong: #0b5d57;
+  --brand-soft: #ebf4f2;
+  --brand-border: #cde1dd;
+  --critical: #b42318;
+  --critical-soft: #fbf0ef;
+  --critical-border: #f1d3cf;
+  --warning: #b54708;
+  --warning-soft: #fcf3e8;
+  --success: #15803d;
+  --success-soft: #eaf5ee;
+  --faint: #8aa09d;
+  --surface-2: #f1f5f4;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #0d1413;
+  --foreground: #e7efee;
+  --card: #131b1a;
+  --card-foreground: #e7efee;
+  --popover: #131b1a;
+  --popover-foreground: #e7efee;
+  --primary: #2dd4bf;
+  --primary-foreground: #0b1514;
+  --secondary: #1b2624;
+  --secondary-foreground: #e7efee;
+  --muted: #1b2624;
+  --muted-foreground: #9db3b0;
+  --accent: #142e2b;
+  --accent-foreground: #c9e8e4;
+  --destructive: #ef7066;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #2dd4bf;
+  --chart-1: #2dd4bf;
+  --chart-2: #57c983;
+  --chart-3: #e19a3f;
+  --chart-4: #7ba5f0;
+  --chart-5: #ef7066;
+  --sidebar: #131b1a;
+  --sidebar-foreground: #e7efee;
+  --sidebar-primary: #2dd4bf;
+  --sidebar-primary-foreground: #0b1514;
+  --sidebar-accent: #142e2b;
+  --sidebar-accent-foreground: #c9e8e4;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #2dd4bf;
+  --brand: #2dd4bf;
+  --brand-strong: #5eead4;
+  --brand-soft: #122b28;
+  --brand-border: #1f4c46;
+  --critical: #ef7066;
+  --critical-soft: #2a1512;
+  --critical-border: #57231d;
+  --warning: #e19a3f;
+  --warning-soft: #2a1e0f;
+  --success: #57c983;
+  --success-soft: #0f2418;
+  --faint: #7d928f;
+  --surface-2: #1b2624;
 }
 
 @layer base {
@@ -134,23 +176,18 @@
     @apply font-sans;
   }
 }
-/* ===== Task 20 — clinical polish layer (calm, professional) ===== */
-
-/* Subtle clinical background instead of pure white */
-body {
-  background-color: color-mix(in oklab, var(--muted) 35%, var(--background));
-}
+/* ===== clinical polish layer (Phase 1 redesign — calm, professional) ===== */
 
 /* Calm, consistent focus states */
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
-  outline: 2px solid color-mix(in oklab, var(--primary) 55%, transparent);
+  outline: 2px solid color-mix(in oklab, var(--brand) 55%, transparent);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
 
 /* Restrained text selection */
 ::selection {
-  background: color-mix(in oklab, var(--primary) 18%, transparent);
+  background: color-mix(in oklab, var(--brand) 18%, transparent);
 }
 
 /* Slim, quiet scrollbars for dense clinical lists */
@@ -160,11 +197,10 @@ body {
     transparent;
 }
 
-/* AI-generated content distinction: a quiet dotted border + faint tint,
-   used for assistant bubbles and AI-analysis panels (never record data) */
+/* AI-generated content distinction: a quiet brand tint, used for assistant
+   answers and AI-analysis panels (never for record data) */
 .ai-content {
-  border-style: dashed;
-  background-color: color-mix(in oklab, var(--primary) 3%, var(--card));
+  background-color: var(--brand-soft);
 }
 
 /* Skeleton shimmer for loading states */

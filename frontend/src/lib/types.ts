@@ -230,11 +230,29 @@ export interface ConversationDetail extends ConversationSummary {
 export interface SendMessagePayload {
   content: string;
   medication_safety: boolean;
+  provider?: string;
+  model?: string;
 }
 
 export interface SendMessageResult {
   user_message: ConversationMessage;
   assistant_message: ConversationMessage;
+}
+
+/** AI provider catalog (runtime provider/model selection — ids only). */
+export interface AIModelInfo {
+  id: string;
+  name: string;
+}
+
+export interface AIProviderInfo {
+  id: string;
+  name: string;
+  models: AIModelInfo[];
+}
+
+export interface AIProvidersResponse {
+  providers: AIProviderInfo[];
 }
 
 /** Clinical AI agent (MCP spike) — stateless, not persisted. */

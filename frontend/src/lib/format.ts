@@ -184,3 +184,17 @@ export function emptyToNull(value: string): string | null {
   const trimmed = value.trim();
   return trimmed === "" ? null : trimmed;
 }
+
+/** Persian digits for counts, e.g. «۳». */
+export function faNum(value: number): string {
+  return new Intl.NumberFormat("fa-IR").format(value);
+}
+
+/** Persian clock time (HH:mm), e.g. «۱۴:۳۲» — for chat timestamps. */
+export function formatTime(iso: string | null | undefined): string {
+  if (!iso) return "";
+  return new Intl.DateTimeFormat("fa-IR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(iso));
+}
