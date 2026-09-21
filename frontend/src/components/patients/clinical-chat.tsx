@@ -14,6 +14,7 @@ import {
   ShieldCheckIcon,
   SparklesIcon,
   Trash2Icon,
+  UserRoundIcon,
   WrenchIcon,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -99,7 +100,14 @@ function ModeChip({
  * medication-safety and agent-mode behavior is unchanged; only the
  * presentation was redesigned.
  */
-export function ClinicalChat({ patientId }: { patientId: number }) {
+export function ClinicalChat({
+  patientId,
+  patientName,
+}: {
+  patientId: number;
+  /** shown in the header so the assistant is clearly tied to THIS record */
+  patientName?: string;
+}) {
   const [conversations, setConversations] = useState<ConversationSummary[]>([]);
   const [activeId, setActiveId] = useState<number | null>(null);
   const [turns, setTurns] = useState<RenderedTurn[]>([]);
@@ -354,15 +362,25 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
       aria-label="دستیار بالینی"
       className="flex h-[75svh] min-h-0 flex-col overflow-hidden bg-surface-2 xl:sticky xl:top-4 xl:h-[calc(100svh-2.5rem)] xl:border-s"
     >
-      {/* panel header — grounding statement */}
-      <header className="flex shrink-0 items-center justify-end gap-2 border-b bg-card px-4 py-2.5">
-        <div className="text-end">
-          <h2 className="text-[15px] leading-5 font-semibold">دستیار بالینی</h2>
-          <p className="text-xs text-faint">
-            پاسخ‌ها بر اساس پروندهٔ همین بیمار هستند
-          </p>
+      {/* panel header — strong identity, grounded in this patient's record */}
+      <header className="shrink-0 border-b bg-card px-3.5 pb-2.5 pt-3">
+        <div className="flex items-center gap-2.5">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand">
+            <SparklesIcon className="size-4" />
+          </span>
+          <div className="min-w-0">
+            <h2 className="text-sm leading-5 font-bold">دستیار بالینی</h2>
+            <p className="truncate text-[11px] leading-4 text-faint">
+              پاسخ‌ها بر اساس اطلاعات پروندهٔ بیمار ارائه می‌شوند
+            </p>
+          </div>
         </div>
-        <SparklesIcon className="size-4 shrink-0 text-brand" />
+        {patientName ? (
+          <span className="mt-2 inline-flex items-center gap-1.5 rounded-md bg-surface-2 px-2 py-1 text-[11px] leading-4 text-muted-foreground">
+            <UserRoundIcon className="size-3 shrink-0 text-faint" />
+            پروندهٔ {patientName}
+          </span>
+        ) : null}
       </header>
 
       {/* conversations — preserved selector, kept compact */}
@@ -427,30 +445,30 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
       {/* messages / empty state */}
       <div
         ref={listRef}
-        className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3.5 py-4"
+        className="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto px-3 py-3"
       >
         {turns.length === 0 && !loading ? (
-          <div className="flex flex-1 flex-col items-center justify-center gap-4 py-4 text-center">
-            <span className="flex size-11 items-center justify-center rounded-full bg-brand-soft">
-              <SparklesIcon className="size-5 text-brand" />
+          <div className="flex flex-1 flex-col items-center justify-center gap-3 py-2 text-center">
+            <span className="flex size-10 items-center justify-center rounded-full bg-brand-soft">
+              <SparklesIcon className="size-4.5 text-brand" />
             </span>
-            <div className="space-y-1.5">
-              <p className="text-[15px] font-semibold">
+            <div className="space-y-1">
+              <p className="text-sm font-semibold">
                 دربارهٔ وضعیت این بیمار از من بپرسید.
               </p>
-              <p className="mx-auto max-w-[340px] text-xs leading-6 text-muted-foreground">
+              <p className="mx-auto max-w-[320px] text-[11px] leading-5 text-muted-foreground">
                 پاسخ‌ها از اطلاعات ثبت‌شدهٔ پرونده ساخته می‌شوند و همراه با ذکر
                 منبع نمایش داده می‌شوند.
               </p>
             </div>
-            <div className="w-full space-y-2">
+            <div className="w-full space-y-1.5">
               {SUGGESTIONS.map(({ text, icon: Icon }) => (
                 <button
                   key={text}
                   type="button"
                   onClick={() => void send(text)}
                   disabled={loading}
-                  className="flex w-full items-center gap-2.5 rounded-lg border bg-card px-3.5 py-2.5 text-start text-[13px] font-medium transition-colors hover:border-brand-border hover:bg-brand-soft disabled:opacity-50"
+                  className="flex w-full items-center gap-2.5 rounded-lg border bg-card px-3 py-2 text-start text-xs leading-5 font-medium transition-colors hover:border-brand-border hover:bg-brand-soft disabled:opacity-50"
                 >
                   <Icon className="size-3.5 shrink-0 text-faint" />
                   {text}
@@ -464,7 +482,7 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
           turn.role === "user" ? (
             <div
               key={index}
-              className="ms-auto w-fit max-w-[85%] rounded-lg border bg-card px-3 py-2"
+              className="ms-auto w-fit max-w-[85%] rounded-lg border bg-card px-3 py-1.5"
             >
               <p className="text-[13px] leading-6 font-medium">{turn.content}</p>
               {turn.createdAt ? (
@@ -476,9 +494,9 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
           ) : (
             <div
               key={index}
-              className="w-full rounded-xl border border-brand-border bg-brand-soft p-3.5"
+              className="w-full rounded-xl border border-brand-border bg-brand-soft p-3"
             >
-              <div className="mb-2 flex items-center justify-between gap-2">
+              <div className="mb-1.5 flex items-center justify-between gap-2">
                 <span className="flex items-center gap-1 text-[11px] font-semibold text-muted-foreground">
                   <SparklesIcon className="size-3 text-brand" />
                   پاسخ دستیار بالینی
@@ -547,7 +565,7 @@ export function ClinicalChat({ patientId }: { patientId: number }) {
       </div>
 
       {/* controls + composer */}
-      <div className="shrink-0 space-y-2 border-t bg-card px-3.5 pb-3 pt-2.5">
+      <div className="shrink-0 space-y-1.5 border-t bg-card px-3 pb-2.5 pt-2">
         <div className="flex items-center justify-between gap-2">
           {/* modes — right in RTL */}
           <div className="flex items-center gap-1.5">

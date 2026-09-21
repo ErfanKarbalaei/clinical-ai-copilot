@@ -34,9 +34,9 @@ export function WorkspaceTabs({
   updatedAt,
 }: WorkspaceTabsProps) {
   return (
-    <div className="flex items-end justify-between border-b bg-card px-4 lg:px-6">
+    <div className="flex items-end justify-between border-b bg-card px-4 lg:px-5">
       <nav
-        className="flex items-end gap-4 lg:gap-6"
+        className="flex items-end gap-4 lg:gap-5"
         aria-label="بخش‌های پرونده"
       >
         {TABS.map((tab) => {
@@ -46,7 +46,7 @@ export function WorkspaceTabs({
               key={tab.key}
               href={`/patients/${patientId}?tab=${tab.key}`}
               aria-current={isActive ? "page" : undefined}
-              className={`relative pt-2 pb-2.5 text-[13px] transition-colors ${
+              className={`relative pt-1.5 pb-2 text-[13px] transition-colors ${
                 isActive
                   ? "font-semibold text-brand"
                   : "font-medium text-muted-foreground hover:text-foreground"
@@ -56,14 +56,14 @@ export function WorkspaceTabs({
               {isActive ? (
                 <span
                   aria-hidden="true"
-                  className="absolute inset-x-0 bottom-0 mx-auto h-0.5 w-5 rounded-full bg-brand"
+                  className="absolute inset-x-0 bottom-0 mx-auto h-0.5 w-6 rounded-full bg-brand"
                 />
               ) : null}
             </Link>
           );
         })}
       </nav>
-      <p className="hidden pb-2.5 text-xs text-faint sm:block">
+      <p className="hidden pb-2 text-[11px] text-faint sm:block">
         به‌روزرسانی پرونده: {formatDate(updatedAt)}
       </p>
     </div>

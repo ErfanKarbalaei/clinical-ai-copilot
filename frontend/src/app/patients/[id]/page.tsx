@@ -25,19 +25,17 @@ import {
   VoiceNoteRowActions,
 } from "@/components/patients/voice-note-actions";
 import { ClinicalChat } from "@/components/patients/clinical-chat";
+import { PatientIdentityBar } from "@/components/patients/patient-identity-bar";
 import {
-  PatientIdentityBar,
-} from "@/components/patients/patient-identity-bar";
-import {
-  SectionHeader,
-} from "@/components/patients/summary/section-header";
+  SectionCard,
+} from "@/components/patients/summary/section-card";
 import { SummaryView } from "@/components/patients/summary/summary-view";
 import {
   WorkspaceTabs,
   parseWorkspaceTab,
 } from "@/components/patients/workspace-tabs";
 import { AppShell } from "@/components/shared/app-shell";
-import { EmptyState } from "@/components/shared/empty-state";
+import { CompactEmptyState } from "@/components/shared/compact-empty-state";
 import { ErrorState } from "@/components/shared/error-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -73,6 +71,12 @@ import type {
 export const dynamic = "force-dynamic";
 
 export const metadata = { title: "پروندهٔ بالینی بیمار" };
+
+const MED_GRID =
+  "grid grid-cols-[minmax(0,1fr)_110px_100px_100px] items-center gap-2";
+const LAB_GRID =
+  "grid grid-cols-[minmax(0,1fr)_110px_120px_92px_88px] items-center gap-2";
+const ROW_DIVIDE = "border-b border-border/50 last:border-0";
 
 function flagClass(flag: ResultFlag | null): string {
   switch (flag) {
@@ -131,45 +135,37 @@ function timelineIcon(eventType: string) {
   }
 }
 
-/* --- tab views (all existing functionality, reorganized into tabs) --- */
-
-const MED_GRID =
-  "grid grid-cols-[minmax(0,1fr)_110px_100px_100px] items-center gap-2";
-const LAB_GRID =
-  "grid grid-cols-[minmax(0,1fr)_110px_120px_92px_88px] items-center gap-2";
+/* --- tab views (all existing functionality, visually unified) --- */
 
 function TimelineView({ timeline }: { timeline: PatientTimeline }) {
   return (
-    <section className="space-y-2">
-      <SectionHeader
-        title="تایم‌لاین بالینی"
-        count={
-          timeline.total > 0 ? `${faNum(timeline.total)} رویداد` : undefined
-        }
-      />
+    <SectionCard
+      title="تایم‌لاین بالینی"
+      count={timeline.total > 0 ? `${faNum(timeline.total)} رویداد` : undefined}
+    >
       {timeline.items.length === 0 ? (
-        <EmptyState
-          title="رویداد بالینی ثبت نشده است"
-          description="با ثبت دارو، سند، یادداشت یا آزمایش، رویدادها به‌صورت خودکار به تایم‌لاین اضافه می‌شوند."
+        <CompactEmptyState
+          label="رویداد بالینی ثبت نشده است"
+          hint="با ثبت دارو، سند یا یادداشت، رویدادها به‌صورت خودکار اضافه می‌شوند"
         />
       ) : (
-        <ol className="border-s ps-7">
+        <ol className="border-s ps-6">
           {timeline.items.map((item, index) => (
             <li
               key={`${item.source_type}-${item.source_id}-${item.event_type}-${index}`}
-              className="relative pb-5 last:pb-0"
+              className="relative pb-4 last:pb-0"
             >
-              <span className="absolute -start-[35px] top-0 flex size-[22px] items-center justify-center rounded-full bg-surface-2 text-muted-foreground">
+              <span className="absolute -start-[31px] top-0 flex size-[22px] items-center justify-center rounded-full bg-surface-2 text-muted-foreground">
                 {timelineIcon(item.event_type)}
               </span>
               <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-                <p className="text-[13px] font-medium">{item.title}</p>
-                <span className="text-xs text-faint">
+                <p className="text-[13px] leading-5 font-medium">{item.title}</p>
+                <span className="text-[11px] text-faint">
                   {formatDateTime(item.date)}
                 </span>
               </div>
               {item.description ? (
-                <p className="mt-0.5 text-xs text-muted-foreground">
+                <p className="mt-0.5 text-[11px] leading-4 text-muted-foreground">
                   {item.description}
                 </p>
               ) : null}
@@ -177,7 +173,7 @@ function TimelineView({ timeline }: { timeline: PatientTimeline }) {
           ))}
         </ol>
       )}
-    </section>
+    </SectionCard>
   );
 }
 
@@ -194,24 +190,21 @@ function MedicationsView({
       (a.status === "active" ? 0 : 1) - (b.status === "active" ? 0 : 1)
   );
   return (
-    <section className="space-y-2">
-      <SectionHeader
-        title="داروها"
-        count={
-          medications.length > 0
-            ? `${faNum(medications.length)} رکورد`
-            : undefined
-        }
-        action={<AddMedicationButton patientId={patientId} />}
-      />
+    <SectionCard
+      title="داروها"
+      count={
+        medications.length > 0 ? `${faNum(medications.length)} رکورد` : undefined
+      }
+      action={<AddMedicationButton patientId={patientId} />}
+    >
       {sorted.length === 0 ? (
-        <EmptyState
-          title="دارویی ثبت نشده است"
-          description="با دکمهٔ + داروی جدیدی اضافه کنید."
+        <CompactEmptyState
+          label="دارویی ثبت نشده است"
+          hint="با دکمهٔ + داروی جدیدی اضافه کنید"
         />
       ) : (
         <>
-          <div className={`${MED_GRID} px-1.5 text-[11px] text-faint`}>
+          <div className={`${MED_GRID} pb-1 text-[11px] text-faint`}>
             <span>نام دارو</span>
             <span>دوز</span>
             <span>شروع</span>
@@ -221,17 +214,17 @@ function MedicationsView({
             {sorted.map((record) => (
               <li
                 key={record.id}
-                className={`${MED_GRID} border-b border-border/60 px-1.5 py-2 last:border-0 hover:bg-surface-2/60`}
+                className={`${MED_GRID} py-1.5 ${ROW_DIVIDE}`}
               >
                 <div className="flex min-w-0 items-center justify-between gap-2">
                   <div className="min-w-0">
-                    <p className="truncate text-[13px] font-medium">
+                    <p className="truncate text-[13px] leading-5 font-medium">
                       {record.medication.name}
                     </p>
                     {record.medication.generic_name ? (
                       <p
                         dir="ltr"
-                        className="truncate text-right font-mono text-[10px] text-faint"
+                        className="truncate text-right font-mono text-[10px] leading-4 text-faint"
                       >
                         {record.medication.generic_name}
                       </p>
@@ -241,14 +234,14 @@ function MedicationsView({
                 </div>
                 <span
                   dir="ltr"
-                  className="truncate font-mono text-[13px] tabular-nums"
+                  className="truncate font-mono text-xs tabular-nums"
                 >
                   {record.dosage ?? "—"}
                 </span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-[11px] text-muted-foreground">
                   {record.start_date ? formatDate(record.start_date) : "—"}
                 </span>
-                <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
                   <span
                     className={`size-1.5 shrink-0 rounded-full ${
                       record.status === "active" ? "bg-success" : "bg-faint"
@@ -261,7 +254,7 @@ function MedicationsView({
           </ul>
         </>
       )}
-    </section>
+    </SectionCard>
   );
 }
 
@@ -271,23 +264,20 @@ function LabsView({
   labResults: PatientContext["lab_results"];
 }) {
   return (
-    <section className="space-y-2">
-      <SectionHeader
-        title="آزمایش‌ها"
-        count={
-          labResults.length > 0
-            ? `${faNum(labResults.length)} نتیجه`
-            : undefined
-        }
-      />
+    <SectionCard
+      title="آزمایش‌ها"
+      count={
+        labResults.length > 0 ? `${faNum(labResults.length)} نتیجه` : undefined
+      }
+    >
       {labResults.length === 0 ? (
-        <EmptyState
-          title="نتیجهٔ آزمایشی ثبت نشده است"
-          description="نتایج آزمایش از اسناد بارگذاری‌شده استخراج می‌شوند."
+        <CompactEmptyState
+          label="نتیجهٔ آزمایشی ثبت نشده است"
+          hint="نتایج از اسناد بارگذاری‌شده استخراج می‌شوند"
         />
       ) : (
         <>
-          <div className={`${LAB_GRID} px-1.5 text-[11px] text-faint`}>
+          <div className={`${LAB_GRID} pb-1 text-[11px] text-faint`}>
             <span>آزمایش</span>
             <span>مقدار</span>
             <span>محدودهٔ مرجع</span>
@@ -296,11 +286,8 @@ function LabsView({
           </div>
           <ul>
             {labResults.map((lab) => (
-              <li
-                key={lab.id}
-                className={`${LAB_GRID} border-b border-border/60 px-1.5 py-2 last:border-0 hover:bg-surface-2/60`}
-              >
-                <span className="truncate text-[13px] font-medium">
+              <li key={lab.id} className={`${LAB_GRID} py-1.5 ${ROW_DIVIDE}`}>
+                <span className="truncate text-[13px] leading-5 font-medium">
                   {lab.test_name}
                 </span>
                 <span
@@ -318,15 +305,15 @@ function LabsView({
                 </span>
                 {lab.flag ? (
                   <span
-                    className={`flex items-center gap-1.5 text-xs ${flagClass(lab.flag)}`}
+                    className={`flex items-center gap-1.5 text-[11px] ${flagClass(lab.flag)}`}
                   >
                     <span className="size-1.5 shrink-0 rounded-full bg-current" />
                     {resultFlagLabels[lab.flag]}
                   </span>
                 ) : (
-                  <span className="text-xs text-faint">—</span>
+                  <span className="text-[11px] text-faint">—</span>
                 )}
-                <span className="text-xs text-faint">
+                <span className="text-[11px] text-faint">
                   {lab.result_date ? formatDate(lab.result_date) : "—"}
                 </span>
               </li>
@@ -334,7 +321,7 @@ function LabsView({
           </ul>
         </>
       )}
-    </section>
+    </SectionCard>
   );
 }
 
@@ -350,41 +337,41 @@ function DocumentsView({
   clinicalNotes: ClinicalNote[];
 }) {
   return (
-    <div className="space-y-8">
+    <div className="space-y-3">
       {/* --- documents --- */}
-      <section className="space-y-2">
-        <SectionHeader
-          title="اسناد"
-          count={
-            documents.length > 0 ? `${faNum(documents.length)} سند` : undefined
-          }
-          action={<AddDocumentButton patientId={patientId} />}
-        />
+      <SectionCard
+        title="اسناد"
+        count={
+          documents.length > 0 ? `${faNum(documents.length)} سند` : undefined
+        }
+        action={<AddDocumentButton patientId={patientId} />}
+      >
         {documents.length === 0 ? (
-          <EmptyState
-            title="سندی بارگذاری نشده است"
-            description="گزارش آزمایش، تصویر یا فایل بالینی بیمار را بارگذاری کنید."
+          <CompactEmptyState
+            label="سندی بارگذاری نشده است"
+            hint="گزارش آزمایش، تصویر یا فایل بالینی بیمار را بارگذاری کنید"
           />
         ) : (
           <ul>
             {documents.map((document) => (
               <li
                 key={document.id}
-                className="flex items-start justify-between gap-2 border-b border-border/60 px-1.5 py-2.5 last:border-0 hover:bg-surface-2/60"
+                className={`flex items-start justify-between gap-2 py-2 ${ROW_DIVIDE}`}
               >
                 <div className="min-w-0 space-y-0.5">
-                  <p className="truncate text-[13px] font-medium">
+                  <p className="truncate text-[13px] leading-5 font-medium">
                     {document.title}
                   </p>
-                  <p className="text-xs text-faint" dir="ltr">
-                    {document.file_name} — {formatBytes(document.file_size_bytes)}
+                  <p className="text-[11px] leading-4 text-faint" dir="ltr">
+                    {document.file_name} —{" "}
+                    {formatBytes(document.file_size_bytes)}
                   </p>
-                  <p className="text-xs text-faint">
-                    {documentTypeLabels[document.doc_type]} —{" "}
-                    {formatDateTime(document.created_at)}
+                  <p className="text-[11px] leading-4 text-faint">
+                    {documentTypeLabels[document.doc_type]} ·{" "}
+                    {formatDate(document.created_at)}
                   </p>
                 </div>
-                <div className="flex shrink-0 items-center gap-2">
+                <div className="flex shrink-0 items-center gap-1.5">
                   <Badge
                     variant="outline"
                     className={extractionStatusBadgeClass(
@@ -415,51 +402,50 @@ function DocumentsView({
             ))}
           </ul>
         )}
-      </section>
+      </SectionCard>
 
       {/* --- voice notes (Persian speech-to-text) --- */}
-      <section className="space-y-2">
-        <SectionHeader
-          title="یادداشت‌های صوتی"
-          count={
-            voiceNotes.length > 0 ? `${faNum(voiceNotes.length)} مورد` : undefined
-          }
-          action={<AddVoiceNoteButton patientId={patientId} />}
-        />
+      <SectionCard
+        title="یادداشت‌های صوتی"
+        count={
+          voiceNotes.length > 0 ? `${faNum(voiceNotes.length)} مورد` : undefined
+        }
+        action={<AddVoiceNoteButton patientId={patientId} />}
+      >
         {voiceNotes.length === 0 ? (
-          <EmptyState
-            title="یادداشت صوتی ثبت نشده است"
-            description="با دکمهٔ میکروفون، گفتار خود را ضبط یا فایل صوتی بارگذاری کنید."
+          <CompactEmptyState
+            label="یادداشت صوتی ثبت نشده است"
+            hint="گفتار خود را ضبط یا فایل صوتی بارگذاری کنید"
           />
         ) : (
           <ul>
             {voiceNotes.map((voiceNote) => (
               <li
                 key={voiceNote.id}
-                className="flex items-start justify-between gap-2 border-b border-border/60 px-1.5 py-2.5 last:border-0 hover:bg-surface-2/60"
+                className={`flex items-start justify-between gap-2 py-2 ${ROW_DIVIDE}`}
               >
                 <div className="min-w-0 space-y-0.5">
-                  <p className="truncate text-[13px] font-medium">
+                  <p className="truncate text-[13px] leading-5 font-medium">
                     {voiceNote.title ?? "بدون عنوان"}
                   </p>
-                  <p className="text-xs text-faint">
-                    {conversationTypeLabels[voiceNote.conversation_type]} —{" "}
-                    {formatDuration(voiceNote.duration_seconds)} —{" "}
-                    {formatDateTime(voiceNote.created_at)}
+                  <p className="text-[11px] leading-4 text-faint">
+                    {conversationTypeLabels[voiceNote.conversation_type]} ·{" "}
+                    {formatDuration(voiceNote.duration_seconds)} ·{" "}
+                    {formatDate(voiceNote.created_at)}
                   </p>
                   {voiceNote.transcript ? (
-                    <p className="line-clamp-1 text-xs text-muted-foreground">
+                    <p className="line-clamp-1 text-[11px] leading-4 text-muted-foreground">
                       {voiceNote.transcript.split("\n")[0]}
                     </p>
                   ) : null}
                   {voiceNote.transcription_status === "failed" &&
                   voiceNote.error_message ? (
-                    <p className="line-clamp-1 text-xs text-critical">
+                    <p className="line-clamp-1 text-[11px] leading-4 text-critical">
                       {voiceNote.error_message}
                     </p>
                   ) : null}
                 </div>
-                <div className="flex shrink-0 items-center gap-2">
+                <div className="flex shrink-0 items-center gap-1.5">
                   <Badge
                     variant="outline"
                     className={transcriptionStatusBadgeClass(
@@ -481,40 +467,43 @@ function DocumentsView({
             ))}
           </ul>
         )}
-      </section>
+      </SectionCard>
 
       {/* --- clinical notes --- */}
-      <section className="space-y-2">
-        <SectionHeader
-          title="یادداشت‌های بالینی"
-          count={
-            clinicalNotes.length > 0
-              ? `${faNum(clinicalNotes.length)} یادداشت`
-              : undefined
-          }
-        />
+      <SectionCard
+        title="یادداشت‌های بالینی"
+        count={
+          clinicalNotes.length > 0
+            ? `${faNum(clinicalNotes.length)} یادداشت`
+            : undefined
+        }
+      >
         {clinicalNotes.length === 0 ? (
-          <EmptyState title="یادداشتی ثبت نشده است" />
+          <CompactEmptyState label="یادداشتی ثبت نشده است" />
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {clinicalNotes.map((note) => (
-              <div key={note.id} className="space-y-1.5">
+              <div key={note.id} className="space-y-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <p className="text-[13px] font-medium">{note.title}</p>
-                  <Badge variant="outline">{noteSourceLabels[note.source]}</Badge>
-                  <span className="text-xs text-faint">
-                    {formatDateTime(note.created_at)}
+                  <p className="text-[13px] leading-5 font-medium">
+                    {note.title}
+                  </p>
+                  <Badge variant="outline">
+                    {noteSourceLabels[note.source]}
+                  </Badge>
+                  <span className="text-[11px] text-faint">
+                    {formatDate(note.created_at)}
                   </span>
                 </div>
-                <p className="text-sm leading-7 text-muted-foreground">
+                <p className="text-[13px] leading-6 text-muted-foreground">
                   {note.content}
                 </p>
-                <Separator />
+                <Separator className="last:hidden" />
               </div>
             ))}
           </div>
         )}
-      </section>
+      </SectionCard>
     </div>
   );
 }
@@ -589,7 +578,7 @@ export default async function PatientDetailPage({
             active={tab}
             updatedAt={patient.updated_at}
           />
-          <div className="px-4 py-4 lg:px-6">
+          <div className="px-4 py-3.5 lg:px-5">
             {tab === "summary" ? (
               <SummaryView
                 patientId={patient.id}
@@ -621,7 +610,10 @@ export default async function PatientDetailPage({
 
         {/* AI copilot — full-height supporting panel on the left */}
         <aside className="order-first min-w-0 xl:order-none">
-          <ClinicalChat patientId={patient.id} />
+          <ClinicalChat
+            patientId={patient.id}
+            patientName={`${patient.first_name} ${patient.last_name}`}
+          />
         </aside>
       </div>
     </div>

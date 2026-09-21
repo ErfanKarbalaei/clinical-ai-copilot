@@ -46,7 +46,10 @@ export function AnswerText({ content }: { content: string }) {
       {blocks.map((block, index) => {
         if (block.kind === "heading") {
           return (
-            <p key={index} className="text-xs font-semibold text-brand">
+            <p
+              key={index}
+              className="border-s-2 border-brand ps-2 text-xs leading-5 font-semibold text-brand"
+            >
               {block.lines[0]}
             </p>
           );

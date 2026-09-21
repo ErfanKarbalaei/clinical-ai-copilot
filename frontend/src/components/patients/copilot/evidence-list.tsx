@@ -63,26 +63,26 @@ interface EvidenceListProps {
 export function EvidenceList({ patientId, evidence }: EvidenceListProps) {
   if (evidence.length === 0) return null;
   return (
-    <div className="space-y-2 border-t border-brand-border pt-2.5">
+    <div className="space-y-1.5 border-t border-brand-border pt-2.5">
       <p className="flex items-baseline gap-2 text-[11px] font-semibold text-muted-foreground">
         منابع استفاده‌شده
-        <span className="font-normal text-faint">
-          {faNum(evidence.length)} منبع
+        <span className="rounded bg-card px-1.5 py-0.5 text-[10px] font-normal text-faint tabular-nums">
+          {faNum(evidence.length)}
         </span>
       </p>
-      <ul className="space-y-1.5">
+      <ul className="space-y-1">
         {evidence.map((item) => {
           const Icon = typeIcons[item.source_type] ?? ActivityIcon;
           return (
             <li
               key={item.source_id}
-              className="flex items-center gap-2 rounded-lg border bg-card px-2.5 py-1.5"
+              className="flex items-center gap-2 rounded-lg border border-transparent bg-card px-2.5 py-1"
             >
               <Icon className="size-3.5 shrink-0 text-muted-foreground" />
               <span className="shrink-0 text-[11px] text-faint">
                 {typeLabels[item.source_type]}
               </span>
-              <span className="min-w-0 flex-1 truncate text-xs font-medium">
+              <span className="min-w-0 flex-1 truncate text-xs leading-5 font-medium">
                 {item.description}
               </span>
               {item.document_id != null ? (

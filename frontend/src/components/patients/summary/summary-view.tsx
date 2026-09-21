@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  ActivityIcon,
   ChevronLeftIcon,
   CircleAlertIcon,
   ClipboardListIcon,
@@ -17,15 +18,14 @@ import {
   AddConditionButton,
   ConditionRowActions,
 } from "@/components/patients/condition-actions";
-import { EmptyState } from "@/components/shared/empty-state";
-import { Badge } from "@/components/ui/badge";
 import type { WorkspaceTab } from "@/components/patients/workspace-tabs";
+import { CompactEmptyState } from "@/components/shared/compact-empty-state";
+import { Badge } from "@/components/ui/badge";
 import {
   allergySeverityLabels,
   documentTypeLabels,
   faNum,
   formatDate,
-  formatDateTime,
   medicationStatusLabels,
   resultFlagLabels,
 } from "@/lib/format";
@@ -39,12 +39,11 @@ import type {
   PatientMedication,
   ResultFlag,
 } from "@/lib/types";
-import { SectionHeader } from "./section-header";
+import { SectionCard } from "./section-card";
 
-const MED_GRID =
-  "grid grid-cols-[minmax(0,1fr)_110px_100px_84px] items-center gap-2";
 const LAB_GRID =
   "grid grid-cols-[minmax(0,1fr)_110px_120px_92px_88px] items-center gap-2";
+const ROW_DIVIDE = "border-b border-border/50 last:border-0";
 
 function ViewAllLink({
   patientId,
@@ -56,10 +55,10 @@ function ViewAllLink({
   return (
     <Link
       href={`/patients/${patientId}?tab=${tab}`}
-      className="inline-flex items-center gap-1 text-xs font-medium text-brand hover:text-brand-strong"
+      className="inline-flex items-center gap-0.5 text-[11px] font-medium text-brand hover:text-brand-strong"
     >
       مشاهدهٔ همه
-      <ChevronLeftIcon className="size-3.5" />
+      <ChevronLeftIcon className="size-3" />
     </Link>
   );
 }
@@ -102,7 +101,7 @@ function documentIcon(docType: DocumentType) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 1. Critical alerts — severe allergies, calm but impossible to miss  */
+/* 1. Critical alerts — compact, prominent, immediately visible        */
 /* ------------------------------------------------------------------ */
 
 function CriticalAlerts({ allergies }: { allergies: Allergy[] }) {
@@ -113,10 +112,13 @@ function CriticalAlerts({ allergies }: { allergies: Allergy[] }) {
     if (others.length === 0) return null;
     // no severe allergy — keep recorded allergies visible, without alarm
     return (
-      <div className="flex items-center justify-between gap-3 rounded-lg border bg-surface-2 px-3.5 py-2.5">
-        <div className="min-w-0 text-end">
-          <p className="text-sm font-semibold">حساسیت‌های ثبت‌شده</p>
-          <p className="truncate text-xs text-muted-foreground">
+      <div className="flex items-center gap-2.5 rounded-xl border bg-card p-3">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-surface-2 text-muted-foreground">
+          <CircleAlertIcon className="size-4" />
+        </span>
+        <div className="min-w-0 ps-0.5">
+          <p className="text-[13px] font-semibold leading-5">حساسیت‌های ثبت‌شده</p>
+          <p className="truncate text-[11px] leading-4 text-muted-foreground">
             {others
               .map(
                 (allergy) =>
@@ -125,13 +127,12 @@ function CriticalAlerts({ allergies }: { allergies: Allergy[] }) {
               .join("، ")}
           </p>
         </div>
-        <CircleAlertIcon className="size-[18px] shrink-0 text-muted-foreground" />
       </div>
     );
   }
 
   const subline = [
-    severe[0].reaction ? `واکنش ثبت‌شده: ${severe[0].reaction}` : null,
+    severe[0].reaction ? `واکنش: ${severe[0].reaction}` : null,
     severe.length > 1
       ? `آلرژی شدید دیگر: ${severe
           .slice(1)
@@ -151,16 +152,20 @@ function CriticalAlerts({ allergies }: { allergies: Allergy[] }) {
     .join(" · ");
 
   return (
-    <div className="flex items-center justify-between gap-3 rounded-lg border border-critical-border bg-critical-soft px-3.5 py-2.5">
-      <div className="min-w-0 text-end">
-        <p className="text-sm font-semibold text-critical">
-          آلرژی شدید: {severe[0].allergen}
+    <div className="flex items-center gap-2.5 rounded-xl border border-critical-border bg-critical-soft p-3">
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-card text-critical">
+        <TriangleAlertIcon className="size-4" />
+      </span>
+      <div className="min-w-0 ps-0.5">
+        <p className="text-[13px] leading-5 font-semibold text-critical">
+          حساسیت شدید — {severe[0].allergen}
         </p>
         {subline ? (
-          <p className="truncate text-xs text-muted-foreground">{subline}</p>
+          <p className="truncate text-[11px] leading-4 text-muted-foreground">
+            {subline}
+          </p>
         ) : null}
       </div>
-      <TriangleAlertIcon className="size-[18px] shrink-0 text-critical" />
     </div>
   );
 }
@@ -178,26 +183,30 @@ function ActiveProblems({
 }) {
   const active = conditions.filter((condition) => condition.status === "active");
   return (
-    <section className="space-y-1.5">
-      <SectionHeader
-        title="مشکلات فعال"
-        count={active.length > 0 ? `${faNum(active.length)} مورد` : undefined}
-        action={<AddConditionButton patientId={patientId} />}
-      />
+    <SectionCard
+      title="مشکلات فعال"
+      count={active.length > 0 ? `${faNum(active.length)}` : undefined}
+      action={<AddConditionButton patientId={patientId} />}
+    >
       {active.length === 0 ? (
-        <EmptyState title="مشکل بالینی فعالی ثبت نشده است" />
+        <CompactEmptyState label="مشکل فعالی ثبت نشده است" />
       ) : (
         <ul>
           {active.map((condition) => (
             <li
               key={condition.id}
-              className="flex items-center gap-3 border-b border-border/60 px-1.5 py-2 last:border-0 hover:bg-surface-2/60"
+              className={`flex items-center gap-2.5 py-1.5 ${ROW_DIVIDE}`}
             >
-              <p className="min-w-0 flex-1 truncate text-[13px] font-medium">
+              <span className="flex size-6.5 shrink-0 items-center justify-center rounded-md bg-surface-2 text-muted-foreground">
+                <ActivityIcon className="size-3.5" />
+              </span>
+              <p className="min-w-0 flex-1 truncate text-[13px] leading-5 font-medium">
                 {condition.name}
               </p>
-              <span className="shrink-0 text-xs text-faint">
-                {condition.onset_date ? `از ${formatDate(condition.onset_date)}` : ""}
+              <span className="shrink-0 text-[11px] text-faint">
+                {condition.onset_date
+                  ? `از ${formatDate(condition.onset_date)}`
+                  : ""}
               </span>
               <ConditionRowActions
                 patientId={patientId}
@@ -207,12 +216,12 @@ function ActiveProblems({
           ))}
         </ul>
       )}
-    </section>
+    </SectionCard>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* 2b. Allergies (management preserved — summary is its only surface)  */
+/* 3a. Allergies (management preserved — summary is its only surface)  */
 /* ------------------------------------------------------------------ */
 
 function AllergyList({
@@ -223,33 +232,23 @@ function AllergyList({
   allergies: Allergy[];
 }) {
   return (
-    <section className="space-y-1.5">
-      <SectionHeader
-        title="حساسیت‌ها"
-        count={
-          allergies.length > 0 ? `${faNum(allergies.length)} مورد` : undefined
-        }
-        action={<AddAllergyButton patientId={patientId} />}
-      />
+    <SectionCard
+      title="حساسیت‌ها"
+      count={allergies.length > 0 ? `${faNum(allergies.length)}` : undefined}
+      action={<AddAllergyButton patientId={patientId} />}
+    >
       {allergies.length === 0 ? (
-        <EmptyState title="حساسیتی ثبت نشده است" />
+        <CompactEmptyState label="بدون حساسیت ثبت‌شده" />
       ) : (
         <ul>
           {allergies.map((allergy) => (
             <li
               key={allergy.id}
-              className="flex items-center gap-3 border-b border-border/60 px-1.5 py-2 last:border-0 hover:bg-surface-2/60"
+              className={`flex items-center gap-2 py-1.5 ${ROW_DIVIDE}`}
             >
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-[13px] font-medium">
-                  {allergy.allergen}
-                </p>
-                {allergy.reaction ? (
-                  <p className="truncate text-xs text-faint">
-                    واکنش: {allergy.reaction}
-                  </p>
-                ) : null}
-              </div>
+              <p className="min-w-0 flex-1 truncate text-[13px] leading-5 font-medium">
+                {allergy.allergen}
+              </p>
               <Badge
                 variant="outline"
                 className={severityTextClass(allergy.severity)}
@@ -261,12 +260,12 @@ function AllergyList({
           ))}
         </ul>
       )}
-    </section>
+    </SectionCard>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* 3. Active medications — dense table with LTR/mono technical values  */
+/* 3b. Active medications — dense rows with LTR/mono doses             */
 /* ------------------------------------------------------------------ */
 
 function ActiveMedications({
@@ -278,68 +277,56 @@ function ActiveMedications({
 }) {
   const active = medications.filter((record) => record.status === "active");
   return (
-    <section className="space-y-1.5">
-      <SectionHeader
-        title="داروهای فعال"
-        count={`${faNum(active.length)} از ${faNum(medications.length)}`}
-        action={<ViewAllLink patientId={patientId} tab="medications" />}
-      />
+    <SectionCard
+      title="داروهای فعال"
+      count={`${faNum(active.length)} از ${faNum(medications.length)}`}
+      action={<ViewAllLink patientId={patientId} tab="medications" />}
+    >
       {active.length === 0 ? (
-        <EmptyState
-          title="داروی فعالی ثبت نشده است"
-          description="در تب «داروها» می‌توانید داروی جدیدی اضافه کنید."
+        <CompactEmptyState
+          label="داروی فعالی ثبت نشده است"
+          hint="افزودن از تب داروها"
         />
       ) : (
-        <>
-          <div className={`${MED_GRID} px-1.5 text-[11px] text-faint`}>
-            <span>نام دارو</span>
-            <span>دوز</span>
-            <span>شروع</span>
-            <span>وضعیت</span>
-          </div>
-          <ul>
-            {active.map((record) => (
-              <li
-                key={record.id}
-                className={`${MED_GRID} border-b border-border/60 px-1.5 py-2 last:border-0 hover:bg-surface-2/60`}
-              >
-                <div className="min-w-0">
-                  <p className="truncate text-[13px] font-medium">
-                    {record.medication.name}
+        <ul>
+          {active.map((record) => (
+            <li
+              key={record.id}
+              className={`flex items-center gap-2 py-1.5 ${ROW_DIVIDE}`}
+            >
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[13px] leading-5 font-medium">
+                  {record.medication.name}
+                </p>
+                {record.medication.generic_name ? (
+                  <p
+                    dir="ltr"
+                    className="truncate text-right font-mono text-[10px] leading-4 text-faint"
+                  >
+                    {record.medication.generic_name}
                   </p>
-                  {record.medication.generic_name ? (
-                    <p
-                      dir="ltr"
-                      className="truncate text-right font-mono text-[10px] text-faint"
-                    >
-                      {record.medication.generic_name}
-                    </p>
-                  ) : null}
-                </div>
-                <span
-                  dir="ltr"
-                  className="truncate font-mono text-[13px] tabular-nums"
-                >
-                  {record.dosage ?? "—"}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  {record.start_date ? formatDate(record.start_date) : "—"}
-                </span>
-                <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <span className="size-1.5 shrink-0 rounded-full bg-success" />
-                  {medicationStatusLabels[record.status]}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </>
+                ) : null}
+              </div>
+              <span
+                dir="ltr"
+                className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground"
+              >
+                {record.dosage ?? "—"}
+              </span>
+              <span className="flex shrink-0 items-center gap-1 text-[11px] text-muted-foreground">
+                <span className="size-1.5 rounded-full bg-success" />
+                {medicationStatusLabels[record.status]}
+              </span>
+            </li>
+          ))}
+        </ul>
       )}
-    </section>
+    </SectionCard>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* 4. Recent labs — semantic flags, tabular LTR values                */
+/* 4. Recent labs — semantic flags, tabular LTR values                 */
 /* ------------------------------------------------------------------ */
 
 function RecentLabs({
@@ -351,17 +338,16 @@ function RecentLabs({
 }) {
   const recent = labResults.slice(0, 5);
   return (
-    <section className="space-y-1.5">
-      <SectionHeader
-        title="آزمایش‌های اخیر"
-        count={`${faNum(recent.length)} از ${faNum(labResults.length)}`}
-        action={<ViewAllLink patientId={patientId} tab="labs" />}
-      />
+    <SectionCard
+      title="آزمایش‌های اخیر"
+      count={`${faNum(recent.length)} از ${faNum(labResults.length)}`}
+      action={<ViewAllLink patientId={patientId} tab="labs" />}
+    >
       {recent.length === 0 ? (
-        <EmptyState title="نتیجهٔ آزمایشی ثبت نشده است" />
+        <CompactEmptyState label="نتیجهٔ آزمایشی ثبت نشده است" />
       ) : (
         <>
-          <div className={`${LAB_GRID} px-1.5 text-[11px] text-faint`}>
+          <div className={`${LAB_GRID} pb-1 text-[11px] text-faint`}>
             <span>آزمایش</span>
             <span>مقدار</span>
             <span>محدودهٔ مرجع</span>
@@ -372,9 +358,9 @@ function RecentLabs({
             {recent.map((lab) => (
               <li
                 key={lab.id}
-                className={`${LAB_GRID} border-b border-border/60 px-1.5 py-2 last:border-0 hover:bg-surface-2/60`}
+                className={`${LAB_GRID} py-1.5 ${ROW_DIVIDE}`}
               >
-                <span className="truncate text-[13px] font-medium">
+                <span className="truncate text-[13px] leading-5 font-medium">
                   {lab.test_name}
                 </span>
                 <span
@@ -392,15 +378,15 @@ function RecentLabs({
                 </span>
                 {lab.flag ? (
                   <span
-                    className={`flex items-center gap-1.5 text-xs ${flagClass(lab.flag)}`}
+                    className={`flex items-center gap-1.5 text-[11px] ${flagClass(lab.flag)}`}
                   >
                     <span className="size-1.5 shrink-0 rounded-full bg-current" />
                     {resultFlagLabels[lab.flag]}
                   </span>
                 ) : (
-                  <span className="text-xs text-faint">—</span>
+                  <span className="text-[11px] text-faint">—</span>
                 )}
-                <span className="text-xs text-faint">
+                <span className="text-[11px] text-faint">
                   {lab.result_date ? formatDate(lab.result_date) : "—"}
                 </span>
               </li>
@@ -408,12 +394,12 @@ function RecentLabs({
           </ul>
         </>
       )}
-    </section>
+    </SectionCard>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* 5. Recent documents                                                */
+/* 5. Recent documents — single-line scannable rows                    */
 /* ------------------------------------------------------------------ */
 
 function RecentDocuments({
@@ -425,41 +411,38 @@ function RecentDocuments({
 }) {
   const recent = documents.slice(0, 3);
   return (
-    <section className="space-y-1.5">
-      <SectionHeader
-        title="اسناد و یادداشت‌های اخیر"
-        count={`${faNum(recent.length)} از ${faNum(documents.length)}`}
-        action={<ViewAllLink patientId={patientId} tab="documents" />}
-      />
+    <SectionCard
+      title="اسناد و یادداشت‌های اخیر"
+      count={`${faNum(recent.length)} از ${faNum(documents.length)}`}
+      action={<ViewAllLink patientId={patientId} tab="documents" />}
+    >
       {recent.length === 0 ? (
-        <EmptyState
-          title="سندی بارگذاری نشده است"
-          description="گزارش آزمایش، تصویر یا فایل بالینی بیمار را در تب «اسناد و یادداشت‌ها» بارگذاری کنید."
+        <CompactEmptyState
+          label="سندی بارگذاری نشده است"
+          hint="بارگذاری از تب اسناد و یادداشت‌ها"
         />
       ) : (
         <ul>
           {recent.map((document) => (
             <li
               key={document.id}
-              className="flex items-center gap-3 border-b border-border/60 px-1.5 py-2 last:border-0 hover:bg-surface-2/60"
+              className={`flex items-center gap-2.5 py-1.5 ${ROW_DIVIDE}`}
             >
-              <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-surface-2 text-muted-foreground">
+              <span className="flex size-6.5 shrink-0 items-center justify-center rounded-md bg-surface-2 text-muted-foreground">
                 {documentIcon(document.doc_type)}
               </span>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-[13px] font-medium">
-                  {document.title}
-                </p>
-                <p className="truncate text-xs text-faint">
-                  {documentTypeLabels[document.doc_type]} ·{" "}
-                  {formatDateTime(document.created_at)}
-                </p>
-              </div>
+              <p className="min-w-0 flex-1 truncate text-[13px] leading-5 font-medium">
+                {document.title}
+              </p>
+              <span className="shrink-0 text-[11px] text-faint">
+                {documentTypeLabels[document.doc_type]} ·{" "}
+                {formatDate(document.created_at)}
+              </span>
             </li>
           ))}
         </ul>
       )}
-    </section>
+    </SectionCard>
   );
 }
 
@@ -485,14 +468,14 @@ export function SummaryView({
   documents,
 }: SummaryViewProps) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <CriticalAlerts allergies={allergies} />
       <ActiveProblems patientId={patientId} conditions={conditions} />
-      <AllergyList patientId={patientId} allergies={allergies} />
-      <ActiveMedications
-        patientId={patientId}
-        medications={medications}
-      />
+      {/* allergies + medications side by side on clinical desktop widths */}
+      <div className="grid gap-3 lg:grid-cols-2">
+        <AllergyList patientId={patientId} allergies={allergies} />
+        <ActiveMedications patientId={patientId} medications={medications} />
+      </div>
       <RecentLabs patientId={patientId} labResults={labResults} />
       <RecentDocuments patientId={patientId} documents={documents} />
     </div>
