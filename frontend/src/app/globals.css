@@ -218,3 +218,15 @@
   background: var(--muted);
   animation: skeleton-pulse 1.6s ease-in-out infinite;
 }
+
+/* Reduced-motion users: framer bakes `opacity:0; transform:…` into SSR HTML
+   (server cannot see the media query), and when the client detects
+   prefers-reduced-motion the entrance animations are skipped — leaving those
+   inline styles permanently applied and the page invisible below the shell.
+   Force the landing reveal states visible for reduced-motion users instead. */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal-safe] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
