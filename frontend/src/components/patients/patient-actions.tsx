@@ -10,14 +10,14 @@ import { PatientFormDialog } from "@/components/patients/patient-form-dialog";
 import { api } from "@/lib/api";
 import type { Patient } from "@/lib/types";
 
-/** «بیمار جدید» — opens the create dialog. */
+/** «افزودن بیمار» — opens the create dialog (Phase 3 primary action). */
 export function AddPatientButton() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)}>
+      <Button size="lg" className="px-4" onClick={() => setOpen(true)}>
         <PlusIcon />
-        بیمار جدید
+        افزودن بیمار
       </Button>
       <PatientFormDialog open={open} onOpenChange={setOpen} />
     </>
@@ -29,9 +29,14 @@ export function EditPatientButton({ patient }: { patient: Patient }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        aria-label="ویرایش اطلاعات بیمار"
+        title="ویرایش اطلاعات بیمار"
+        onClick={() => setOpen(true)}
+      >
         <PencilIcon />
-        ویرایش
       </Button>
       <PatientFormDialog patient={patient} open={open} onOpenChange={setOpen} />
     </>
@@ -51,9 +56,15 @@ export function DeletePatientButton({ patient }: { patient: Patient }) {
 
   return (
     <>
-      <Button variant="destructive" size="sm" onClick={() => setOpen(true)}>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        className="text-destructive hover:text-destructive"
+        aria-label="حذف بیمار"
+        title="حذف بیمار"
+        onClick={() => setOpen(true)}
+      >
         <Trash2Icon />
-        حذف بیمار
       </Button>
       <ConfirmDialog
         open={open}
