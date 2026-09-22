@@ -1,0 +1,151 @@
+# ============================================================
+# Clinical AI Copilot — PRODUCTION Docker Compose
+#
+#   nginx (80/443, the ONLY public entry)
+#     └─ frontend (Next.js standalone, :3000 internal)
+#     └─ backend  (FastAPI/uvicorn,  :8000 internal)
+#          ├─ postgres (:5432 internal — never published)
+#          └─ minio    (:9000 internal, console :9001 never published)
+#
+# Usage (from the repository root, root .env holds the secrets):
+#   docker compose --env-file .env -f deploy/docker-compose.prod.yml build
+#   docker compose --env-file .env -f deploy/docker-compose.prod.yml up -d
+#
+# Database migration (one-shot, NEVER automatic):
+#   docker compose --env-file .env -f deploy/docker-compose.prod.yml \
+#       run --rm backend alembic upgrade head
+#
+# KNOWN DEPLOYMENT CONSTRAINT (solved by the Nginx task):
+#   The backend generates presigned download URLs pointing at
+#   MINIO_ENDPOINT. Inside this network that is `minio:9000`, which the
+#   BROWSER cannot reach. Nginx must expose MinIO on a public path/host
+#   and MINIO_ENDPOINT must then be set to that public endpoint.
+#
+# No secrets are hard-coded here — every credential comes from the
+# environment (root .env via --env-file / env_file).
+# ============================================================
+
+name: clinical-ai-copilot-prod
+
+services:
+  # ---------------------------------------------------------- nginx (Task 21.4)
+  # The single public entry point. Ports 80/443 only. The config files
+  # under deploy/nginx/ are created in the Nginx task.
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - frontend
+      - backend
+
+  # ---------------------------------------------------------- frontend
+  frontend:
+    build:
+      context: ../frontend
+      args:
+        # BUILD-TIME value baked into the Next.js client bundle.
+        # Production: the PUBLIC absolute API URL, e.g.
+        #   https://demo.example.com/api/v1
+        # (A relative /api/v1 is NOT enough: server-side fetches in RSC
+        # pages need an absolute URL.)
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:?set NEXT_PUBLIC_API_URL to the public API base URL, e.g. https://demo.example.com/api/v1}
+    image: clinical-ai-copilot-frontend:prod
+    restart: unless-stopped
+    expose:
+      - "3000"
+    depends_on:
+      backend:
+        condition: service_started
+
+  # ---------------------------------------------------------- backend
+  backend:
+    build:
+      context: ../backend
+    image: clinical-ai-copilot-backend:prod
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    environment:
+      # Docker-internal service addresses — override whatever the .env
+      # file carries (host-mapped dev values such as localhost/5433).
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      # MinIO is reached THROUGH NGINX at the public storage hostname so
+      # that presigned-URL signatures stay valid for the browser.
+      # Replace storage.local.test with storage.<your-domain> in production
+      # (STORAGE_PUBLIC_HOST in the environment / .env).
+      MINIO_ENDPOINT: ${STORAGE_PUBLIC_HOST:-storage.local.test}
+    extra_hosts:
+      # The backend resolves the public storage hostname to the Docker
+      # host, where Nginx publishes port 80.
+      - "${STORAGE_PUBLIC_HOST:-storage.local.test}:host-gateway"
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys,urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status == 200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+
+  # ---------------------------------------------------------- postgres
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?required}
+      POSTGRES_USER: ${POSTGRES_USER:?required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?required}
+    # NO ports: 5432 stays inside the private network.
+    expose:
+      - "5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ---------------------------------------------------------- minio
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:?required}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:?required}
+    # NO ports: both 9000 (S3) and 9001 (console) stay internal. The
+    # console is admin-only; S3 will be routed by Nginx (next task).
+    expose:
+      - "9000"
+      - "9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# One private network — service names resolve internally (postgres,
+# minio, backend, frontend). Only nginx publishes ports.
+networks:
+  default:
+    name: clinical-ai-copilot-prod_net
+
+volumes:
+  postgres_data:
+  minio_data:
