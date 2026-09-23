@@ -44,6 +44,10 @@ class AIUnavailableError(AIError):
     """No AI provider configured (empty AI_API_KEY)."""
 
 
+class AIInvalidSelectionError(AIError):
+    """Client-supplied provider/model selection is not valid."""
+
+
 SYSTEM_PROMPT = """You are a clinical decision-support assistant used by a physician.
 You receive one patient's structured record (JSON) and the physician's question.
 
@@ -143,12 +147,16 @@ class OpenAICompatibleProvider:
         model: str,
         timeout: float,
         proxy: str | None = None,
+        extra_headers: dict[str, str] | None = None,
+        provider_name: str = "openai_compatible",
     ):
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
         self.model = model
         self.timeout = timeout
         self.proxy = proxy
+        self.extra_headers = extra_headers or {}
+        self.provider_name = provider_name
 
     def complete(
         self,
@@ -164,7 +172,7 @@ class OpenAICompatibleProvider:
         client = _http_client(self.timeout, self.proxy)
         try:
             _log_request(
-                "openai_compatible",
+                self.provider_name,
                 "POST",
                 f"{self.base_url}/chat/completions",
                 model=self.model,
@@ -173,10 +181,13 @@ class OpenAICompatibleProvider:
             response = _post_with_retries(
                 client,
                 f"{self.base_url}/chat/completions",
-                headers={"Authorization": f"Bearer {self.api_key}"},
+                headers={
+                    "Authorization": f"Bearer {self.api_key}",
+                    **self.extra_headers,
+                },
                 json_body={"model": self.model, "messages": messages},
             )
-            _log_response("openai_compatible", response)
+            _log_response(self.provider_name, response)
         finally:
             client.close()
 
@@ -205,6 +216,35 @@ OPENAI_DEFAULT_MODEL = "gpt-4o-mini"
 # Fast, cheap, strong multilingual (Persian) support, large context window —
 # a good fit for grounded clinical Q&A.
 GEMINI_DEFAULT_MODEL = "gemini-3.6-flash"
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+# Free model for the initial OpenRouter integration test.
+OPENROUTER_DEFAULT_MODEL = "deepseek/deepseek-r1:free"
+
+
+class OpenRouterProvider(OpenAICompatibleProvider):
+    """OpenRouter (https://openrouter.ai) — an OpenAI-compatible aggregator.
+
+    Same chat/completions wire format as the parent; only the base URL,
+    the ``X-Title`` identification header, and the API-key source differ.
+    """
+
+    def __init__(
+        self,
+        *,
+        api_key: str,
+        model: str,
+        timeout: float,
+        proxy: str | None = None,
+    ):
+        super().__init__(
+            base_url=OPENROUTER_BASE_URL,
+            api_key=api_key,
+            model=model,
+            timeout=timeout,
+            proxy=proxy,
+            extra_headers={"X-Title": "Clinical AI Copilot"},
+            provider_name="openrouter",
+        )
 
 
 class GeminiProvider:
@@ -297,29 +337,73 @@ class GeminiProvider:
             raise AIError(f"unexpected provider response: {error}") from None
 
 
+# Known provider ids (validated for runtime selection from the frontend).
+PROVIDER_IDS = ("gemini", "openrouter", "openai_compatible")
+
+_PROVIDER_DEFAULT_MODELS = {
+    "gemini": GEMINI_DEFAULT_MODEL,
+    "openrouter": OPENROUTER_DEFAULT_MODEL,
+    "openai_compatible": OPENAI_DEFAULT_MODEL,
+}
+
+
+def _key_for(provider_id: str, settings) -> str:
+    """Resolve the API key for a provider (dedicated var, AI_API_KEY fallback)."""
+    if provider_id == "openrouter":
+        return settings.OPENROUTER_API_KEY or settings.AI_API_KEY
+    return settings.AI_API_KEY
+
+
+def build_provider(
+    provider_id: str | None = None, model: str | None = None
+) -> LLMProvider:
+    """Centralized provider construction (single registry, no scattered ifs).
+
+    ``provider_id``/``model`` fall back to the AI_PROVIDER / AI_MODEL
+    environment defaults when omitted (backwards compatible). Only provider
+    and model ids may be supplied by callers — never URLs or keys.
+    """
+    settings = get_settings()
+    resolved_id = (provider_id or settings.AI_PROVIDER or "openai_compatible").lower()
+    if resolved_id not in PROVIDER_IDS:
+        raise AIInvalidSelectionError(f"unknown provider: {resolved_id!r}")
+
+    resolved_model = model or settings.AI_MODEL or _PROVIDER_DEFAULT_MODELS[resolved_id]
+    if not resolved_model or len(resolved_model) > 200:
+        raise AIInvalidSelectionError(
+            f"no model configured for provider {resolved_id!r}"
+        )
+    if "://" in resolved_model or " " in resolved_model:
+        # model is an id, never a URL / free text from the client
+        raise AIInvalidSelectionError("model must be a plain model id")
+
+    api_key = _key_for(resolved_id, settings)
+    if not api_key:
+        raise AIUnavailableError(f"API key for provider {resolved_id!r} is not configured")
+    proxy = settings.AI_PROXY or None
+
+    if resolved_id == "gemini":
+        return GeminiProvider(
+            api_key=api_key, model=resolved_model,
+            timeout=settings.AI_TIMEOUT_SECONDS, proxy=proxy,
+        )
+    if resolved_id == "openrouter":
+        return OpenRouterProvider(
+            api_key=api_key, model=resolved_model,
+            timeout=settings.AI_TIMEOUT_SECONDS, proxy=proxy,
+        )
+    return OpenAICompatibleProvider(
+        base_url=settings.AI_BASE_URL,
+        api_key=api_key, model=resolved_model,
+        timeout=settings.AI_TIMEOUT_SECONDS, proxy=proxy,
+    )
+
+
 def get_provider() -> LLMProvider:
-    """Cached provider built from settings (dispatched by AI_PROVIDER)."""
+    """Cached ENV-DEFAULT provider (callers with explicit selection use build_provider)."""
     global _provider
     if _provider is None:
-        settings = get_settings()
-        if not settings.AI_API_KEY:
-            raise AIUnavailableError("AI_API_KEY is not configured")
-        proxy = settings.AI_PROXY or None
-        if settings.AI_PROVIDER == "gemini":
-            _provider = GeminiProvider(
-                api_key=settings.AI_API_KEY,
-                model=settings.AI_MODEL or GEMINI_DEFAULT_MODEL,
-                timeout=settings.AI_TIMEOUT_SECONDS,
-                proxy=proxy,
-            )
-        else:
-            _provider = OpenAICompatibleProvider(
-                base_url=settings.AI_BASE_URL,
-                api_key=settings.AI_API_KEY,
-                model=settings.AI_MODEL or OPENAI_DEFAULT_MODEL,
-                timeout=settings.AI_TIMEOUT_SECONDS,
-                proxy=proxy,
-            )
+        _provider = build_provider()
     return _provider
 
 

@@ -84,6 +84,14 @@ class ConversationMessageCreate(BaseModel):
             "تخصصی ایمنی دارو تولید می‌شود"
         ),
     )
+    # Runtime provider/model selection (ids only — URLs/keys are never
+    # accepted from the client). Omitted → environment defaults.
+    provider: str | None = Field(
+        default=None, max_length=40, description="شناسهٔ ارائه‌دهندهٔ هوش مصنوعی"
+    )
+    model: str | None = Field(
+        default=None, max_length=200, description="شناسهٔ مدل هوش مصنوعی"
+    )
 
 
 class SendMessageResponse(BaseModel):

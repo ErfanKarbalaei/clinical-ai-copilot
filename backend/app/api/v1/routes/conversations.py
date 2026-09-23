@@ -204,7 +204,17 @@ def send_conversation_message(
     db.refresh(user_message)
 
     try:
-        provider = ai.get_provider()
+        # runtime selection (ids only) with env-default fallback
+        provider = (
+            ai.build_provider(payload.provider, payload.model)
+            if (payload.provider or payload.model)
+            else ai.get_provider()
+        )
+    except ai.AIInvalidSelectionError:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="ارائه‌دهنده یا مدل انتخابی معتبر نیست.",
+        ) from None
     except AIUnavailableError:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,

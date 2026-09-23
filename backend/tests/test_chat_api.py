@@ -123,6 +123,7 @@ def test_get_provider_without_key_raises():
     ai.reset_provider_cache()
     monkeypatched = pytest.MonkeyPatch()
     monkeypatched.setattr(get_settings(), "AI_API_KEY", "")
+    monkeypatched.setattr(get_settings(), "OPENROUTER_API_KEY", "")
     try:
         with pytest.raises(AIUnavailableError):
             ai.get_provider()
@@ -358,6 +359,7 @@ def test_chat_without_key_returns_503(api_client, make_patient, monkeypatch):
     patient = make_patient("۳")
     ai.reset_provider_cache()
     monkeypatch.setattr(get_settings(), "AI_API_KEY", "")
+    monkeypatch.setattr(get_settings(), "OPENROUTER_API_KEY", "")
     try:
         response = api_client.post(
             CHAT_URL.format(patient_id=patient["id"]), json={"question": "سلام"}

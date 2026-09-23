@@ -25,6 +25,12 @@ class ChatRequest(BaseModel):
             "ایمنی دارو (تداخل، عدم‌قطعیت، اطلاعات ناقص) پاسخ داده می‌شود"
         ),
     )
+    provider: str | None = Field(
+        default=None, max_length=40, description="شناسهٔ ارائه‌دهندهٔ هوش مصنوعی"
+    )
+    model: str | None = Field(
+        default=None, max_length=200, description="شناسهٔ مدل هوش مصنوعی"
+    )
 
 
 class ChatResponse(BaseModel):

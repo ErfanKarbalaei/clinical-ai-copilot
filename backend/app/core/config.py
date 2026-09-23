@@ -83,9 +83,12 @@ class Settings(BaseSettings):
     JWT_EXPIRE_MINUTES: int = 480  # 8-hour clinical shift
 
     # --- AI assistant (provider-agnostic) ---
-    # AI_PROVIDER: "openai_compatible" (any OpenAI-style chat/completions API)
-    #              or "gemini" (native Google Gemini generateContent API)
+    # AI_PROVIDER: "openai_compatible" (any OpenAI-style chat/completions API),
+    #              "gemini" (native Google Gemini generateContent API), or
+    #              "openrouter" (https://openrouter.ai — key below)
     AI_PROVIDER: str = "openai_compatible"
+    # OpenRouter (used when AI_PROVIDER=openrouter; falls back to AI_API_KEY)
+    OPENROUTER_API_KEY: str = ""
     AI_API_KEY: str = ""  # empty → chat returns 503 with a Persian message
     AI_BASE_URL: str = "https://api.openai.com/v1"
     AI_MODEL: str = "gemini-3.6-flash"  # empty → provider default (gpt-4o-mini / gemini-2.5-flash)
