@@ -1,0 +1,9 @@
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> d3d54628e9bd, create core clinical entities
+INFO  [alembic.runtime.migration] Running upgrade d3d54628e9bd -> b309d1be6900, add document AI analysis columns
+INFO  [alembic.runtime.migration] Running upgrade b309d1be6900 -> fe6bf890d790, add voice note cleanup columns
+INFO  [alembic.runtime.migration] Running upgrade fe6bf890d790 -> 03378aed5376, add persistent conversations
+INFO  [alembic.runtime.migration] Running upgrade 03378aed5376 -> ab22d66552c2, add conversation message evidence
+INFO  [alembic.runtime.migration] Running upgrade ab22d66552c2 -> 9a1c78a56f1a, add users and patient user access
+INFO  [alembic.runtime.migration] Running upgrade 9a1c78a56f1a -> 49c86fd969f2, add otp login (otp_requests table + users.phone)

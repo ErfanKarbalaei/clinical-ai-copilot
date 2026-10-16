@@ -1,0 +1,41 @@
+                                                        27                                  نیلامیات و هنیمز رامیب هدنورپ مجنپ لصف
+
+            و دوجوم     end_date         هک دوش یم هفاضا ینامز نایاپ و دراد دوجو عورش              PatientMedication
+   .دنوش یم یفرعم       result_date          اب شیامزآ و داجیا خیرات اب توص و دنس .دشاب            active     ریغ    status
+                                                                     .درادن لقتسم دادیور عبات نیا یاه هقلح رد تیساسح
+
+                    add     ،    event_type        ،   date     ،   title   ،    description       ،  یلخاد      helper
+  دشابن دوجوم رگا یلصا خیرات .دنک یم لیدبت             TimelineItem            هب ار  source_id          و  source_type
+            و دریگ  یم رارق      UTC        بش   همین رد تعاس نودب         date       .دوش یم نیزگیاج       created_at         اب
+    اما ،تسا راگزاس یزاسبترم یارب هدعاق نیا .دوش            یم ضرف       timezone        ،   UTC       نودب      datetime
+    لباق »دادخر خیرات« زا »تبث خیرات« یانعم دیاب شیامن رد .دنک فشک ار لوهجم دادیور یعقاو نامز دناوتیمن
+                                                                                                               .دشاب صیخشت
+     reverse=True           اب   source_id         و   date     ،   source_type           ییات هس یور ییاهن یزاس       بترم
+   ربارب رد شور نیا .هدشتابثا ینیلاب بیترت هب هن ،دماجنا یم عبانم یعطق بیترت هب اه                نامز یواست .دوش یم ماجنا
+                   یتسد دادیور .تشاد دهاوخن دوجو یدعب خساپ رد نآ قتشم دادیور :تسا نشور زین دروکر فذح
+   نیلا  میات نیا دراو لودج نآ رد ندوب لیلد هب ًافرص ،تسین عبات یاه              هورگ رد شعبنم هک         ClinicalEvent
+                                                                                                                      .دوشیمن
+
+                                              نیلامیات یاهدادیور خیرات و عبنم ۴ لودج
+
+                                 fallback       و یلصا خیرات                             دادیور                           عبنم
+
+   عورش خیرات دوبن ؛  resolved_date       ای  onset_date                    condition_onset /                      Condition
+                                          created_at      →               condition_resolved
+
+      تیعضو و     end_date      اب طقف نایاپ ؛ start_date                medication_started /             PatientMedication
+                                                active    ریغ            medication_stopped
+
+                                                 created_at              document_uploaded                         Document
+                                                 created_at             voice_note_recorded                       VoiceNote
+                                                 created_at                      note_created                   ClinicalNote
+               created_at      → دوبن رد ؛    result_date                            lab_result                    LabResult
+
+                                                           تاعلاطا دوبن ریسفت و هداد تیفیک .۵-۵
+
+   یکشزپ رابتعا یلو ،دنک      یم لمح ار اه   خیرات و تیساسح تدش ،وراد لاعفریغ و لاعف تیعضو                    Context
+           رگا .دنیب یم ار هداد نامه لدم ،دشاب هدش تبث هابتشا تیعضو کی رگا .دنک                  یمن ینیبزاب راکدوخ ار اهنآ
+    عبنم ظفح یارب راتفر نیا .دنک        یمن حلاصا ار نآ      builder        ،دشاب لیدبت لباقریغ نتم شیامزآ            value
+     یفاک و ربتعم ی    هداد هب رت قیقد خساپ دیلوت .دربیمن نیب زا ار یدورو ی           هداد ینیبزاب ترورض اما ،تسا بسانم
+                                                                                                                       .دراد زاین
+

@@ -1,0 +1,31 @@
+{
+  "typescript": {
+    "exit_code": 0,
+    "seconds": 5.78,
+    "command": [
+      "C:/Users/mandegar/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe",
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--incremental",
+      "false"
+    ]
+  },
+  "lint": {
+    "exit_code": 1,
+    "seconds": 8.51,
+    "command": [
+      "C:/Users/mandegar/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe",
+      "node_modules/eslint/bin/eslint.js",
+      "."
+    ]
+  },
+  "build": {
+    "exit_code": 0,
+    "seconds": 51.01,
+    "command": [
+      "C:/Users/mandegar/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe",
+      "node_modules/next/dist/bin/next",
+      "build"
+    ]
+  }
+}

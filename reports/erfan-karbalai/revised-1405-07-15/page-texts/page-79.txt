@@ -1,0 +1,37 @@
+                           University of Tehran
+
+                               College of Farabi
+
+                           Faculty of Engineering
+
+                  Department of Computer Engineering
+
+Design and Implementation of an AI Clinical Copilot
+Based on Integration of Patient Context and Validated
+                                                   Medical Knowledge
+
+                                       By
+
+                                Erfan Karbalai
+
+                                    Supervisor
+
+                              هعلق یدلاوف مظاک رتکد
+
+           A Bachelor's Project Report in Computer Engineering
+
+                 Submission month and year: 15 Mehr 1405 )15 October 2026(
+
+
+
+
+
+
+
+
+
+
+
+
+
+

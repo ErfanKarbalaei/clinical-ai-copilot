@@ -1,0 +1,44 @@
+                 )API ( یسیون           همانرب طبار بختنم یاهریسم .فلا تسویپ
+
+  .دنهد یم ناشن ار ینیلاب یوگتفگ و دنس شزادرپ ،هنیمز تخاس ،هدنورپ تخاس یلصا یاهریسم اه           هنومن نیا
+      نیا رد رارکت زا زیهرپ یارب و دوش یم یرادهگن نزخم رد    OpenAPI  یاهدادرارق و اهریسم لماک تسرهف
+                                                                                   .تسا هدشن رشنزاب شرازگ
+
+                                                                            API بختنم یاهریسم .  ۱-فلا لودج
+                           راک شدرگ رد درکراک                                               بختنم ریسم
+                             رامیب ی هدنورپ داجیا                      POST /api/v۱/patients
+
+                هدنورپ یاهدروکر زا هنیمز تخاس                                 GET /api/v۱/patients
+                                                                       {patient_id}/        context         /
+
+                   هدش قتشم ینامز طخ ندناوخ                                   GET /api/v۱/patients
+                                                                      {patient_id}/        timeline         /
+
+                   رامیب کی یارب دنس یراذگراب                               POST /api/v۱/patients
+                                                                  {patient_id}/        documents            /
+
+                   هدش تبث دنس یرایتخا لیلحت                            POST /api/v۱/documents
+                                                                   {document_id}/           analyze         /
+
+                         یراگدنام نودب یوگتفگ                               POST /api/v۱/patients
+                                                                            {patient_id}/        chat       /
+
+                         راگدنام یوگتفگ تخاس                                POST /api/v۱/patients
+                                                              {patient_id}/        conversations            /
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                      67

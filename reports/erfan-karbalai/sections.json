@@ -1,0 +1,92 @@
+[
+  {
+    "title": "فصل اول مقدمه و معرفی پروژه",
+    "kind": "main",
+    "bookmark": "section_1"
+  },
+  {
+    "title": "فصل دوم تعریف مسئله و مبانی طراحی",
+    "kind": "main",
+    "bookmark": "section_2"
+  },
+  {
+    "title": "فصل سوم معماری کلان و جریان داده",
+    "kind": "main",
+    "bookmark": "section_3"
+  },
+  {
+    "title": "فصل چهارم پیاده‌سازی Backend و مدل داده",
+    "kind": "main",
+    "bookmark": "section_4"
+  },
+  {
+    "title": "فصل پنجم پرونده بیمار زمینه و تایم‌لاین",
+    "kind": "main",
+    "bookmark": "section_5"
+  },
+  {
+    "title": "فصل ششم بارگذاری پردازش و تحلیل اسناد",
+    "kind": "main",
+    "bookmark": "section_6"
+  },
+  {
+    "title": "فصل هفتم مدل زبانی و گفتگوی بالینی",
+    "kind": "main",
+    "bookmark": "section_7"
+  },
+  {
+    "title": "فصل هشتم صوت و تبدیل گفتار به متن",
+    "kind": "main",
+    "bookmark": "section_8"
+  },
+  {
+    "title": "فصل نهم ایمنی دارو شواهد و عامل آزمایشی",
+    "kind": "main",
+    "bookmark": "section_9"
+  },
+  {
+    "title": "فصل دهم احراز هویت امنیت و حریم خصوصی",
+    "kind": "main",
+    "bookmark": "section_10"
+  },
+  {
+    "title": "فصل یازدهم آزمون یکپارچه‌سازی و استقرار",
+    "kind": "main",
+    "bookmark": "section_11"
+  },
+  {
+    "title": "فصل دوازدهم خلاصه نتیجه‌گیری و کارهای آینده",
+    "kind": "main",
+    "bookmark": "section_12"
+  },
+  {
+    "title": "منابع و مراجع",
+    "kind": "references",
+    "bookmark": "section_13"
+  },
+  {
+    "title": "پیوست الف مرجع مسیرهای واقعی API",
+    "kind": "appendix",
+    "bookmark": "section_14"
+  },
+  {
+    "title": "پیوست ب فرهنگ داده و روابط پایگاه",
+    "kind": "appendix",
+    "bookmark": "section_15"
+  },
+  {
+    "title": "پیوست پ تنظیمات و حدود اجرای محیط",
+    "kind": "appendix",
+    "bookmark": "section_16"
+  },
+  {
+    "title": "پیوست ت قرارداد نمونه و گزیدهٔ کد",
+    "kind": "appendix",
+    "bookmark": "section_17"
+  },
+  {
+    "title": "پیوست ث مرجع آزمون و سناریوهای تکمیلی",
+    "kind": "appendix",
+    "bookmark": "section_18"
+  }
+]

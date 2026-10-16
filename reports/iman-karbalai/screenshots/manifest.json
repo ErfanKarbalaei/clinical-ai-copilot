@@ -1,0 +1,402 @@
+[
+  {
+    "file": "clinical-chat-empty-desktop.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1036,
+    "height": 1800,
+    "sha256": "42b2aa514b64342384707364f3afe969acff860a53168ef4123b718ee37f10ea",
+    "used_in_report": false
+  },
+  {
+    "file": "clinical-chat-suggestions.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1036,
+    "height": 680,
+    "sha256": "ca8a7e3910215af0ed8c17f9d3401185eefc5155736472faeb7c83a3fa6f389e",
+    "used_in_report": true
+  },
+  {
+    "file": "document-upload-dialog.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 896,
+    "height": 760,
+    "sha256": "cf3b28635eba548ed1f7b7ca3278560833a9d76248f340b8fab56bc85e1864ba",
+    "used_in_report": true
+  },
+  {
+    "file": "features-desktop.png",
+    "source": "Next.js 16.3.2 production server at http://127.0.0.1:3100, local Chrome via Playwright",
+    "captured": "2026-10-15",
+    "data": "public UI, no patient records or credentials",
+    "width": 1440,
+    "height": 900,
+    "sha256": "d3ad2fa5892952183096c223a3d0bfb1a813c899f7ebf16a259dad182089f0e9",
+    "used_in_report": false
+  },
+  {
+    "file": "features-section.png",
+    "source": "Next.js 16.3.2 production server at http://127.0.0.1:3100, local Chrome via Playwright; direct DOM element screenshot",
+    "captured": "2026-10-15",
+    "data": "public UI, no patient records or credentials",
+    "width": 1440,
+    "height": 519,
+    "sha256": "c04406c360514356f3752f4da32cade2f9d73472aeea87d867c06889d8f31049",
+    "used_in_report": true
+  },
+  {
+    "file": "landing-desktop.png",
+    "source": "Next.js 16.3.2 production server at http://127.0.0.1:3100, local Chrome via Playwright",
+    "captured": "2026-10-15",
+    "data": "public UI, no patient records or credentials",
+    "width": 1440,
+    "height": 900,
+    "sha256": "c0ebac3b2188eb80d10b5fa60f9e9a04452d3c1798b4085e3d306031dc52c659",
+    "used_in_report": true
+  },
+  {
+    "file": "landing-mobile.png",
+    "source": "Next.js 16.3.2 production server at http://127.0.0.1:3100, local Chrome via Playwright",
+    "captured": "2026-10-15",
+    "data": "public UI, no patient records or credentials",
+    "width": 390,
+    "height": 844,
+    "sha256": "9834f1e64da91a47163f81a0e703e3139421351d9b37c016675befb572f95664",
+    "used_in_report": true
+  },
+  {
+    "file": "login-desktop.png",
+    "source": "Next.js 16.3.2 production server at http://127.0.0.1:3100, local Chrome via Playwright",
+    "captured": "2026-10-15",
+    "data": "public UI, no patient records or credentials",
+    "width": 1440,
+    "height": 900,
+    "sha256": "d3d1c40673568a302d55fef2fac81a135c769ebe3bbbee84035030c4ef606d94",
+    "used_in_report": false
+  },
+  {
+    "file": "login-fields-desktop.png",
+    "source": "Next.js 16.3.2 production server at http://127.0.0.1:3100, local Chrome via Playwright; direct form element screenshot at devicePixelRatio 2",
+    "captured": "2026-10-15",
+    "data": "public UI, no patient records or credentials",
+    "width": 768,
+    "height": 344,
+    "sha256": "a51a079122080c33b06e18b6399613ac82ec42ef8ffe720cb1cbfa78826530d9",
+    "used_in_report": true
+  },
+  {
+    "file": "login-form-desktop.png",
+    "source": "Next.js 16.3.2 production server at http://127.0.0.1:3100, local Chrome via Playwright; direct DOM element screenshot at devicePixelRatio 2",
+    "captured": "2026-10-15",
+    "data": "public UI, no patient records or credentials",
+    "width": 832,
+    "height": 732,
+    "sha256": "0d2008f2700ba4f781404593d4359fc2ba3eb607545afe2fdeda94cb19c083ba",
+    "used_in_report": true
+  },
+  {
+    "file": "login-mobile.png",
+    "source": "Next.js 16.3.2 production server at http://127.0.0.1:3100, local Chrome via Playwright",
+    "captured": "2026-10-15",
+    "data": "public UI, no patient records or credentials",
+    "width": 390,
+    "height": 844,
+    "sha256": "c0043f02535462e031ae357d11f2d910087fbbeee74b2e468013e091a7287ab0",
+    "used_in_report": true
+  },
+  {
+    "file": "medication-create-dialog.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1024,
+    "height": 1128,
+    "sha256": "4c5be60ac3a1e2c9603a320fcd9ca19229f668f461e6c4baeed74884cc8a26b2",
+    "used_in_report": false
+  },
+  {
+    "file": "medication-safety-controls.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1036,
+    "height": 298,
+    "sha256": "5bde66c291368d9b5299cd23aa30ea2335f3b5c1ed2e0cec7f0e7fc3c6a718ae",
+    "used_in_report": true
+  },
+  {
+    "file": "medication-safety-mode.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 2880,
+    "height": 1948,
+    "sha256": "55b693cc35292833bce484530973fe4a181ce18b1bb39e2c9bd2e20a78185769",
+    "used_in_report": false
+  },
+  {
+    "file": "patient-create-dialog.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1024,
+    "height": 924,
+    "sha256": "25b5887602ba5042685e9b06c761e10adf7f3f3288d5690fe1844748489daf81",
+    "used_in_report": true
+  },
+  {
+    "file": "patient-documents-desktop.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1844,
+    "height": 746,
+    "sha256": "dbd12218b23778eb60f4b56b183c62a4f37497be9898aa220e83d2da72b0b7f8",
+    "used_in_report": true
+  },
+  {
+    "file": "patient-documents-full.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 2880,
+    "height": 1948,
+    "sha256": "c6b0a34b69b31049f2b314c7d139f9e92944f4e3f2f0c4716d6d06261dd41e13",
+    "used_in_report": false
+  },
+  {
+    "file": "patient-identity-tabs-desktop.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 2880,
+    "height": 600,
+    "sha256": "3a49d4fd2dd98327664fec19ec70112d71e5b4e856856e5bea80cefaa4045e1b",
+    "used_in_report": false
+  },
+  {
+    "file": "patient-labs-desktop.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1844,
+    "height": 312,
+    "sha256": "869d37a221476817e4836370d9b54112f190ca79287798c9360b65ecc62169ec",
+    "used_in_report": false
+  },
+  {
+    "file": "patient-labs-full.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 2880,
+    "height": 1948,
+    "sha256": "0754ac87c62d4b6b037929ca755b3b9896b0ba8731f2a0b781a7899b41f37145",
+    "used_in_report": false
+  },
+  {
+    "file": "patient-list-desktop.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 2880,
+    "height": 1800,
+    "sha256": "70416444097f502e8ca4b7d03713ec2e26e81e2a661ede65a736d9fa8ef5acfc",
+    "used_in_report": false
+  },
+  {
+    "file": "patient-list-empty-card.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1936,
+    "height": 494,
+    "sha256": "e0614af68965de3df887039342c50ea7ebe05bc096a95b2501970e1d74e2946e",
+    "used_in_report": true
+  },
+  {
+    "file": "patient-list-empty-desktop.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 2880,
+    "height": 1800,
+    "sha256": "2ff386053bc53437383c254bc848f7a657d6c2cf67acf755d550e5649c5ed982",
+    "used_in_report": false
+  },
+  {
+    "file": "patient-list-mobile.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 780,
+    "height": 1688,
+    "sha256": "408c8c15ea05133f6b0ccb5bbc4256a27eedfe89e54ab055bb5a23dcfc464d96",
+    "used_in_report": false
+  },
+  {
+    "file": "patient-list-row.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1932,
+    "height": 170,
+    "sha256": "4dab01659da789f7257aa75e584e7adfa393372e6229921feb399ec4cd3eeec2",
+    "used_in_report": true
+  },
+  {
+    "file": "patient-medications-desktop.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1844,
+    "height": 320,
+    "sha256": "23a137bad46f222e5f34ffc8a359e7cf0b0c796063b4dc79500cc95c9f1022c4",
+    "used_in_report": false
+  },
+  {
+    "file": "patient-medications-full.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 2880,
+    "height": 1948,
+    "sha256": "be57ba70dd404980e8a010f12c5ead24c53389376f791c98311480f586972242",
+    "used_in_report": false
+  },
+  {
+    "file": "patient-medications-populated.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1844,
+    "height": 366,
+    "sha256": "5ccd774b2ee8c6d5ee8369c1fcbd01089b801b526fe353c2b11ac5f93a207c9c",
+    "used_in_report": true
+  },
+  {
+    "file": "patient-summary-desktop.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1844,
+    "height": 952,
+    "sha256": "17682233710920fe78dde1729cd0e8d2cebefcb772cdd44a9b06bbc6195668ba",
+    "used_in_report": true
+  },
+  {
+    "file": "patient-summary-mobile.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 780,
+    "height": 1152,
+    "sha256": "0d1e68d1311862c7aa2705d8985327748d811f701a822620bce14d331436df5b",
+    "used_in_report": true
+  },
+  {
+    "file": "patient-timeline-desktop.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1844,
+    "height": 312,
+    "sha256": "22eb76c6478e0a181f7d1de090752d93d478c07527fc83979629427d9f4e67ad",
+    "used_in_report": false
+  },
+  {
+    "file": "patient-timeline-full.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 2880,
+    "height": 1948,
+    "sha256": "f8bdcc3632a4254ef2bb345df1dcccd0feec3b4824d9b648479ce857d05e153b",
+    "used_in_report": false
+  },
+  {
+    "file": "patient-timeline-populated.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 1844,
+    "height": 278,
+    "sha256": "469b5845bc329e594d7c8d49243f81308421179b09611f52f83183d550637a53",
+    "used_in_report": true
+  },
+  {
+    "file": "patient-workspace-desktop.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 2880,
+    "height": 1948,
+    "sha256": "1404418c27e58e4051b2e109644b016c30631ec79da4d88a31e04721354100e5",
+    "used_in_report": false
+  },
+  {
+    "file": "patient-workspace-mobile-top.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 780,
+    "height": 1688,
+    "sha256": "0d872c9aaa03b16d269b0ba7502a0087920c16fe2652b158bac9a8d88124e985",
+    "used_in_report": true
+  },
+  {
+    "file": "registration-desktop.png",
+    "source": "Next.js 16.3.2 production server at http://127.0.0.1:3100, local Chrome via Playwright",
+    "captured": "2026-10-15",
+    "data": "public UI, no patient records or credentials",
+    "width": 1440,
+    "height": 900,
+    "sha256": "e63e267d271b2ebc5cd5b69954e595813025e9dc7d9acad67bae853341f88425",
+    "used_in_report": false
+  },
+  {
+    "file": "registration-form-desktop.png",
+    "source": "Next.js 16.3.2 production server at http://127.0.0.1:3100, local Chrome via Playwright; direct DOM element screenshot at devicePixelRatio 2",
+    "captured": "2026-10-15",
+    "data": "public UI, no patient records or credentials",
+    "width": 832,
+    "height": 920,
+    "sha256": "67c617312d5e4dbfeda732c1cb3429ae9de46d55df2d158e513d76270b293122",
+    "used_in_report": true
+  },
+  {
+    "file": "safety-message-desktop.png",
+    "source": "Next.js 16.3.2 production server at http://127.0.0.1:3100, local Chrome via Playwright",
+    "captured": "2026-10-15",
+    "data": "public UI, no patient records or credentials",
+    "width": 1440,
+    "height": 900,
+    "sha256": "a81071ac50106d5bae1b0ce9942f19a38fc305f02c346a2723d98bbfd9f7ef43",
+    "used_in_report": false
+  },
+  {
+    "file": "safety-section.png",
+    "source": "Next.js 16.3.2 production server at http://127.0.0.1:3100, local Chrome via Playwright; direct DOM element screenshot",
+    "captured": "2026-10-15",
+    "data": "public UI, no patient records or credentials",
+    "width": 1440,
+    "height": 474,
+    "sha256": "2f3fae885a2fa3eb647eca5a011b7d6beb72b2494926e502730cc014dda0b34d",
+    "used_in_report": true
+  },
+  {
+    "file": "voice-note-dialog.png",
+    "source": "Next.js 16.3.2 production UI with FastAPI and isolated local PostgreSQL; Chrome/Playwright screenshot of live application",
+    "captured": "2026-10-15",
+    "data": "synthetic doctor and patient only; no real patient data or credentials shown",
+    "width": 896,
+    "height": 928,
+    "sha256": "830eb299bb979ea444d9c14e73ba8a152a48d796db8cb1a0bc91cd29355f1fee",
+    "used_in_report": true
+  }
+]

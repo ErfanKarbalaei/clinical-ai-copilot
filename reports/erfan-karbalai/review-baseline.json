@@ -1,0 +1,13 @@
+{
+  "F:\\clinical-ai-copilot\\reports\\erfan-karbalai\\گزارش_پروژه_کارشناسی_عرفان_کربالئی.docx": "88ec2fe5c8f06717c9c7abe12ec4fff054e91a3e3df9fd6800174934b8ddaf44",
+  "F:\\clinical-ai-copilot\\reports\\erfan-karbalai\\گزارش_پروژه_کارشناسی_عرفان_کربالئی.pdf": "de31eec4643b66146f30b39a53e40c47a078890686b8b529fbcdfbd9c311eb24",
+  "tracked_changes": {
+    ".env.example": "8e3b7817a4d1714a975c68aba7106f73380c3f51b8c165b15154ed4f751533de",
+    "backend/app/core/config.py": "3eb1df598dd38246df14b972d0f0929987fc0e70fe960a3df2df8664800b233a",
+    "backend/app/services/stt.py": "b1cf3ebf1c15938955dcad74c6977bf273544152a6d5d32311935cec58261777",
+    "backend/requirements.txt": "6fa8106b751b4026cc270f73712fe6d27cb23cda40ed93ab3397805eb160dc06"
+  },
+  "figures": 13,
+  "tables": 56,
+  "body_paragraphs": 881
+}

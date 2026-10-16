@@ -1,0 +1,43 @@
+                                                                                         عجارم و عبانم
+
+  و اه لیاف ریسم ؛دننک یم ینابیتشپ ار ینف ینابم راد   هرامش یاه   عاجرا .دنوش یم یفرعم اتکی ی     هرامش اب عبانم
+   جیاتن و نزخم دهاوش و تسا ۲۰۲۶ ربتکا ۱۴ بو عبانم یسرتسد خیرات .دنا هژورپ یزاس هدایپ دهاوش اه عبات مان
+                                                               .دنا هدش هداد حیضوت طوبرم یاه لصف رد زین نومزآ
+    و خساپ لاسرا زا سپ راک یارجا یارب انبم ؛یمسر تادنتسم         ]۱[    FastAPI. Background Tasks.
+                                                                                          .لقتسم فص اب نآ توافت
+
+                                        https://fastapi.tiangolo.com/tutorial/background-tasks/
+    و   Session      تیریدم یارب انبم .۲  ی    هخسن تادنتسم ،]۲[       SQLAlchemy. Session Basics
+                                                .تسا هدش تشادرب هژورپ دک زا صاخ تامیظنت باختنا ؛شنکارت
+
+                                      https://docs.sqlalchemy.org/en/20/orm/session_basics.html
+                 runtime.       یجورخ و همانرب رارقتسا یمسر تادنتسم ]۳[           Next.js. Self-hosting.
+
+                                                   https://nextjs.org/docs/app/guides/self-hosting
+    راتفر و یجراخ و ییاتکی دویق یارب انبم .۱۷  ی    هخسن تادنتسم ،]۴[        PostgreSQL. Constraints
+                                                                                                             .فذح
+
+                                        https://www.postgresql.org/docs/17/ddl-constraints.html
+   مان ؛نتم دیلوت بلاق عجرم    ]۵[   Google AI for Developers. Gemini API text generation.
+                                        .تسین لدم زور یریذپ     سرتسد دییأت ،هژورپ تامیظنت رد دوجوم یاهلدم
+
+                                           https://ai.google.dev/gemini-api/docs/text-generation
+   هژورپ دک ی هنومن ؛   API     خساپ و تساوخرد دادرارق عجرم ]۶[          OpenRouter. API overview.
+                                                                                       .تسا هدش یسررب ًامیقتسم
+
+                                                https://openrouter.ai/docs/api/reference/overview
+         تفایرد و   job      شدرگ عجرم    ]۷[    Speechmatics. Batch speech-to-text quickstart.
+                                           .تسا هدشن یریگ    هزادنا شرازگ نیا رد یسراف تیفیک ؛       transcript
+
+                                https://docs.speechmatics.com/speech-to-text/batch/quickstart
+    OCR.        و هدش نکسا دنس ،نتم ی      هیلا توافت عجرم  ]۸[    pypdf. Extract Text from a PDF.
+
+                                https://pypdf.readthedocs.io/en/stable/user/extract                   -text.html
+   depends_on          عجرم ]۹[    Docker. Control startup and shutdown order in Compose.
+                                                    .دراد قرف قفوم رارقتسا اب یدنبرکیپ دوجو ؛سیورس تملاس و
+
+                                          https://docs.docker.com/compose/how-tos/startup-order/
+
+
+
+                                                         65

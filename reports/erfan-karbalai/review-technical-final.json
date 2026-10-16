@@ -1,0 +1,522 @@
+{
+  "router_count": 15,
+  "registered_routers": [
+    "health_router",
+    "auth_router",
+    "ai_catalog_router",
+    "auth_otp_router",
+    "patients_router",
+    "conditions_router",
+    "allergies_router",
+    "medications_router",
+    "documents_router",
+    "voice_notes_router",
+    "chat_router",
+    "medication_safety_router",
+    "ai_medication_safety_router",
+    "conversations_router",
+    "agent_router"
+  ],
+  "api_count": 56,
+  "reported_api_count": 56,
+  "unsupported_reported_routes": [],
+  "unreported_routes": [],
+  "orm_field_tables": [
+    {
+      "table_index": 21,
+      "fields": [
+        "created_at",
+        "generic_name",
+        "id",
+        "name",
+        "updated_at"
+      ],
+      "matching_orm_tables": [
+        "medications"
+      ]
+    },
+    {
+      "table_index": 22,
+      "fields": [
+        "attempts_left",
+        "code_hash",
+        "consumed_at",
+        "created_at",
+        "expires_at",
+        "id",
+        "phone",
+        "updated_at"
+      ],
+      "matching_orm_tables": [
+        "otp_requests"
+      ]
+    },
+    {
+      "table_index": 23,
+      "fields": [
+        "address",
+        "created_at",
+        "date_of_birth",
+        "first_name",
+        "gender",
+        "id",
+        "last_name",
+        "national_code",
+        "phone",
+        "updated_at"
+      ],
+      "matching_orm_tables": [
+        "patients"
+      ]
+    },
+    {
+      "table_index": 25,
+      "fields": [
+        "created_at",
+        "email",
+        "full_name",
+        "id",
+        "is_active",
+        "password_hash",
+        "phone",
+        "role",
+        "updated_at"
+      ],
+      "matching_orm_tables": [
+        "users"
+      ]
+    },
+    {
+      "table_index": 27,
+      "fields": [
+        "allergen",
+        "created_at",
+        "id",
+        "patient_id",
+        "reaction",
+        "severity",
+        "updated_at"
+      ],
+      "matching_orm_tables": [
+        "allergies"
+      ]
+    },
+    {
+      "table_index": 29,
+      "fields": [
+        "created_at",
+        "description",
+        "event_date",
+        "event_type",
+        "id",
+        "patient_id",
+        "source_id",
+        "source_type",
+        "title",
+        "updated_at"
+      ],
+      "matching_orm_tables": [
+        "clinical_events"
+      ]
+    },
+    {
+      "table_index": 30,
+      "fields": [
+        "created_at",
+        "id",
+        "name",
+        "notes",
+        "onset_date",
+        "patient_id",
+        "resolved_date",
+        "status",
+        "updated_at"
+      ],
+      "matching_orm_tables": [
+        "conditions"
+      ]
+    },
+    {
+      "table_index": 32,
+      "fields": [
+        "created_at",
+        "id",
+        "patient_id",
+        "title",
+        "updated_at"
+      ],
+      "matching_orm_tables": [
+        "conversations"
+      ]
+    },
+    {
+      "table_index": 33,
+      "fields": [
+        "ai_summary",
+        "analysis_status",
+        "created_at",
+        "doc_type",
+        "extracted_text",
+        "extraction_status",
+        "file_name",
+        "file_size_bytes",
+        "id",
+        "mime_type",
+        "patient_id",
+        "storage_key",
+        "title",
+        "updated_at"
+      ],
+      "matching_orm_tables": [
+        "documents"
+      ]
+    },
+    {
+      "table_index": 35,
+      "fields": [
+        "created_at",
+        "dosage",
+        "end_date",
+        "frequency",
+        "id",
+        "medication_id",
+        "notes",
+        "patient_id",
+        "start_date",
+        "status",
+        "updated_at"
+      ],
+      "matching_orm_tables": [
+        "patient_medications"
+      ]
+    },
+    {
+      "table_index": 37,
+      "fields": [
+        "created_at",
+        "id",
+        "patient_id",
+        "updated_at",
+        "user_id"
+      ],
+      "matching_orm_tables": [
+        "patient_user_access"
+      ]
+    },
+    {
+      "table_index": 38,
+      "fields": [
+        "audio_storage_key",
+        "cleaned_note",
+        "cleanup_status",
+        "conversation_type",
+        "created_at",
+        "duration_seconds",
+        "error_message",
+        "id",
+        "language",
+        "patient_id",
+        "processed_at",
+        "title",
+        "transcript",
+        "transcription_status",
+        "updated_at"
+      ],
+      "matching_orm_tables": [
+        "voice_notes"
+      ]
+    },
+    {
+      "table_index": 40,
+      "fields": [
+        "content",
+        "created_at",
+        "id",
+        "patient_id",
+        "source",
+        "title",
+        "updated_at",
+        "voice_note_id"
+      ],
+      "matching_orm_tables": [
+        "clinical_notes"
+      ]
+    },
+    {
+      "table_index": 42,
+      "fields": [
+        "content",
+        "conversation_id",
+        "created_at",
+        "evidence",
+        "id",
+        "role",
+        "updated_at"
+      ],
+      "matching_orm_tables": [
+        "conversation_messages"
+      ]
+    },
+    {
+      "table_index": 44,
+      "fields": [
+        "created_at",
+        "document_id",
+        "flag",
+        "id",
+        "patient_id",
+        "reference_range",
+        "result_date",
+        "test_name",
+        "unit",
+        "updated_at",
+        "value"
+      ],
+      "matching_orm_tables": [
+        "lab_results"
+      ]
+    }
+  ],
+  "setting_field_names": [
+    "AI_API_KEY",
+    "AI_BASE_URL",
+    "AI_MAX_HISTORY_TURNS",
+    "AI_MODEL",
+    "AI_PROVIDER",
+    "AI_PROXY",
+    "AI_TIMEOUT_SECONDS",
+    "API_V1_PREFIX",
+    "BACKEND_PORT",
+    "CORS_ORIGINS",
+    "DEBUG",
+    "JWT_ALGORITHM",
+    "JWT_EXPIRE_MINUTES",
+    "JWT_SECRET_KEY",
+    "MINIO_ACCESS_KEY",
+    "MINIO_BUCKET",
+    "MINIO_ENDPOINT",
+    "MINIO_SECRET_KEY",
+    "MINIO_SECURE",
+    "OPENROUTER_API_KEY",
+    "POSTGRES_DB",
+    "POSTGRES_HOST",
+    "POSTGRES_PASSWORD",
+    "POSTGRES_PORT",
+    "POSTGRES_USER",
+    "PROJECT_DESCRIPTION",
+    "PROJECT_NAME",
+    "SPEECHMATICS_API_KEY",
+    "SPEECHMATICS_BASE_URL",
+    "STT_API_KEY",
+    "STT_FALLBACK_PROVIDERS",
+    "STT_GOOGLE_MAX_CHUNK_SECONDS",
+    "STT_GOOGLE_RETRIES",
+    "STT_LANGUAGE",
+    "STT_OPENROUTER_MODEL",
+    "STT_POLL_INTERVAL_SECONDS",
+    "STT_PROVIDER",
+    "STT_TIMEOUT_SECONDS",
+    "TESSERACT_CMD",
+    "UNIOM_API_BASE_URL",
+    "UNIOM_API_KEY",
+    "UNIOM_TIMEOUT_SECONDS",
+    "VERSION"
+  ],
+  "migration_count": 7,
+  "migrations": [
+    "03378aed5376_add_persistent_conversations.py",
+    "49c86fd969f2_add_otp_login.py",
+    "9a1c78a56f1a_add_users_and_patient_access.py",
+    "ab22d66552c2_add_message_evidence.py",
+    "b309d1be6900_add_document_ai_analysis_columns.py",
+    "d3d54628e9bd_create_core_clinical_entities.py",
+    "fe6bf890d790_add_voice_note_cleanup_columns.py"
+  ],
+  "context_limit": 200,
+  "evidence_limit": 10,
+  "text_providers": [
+    "gemini",
+    "openrouter",
+    "openai_compatible"
+  ],
+  "stt_classes": [
+    "SpeechmaticsProvider",
+    "GoogleSpeechProvider",
+    "OpenRouterSTTProvider"
+  ],
+  "mcp_tool_count": 6,
+  "code_blocks_count": 37,
+  "code_hashes": [
+    "3e17b7a106e7a80575bff1bb887c2cb1a97cc2529d9699706422b7def747069d",
+    "fb96bbf995e45c9317382334d803dd7e7d6b72e7ccbdf703567758603af7b12d",
+    "353c30dff99f28144f78f44b91ad5106759ad3074b7d0c2935639491528f5683",
+    "b1773158297ec1fd7bed9925a635c786757c9101629f98193d521581c2917572",
+    "cdf03e1d5edbed08e8f6391beafe705707be3ce0810f038ec78e9db7e4a8a5a7",
+    "fe244e1117de05c00c805a60c3992bf28f0314bcf5732cb7b0dc6f29b17e22dc",
+    "dc9b61dbbb4ae70fe23960862c8e0014e4b3601912fc821bb8cc8336eab110f6",
+    "1110f5af28ed7d3cf8c6b1454367f3e12350676ad8adb6bf9492029444bffd52",
+    "6f5d28143d3dbe8735776f6f09865f7d1148949917477a71b9f3ebdbdfffc09e",
+    "a11c069b26bdc4212edd9ef2c2c019a5d3ca38584f5abcd9497e9451a3da214f",
+    "8fa33e0168e45598eb5e3838e382f8ff487075380159fbf8233f0399a84e2e93",
+    "f910c64abc0b0743af8f756c266e8ec093d7a65cf2abe47c078470542b994356",
+    "853f10c51eac444dc0925f72a9ffaecdf8c7084fddedbc6312879d338286115f",
+    "badc162b95a0c2b6c3f744e58fd2a132540257fdef972b9475d7cedc9ddb39d6",
+    "55c8bd4cd63d3bba7a9387aa18e0220e032cda038fb374aa29eef859ce85ef89",
+    "e5a5ba96f3d38954554cd6f24f6d895f7effe81cd8ce8457211c9b377c0224f4",
+    "0a29c9d7dc5da5a68b16c5f0279f73028870f7f4c93a71f6dcce6100cf2c464d",
+    "e64a35dbfeced45bc5813c6c6b6bd2d54e42edeaa1951def7c2e1deb5db31403",
+    "8e593f00200b483fba2b766c0159d1caecf4c0c7e076cd6710e28114b7f7b08f",
+    "2b5c93a5368238b14c594cdc626fd4c5170569f2f6fb3cfae2166d6c0785ae7f",
+    "7239ba850d4daa05342f6d246e3f1516343b3608922df2ccaa15ecba56753507",
+    "ebc94b39802717497f265ec1c3ff48d6ab510691fa231a48f2c2ad38717751f0",
+    "066bb9daa45f34bb8c16e94efadd1d4eb9ef82f306f12f6c55ee33706c9ec995",
+    "3f6ee16a5b633cb5c7c570bd3c2135386cddac9460a8dd5cc73d27e4985e2c6f",
+    "5c322874bac7847fb662019e3890c93f0fecaf5a8b768ef0e9cd0af8729b618f",
+    "1691e2a32347edc3cc9f01b4bb258490dba5aca58f60865c4c62578b9701e172",
+    "cb8e9feafcc786921de9cc31dc7c01f052c7b76d628089f32de71e3669223cb8",
+    "e4160c66604bb13948af1bcc0aabab96af2a9470599d291932c14d070e027083",
+    "b35356a5cdfdee92eb827b509fa4db8e4be392a896ba4feb48b8c2de8ece15ab",
+    "4de88b93e89c068b83f5df492a22a772475a532e4543d0ae34149a8baf1819fd",
+    "1779c8855bf893f41e4b238b31af31bc09730ab8e2f110aa8c3ae308921f9a58",
+    "51e8f454176f401a1738fb022bb7fd924eaf04348b97b03f0811759e499a5733",
+    "dd0addb5e67a7973a5390c4cbb6c221ba90c2d3ac2e6c86b2ee373e870920a3d",
+    "506ba648bf6766ddc543042970f66e016c7cd3937986814c5b201801cae64584",
+    "18befe1d3b7bf5f0e7265af9d6e9361f35d76f6fcef170a83a0687c3fdebe757",
+    "608184cf4fc8372af8c7c10278d54bd260d7823c97048a8c15512be8ecb312cc",
+    "df5551dc4a7c797a8715c71695ff5828d3909b736b8414923a44720d4a7d1ed9"
+  ],
+  "source_hashes": {
+    "backend/app/main.py": "2e51b014c71462802437ae4aa040a1465d10be40aaecadbb99ce21af571f7135",
+    "backend/app/mcp_server.py": "d9dc213052beaea086f72b4a1054144807cda760adab9e74562ddec9faa21c86",
+    "backend/app/__init__.py": "7e999bbcb82213c5fcdd1d8a2dd91e3bb85506125306fee3a4e3b77d07ce7e27",
+    "backend/app/api/__init__.py": "c5e79b75137811726e30acef2fa5cfc649514fce1c86da771535b368f43238c0",
+    "backend/app/core/config.py": "3eb1df598dd38246df14b972d0f0929987fc0e70fe960a3df2df8664800b233a",
+    "backend/app/core/logging.py": "3240d919abeb0bb8b5fc52af0424e21121ce8162dbe51eb0d4e76a855db40eeb",
+    "backend/app/core/security.py": "212f815ff5e1c42ff66a6c319fa9745df0b4e4b88de69967a6ab288fdb213953",
+    "backend/app/core/__init__.py": "96fb336589cc616be9dda1d532109fc3c4f0ce40a3c5b3c6c4a81daf78c535c9",
+    "backend/app/db/base.py": "34d88d2381175899375e30361e10abbbcb764b80de47fb3ce9a226f9cec7a2aa",
+    "backend/app/db/mixins.py": "7ad2f97e19f2710503c7908b5e64c8c2645126ea823fe16316c3a2857bd9845d",
+    "backend/app/db/session.py": "6946e382a83ac4574d1113c1ff000453a8d11314c293ccbfc17be1ae547869cd",
+    "backend/app/db/__init__.py": "59a2a77b94456bc885204344eb6d1d5b0e582b2b9b04f1fe29d481f217287db2",
+    "backend/app/models/allergy.py": "2565f95d193a6a4ea595f530afc8464df3613501df9ba151159a19fc2f22936f",
+    "backend/app/models/clinical_event.py": "85da9255b7e3738df66fd0176502043732963e415927494e6bb2639eac438b67",
+    "backend/app/models/clinical_note.py": "ac734d71145b9af02a7c379cf1a4c96a01ee40edf663044ba9a807230c123b06",
+    "backend/app/models/condition.py": "e774f970453293d5f5c57a63b218800d193896d6634d456f67f92f4b7ad0a7bd",
+    "backend/app/models/conversation.py": "7ab15ee59f1a991059e7b483c4e22e23abe4c17ff6238871c1225ecdfb3d513c",
+    "backend/app/models/document.py": "c31c6afbec5dfdf17d07914788029d3e163faa50bfd04bbe0c8b69265d463176",
+    "backend/app/models/enums.py": "0c3e397b11c6c1c85546710ea07861e51f80e381da6908691452d2b086d0d1a3",
+    "backend/app/models/lab_result.py": "e3fb254d614e8b0165db83e8724f711f3ca906c74de7ede5fd81c8154fcde764",
+    "backend/app/models/medication.py": "abb3f80062d3f95c2f2aed45ef8e851549b1f44a1b8ee271923e8d16de3ad4bb",
+    "backend/app/models/otp_request.py": "185701e59162450acf3a226195963294d10f99e885db37fa3e642b6db6de8f79",
+    "backend/app/models/patient.py": "9af1aab3df441c3479221e8b5c61319c8b4c41e55e98713849412bc16ba3caa6",
+    "backend/app/models/patient_user_access.py": "6bfd0c02a16dc950c8376f729ad915db781a6b3b86a6a5c821922e5d44cd025a",
+    "backend/app/models/user.py": "28c07b489b6a699597603352862ae15ce66abc603fdf0dff5b6351b32308de47",
+    "backend/app/models/voice_note.py": "2c04f8d09718354134fb345fd4c6a7c4d6580e98c0031f10da57be19edd00bee",
+    "backend/app/models/__init__.py": "ec11eaf385e047caa7aa7c07772dd7f469c154a28cc17f82b402c11278fb281a",
+    "backend/app/schemas/ai_medication_safety.py": "1f76a3b84461d37c278c5fb63e128ca01e01e504d367e92a37093456e5c7d1b0",
+    "backend/app/schemas/allergy.py": "965d99280581f58c9c07709d2eab7b79894fdff4fab822c109ba6ec292d3d607",
+    "backend/app/schemas/auth.py": "c31950c6a4ffe79d4b94ef05272d771cbed9559776bdd5a9b9294d73655aa0ea",
+    "backend/app/schemas/chat.py": "ae8d7f2b2aee806f06adf0b3d9980bd6444e69bf05759d2e4708257cf535aac6",
+    "backend/app/schemas/clinical_note.py": "02a4007c8126feb7508b2f88d8d390275d952d4d791d265e3d1a3295d652f00c",
+    "backend/app/schemas/condition.py": "f73c7cd6f8f666ade1e840b2209cc27dae0572016775041b32ebc8ae59e8b76b",
+    "backend/app/schemas/conversation.py": "198e33be1a4f49c40d5cfd2f570cc56215b6700928881e036f69de903891a9da",
+    "backend/app/schemas/document.py": "81c94186fc783c339908ffafb6c2aac1231fa1e07d7baccd38fcffa0263a9ea7",
+    "backend/app/schemas/health.py": "1dc4d38e0809a5668f8cbfecd0da565b421579fb07a64026b8ec53ee46cf44a5",
+    "backend/app/schemas/lab_result.py": "2cefc49b32dc6588ccc9e16f63bbdc95ac76b2ccc139d2fc1a61f3ed8fa816ad",
+    "backend/app/schemas/medication.py": "5ccbf03867f9c9970bfbcc6a0b9390902696a5411b81d2cde92bb41aaa4d5c82",
+    "backend/app/schemas/medication_safety.py": "c76436358880fe154e6ff9d33730f859c89b031b4f24b8df699a0c6ce4d547e8",
+    "backend/app/schemas/patient.py": "4171a62b685edc6dcfa4d6bccb8d9de56018c06bbd6381a0eb4ae4eac09e40a3",
+    "backend/app/schemas/patient_context.py": "0bf1e44b0deb63b55e2e05347f6e2aa234c91929efd810e67235ee68792c8813",
+    "backend/app/schemas/voice_note.py": "6fd469730bff807ce361b5d5873fed35be0a7940134f315d36acedf33d24b05c",
+    "backend/app/schemas/__init__.py": "b9848024595a879517a49a859ec8591e3f29962604c50354805a89176bca9665",
+    "backend/app/services/agent.py": "2c51436b597f2edff1a1f01d69954f87593aca8e7d225295b49f2354ae3af8f0",
+    "backend/app/services/ai.py": "9c1e727dc8c29ef63f430cf0a73edf48dedd291f3987c7b8f73d1eddc2dfdd4f",
+    "backend/app/services/ai_catalog.py": "8abcd86e9a7c78594e9618632420cb7e3e143648d7fdd7435ea227570c8533e6",
+    "backend/app/services/ai_medication_safety.py": "6765f88c8d04790ed8f4387483c4c9abdd5acb32383722d93a103ae3704955bc",
+    "backend/app/services/documents.py": "ccc4dfd7643d9e4f8a31696ea4ed4af51efbd5155414e7907d0afff9c191a88d",
+    "backend/app/services/document_analysis.py": "22c24dabd83ed41e87dbc13f94b4303cfad589a3b4a3415b68abd3791ed60b4b",
+    "backend/app/services/evidence.py": "72844ca861be079a8e1e36834089d936ce40576a7408a8bbf1b1898932c4651f",
+    "backend/app/services/extraction.py": "b790f79969292dc199a1778e9c2b64156429632c48807697a24b1a9acdce5bda",
+    "backend/app/services/medications.py": "c7d8a314f7161ae79e8b2f1a5ffb391053248f6faf10862d963b682cfae33d20",
+    "backend/app/services/medication_safety.py": "fdd624e1bcca20567217f5f19270a2c98e855cd064d2a03880b31dbfdc693a61",
+    "backend/app/services/otp.py": "97dde7730d077d49f3ba4dbeef19bbc27386c8bbdcaacf24b24069acd5b47137",
+    "backend/app/services/patient_context.py": "9ff20d15184b83030feeaf926cc5a5e87f5500f0f3270984dd7661f2d3d7fc5f",
+    "backend/app/services/storage.py": "05f26d5d6992ce7fff01e2505360e9c5efb4f3d6907d605d65dce7feeea72ec4",
+    "backend/app/services/stt.py": "b1cf3ebf1c15938955dcad74c6977bf273544152a6d5d32311935cec58261777",
+    "backend/app/services/voice_notes.py": "2b8b0216076f09f2bbe308eb80ce75e95eaec988cdc539d9590bd1671775480f",
+    "backend/app/services/voice_note_cleanup.py": "80bc12e232e17f2216da5227a3688ee39fd59ff0481e83a837d1277e4cad789a",
+    "backend/app/services/__init__.py": "fc1619110267772928db4467e10751266c157a9bdfaee307cda99fa897909c78",
+    "backend/app/utils/__init__.py": "ea7df30133c4b92487e80780fb84664d2885042d9013196d321215ca4cb217c4",
+    "backend/app/api/v1/api.py": "9542e7f3197a1ebc3f2fdcfaf58e24d4dd1512c2ab6aa8d3cbf918d2cfb0016e",
+    "backend/app/api/v1/dependencies.py": "2537eca686efd199e364d3ae891b045b49211f6bf252e8a498742c45eaf08eac",
+    "backend/app/api/v1/__init__.py": "80083ed57c2cd7de7e3a266cbb8ab6de884015f93703df76d388fff3ac6eb18f",
+    "backend/app/api/v1/routes/agent.py": "f6e9984675eceb45c22bd8be6add940be51cc2e33be67dcb8f37c8dc084fdaac",
+    "backend/app/api/v1/routes/ai_catalog.py": "44399239b04ca06d1bfaffa26e9ba1d07d05717c8e6d24d5d1aa6ac4f01a4cca",
+    "backend/app/api/v1/routes/ai_medication_safety.py": "f702cb0f8bb78d71dccaa165f41baa637190c9a170c07d73aefc33f724ffbfdd",
+    "backend/app/api/v1/routes/allergies.py": "459e122699c02d7598d32677a495b682b48e6908c759f5e2a06eaf7b441aa53c",
+    "backend/app/api/v1/routes/auth.py": "ee5087a6d5db88556d1d4f037d0de5e2af56ca4ea607a741853c3b36e1e3c25c",
+    "backend/app/api/v1/routes/auth_otp.py": "cff64fc066cedf7810710707533fc772ab848188311d4528557174197d319c67",
+    "backend/app/api/v1/routes/chat.py": "5826163be8150efeb940da18eb91b800c5ba9255be87447a5caed5c087e8892b",
+    "backend/app/api/v1/routes/conditions.py": "72a84555dafdc8b60e210396f26a3e1efd729939269aa96226ce8c94d46f668f",
+    "backend/app/api/v1/routes/conversations.py": "56bb55819ff8c51b17cc2bb4c432d7170da939d617814e3081b995aa98fd2980",
+    "backend/app/api/v1/routes/documents.py": "eee165dafa3a75d1e4df0ba45d38e6e5efdf8e97e437ad604bf1afb8f64f9846",
+    "backend/app/api/v1/routes/health.py": "3b1d0e32a60d9593f14fe9152ea9ce6e083100447c6582ca3062ef0e558d03a8",
+    "backend/app/api/v1/routes/medications.py": "851c9175b2eba8b6a4973ea15dcec64bcea72c4745cd35326252019aa6c43ae2",
+    "backend/app/api/v1/routes/medication_safety.py": "887fb07b567c133bb7bf34c601effcae5bdc33cdab2efabe8b5af994791ccc86",
+    "backend/app/api/v1/routes/patients.py": "bc2c87f8fcffeab6613a6432b88e549c3e813ded7bf34c7a747e9f450521f437",
+    "backend/app/api/v1/routes/voice_notes.py": "a58bfceb49a9d5f29df2cce8ea8d16ed03ad658bf2d2331c6874679e7e8f4053",
+    "backend/app/api/v1/routes/__init__.py": "1c02e06ea463d3ef6cef73f4fca6097ca965bccc6b4dca30a6d6e1c230cb69d7",
+    "backend/app/services/messaging/uniom.py": "7b1fd7e4654362c5d59000d9af430a9b5d089f840c90ca9a2d4d8b6b47038777",
+    "backend/app/services/messaging/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/tests/conftest.py": "740c39a52d94241b78154ae19cfd9dbf5f0e560f48b3fc8d9dc3b639dc48a3ca",
+    "backend/tests/pdf_helper.py": "aa53f9cdb44627cb8136e35002cce9af81240ca0440d83a47440ca919acf8dc7",
+    "backend/tests/test_agent_api.py": "af8d320be333d69889335f927373e6e719494b7f66584982d2c719ddd3fbf234",
+    "backend/tests/test_ai_medication_safety.py": "2eb0d77a5966a9105c3935c71f0779bf184b84c3ccc0a210a120bfdd77d7b2e5",
+    "backend/tests/test_ai_selection_and_catalog.py": "38994fc63a00e2c45006c91236617edce5bbd240e7294b8528251a4caa13482a",
+    "backend/tests/test_allergies_api.py": "c9f8294baa8973d6fb6c959a5983179caff7e1701816f26e6d3ab29e3fffcafd",
+    "backend/tests/test_auth_api.py": "a7997e6e7e342547f959f4ccf7528cbdeaa5d3a1beaa7ff94f16b163dae5f39f",
+    "backend/tests/test_chat_api.py": "6796b2e2089a0ca11a605a9dada7206d0a56a095583bb25ce81d3a9d95d12e37",
+    "backend/tests/test_conditions_api.py": "97479b6ebebd8958460ed51a9dd24a4c928b3e0b40c37268bc8c8b12180e5996",
+    "backend/tests/test_conversations_api.py": "0794d5e0736be27fdcf901dc6bf740ca0de2fe14cbcea11dd5ea23ec1c5c0096",
+    "backend/tests/test_cors.py": "152c8e02d65c431df8a8ac60734085abcf180590b8a321246ee1c6edc80212ba",
+    "backend/tests/test_documents_api.py": "1f1b5d2f4da473e0f4d38ae3a8583ed135b1bef80dc95186684d714e3c55f062",
+    "backend/tests/test_document_analysis_api.py": "84a317628d86c72fde66cc3e1848cd9ffa57d7b5d3bdadfad13d308286694a3a",
+    "backend/tests/test_evidence_api.py": "743daa8dd0a3004f80ada498b791f33cd493db9a5622871e4bdf0dce90de3d6f",
+    "backend/tests/test_extraction_service.py": "57d8b11ed7b29c6744d01eafc006f8215c56e7b2c05474c07d65abb42603f478",
+    "backend/tests/test_health.py": "2cae3d21701eec3167df15b9a2b7108b8b3903faf67ee254ef3bcb63e8426009",
+    "backend/tests/test_logging.py": "f4bf07f9f99dcb97a0bd24447f07a4c0516685baac98e92dcb71e7a74b410fd7",
+    "backend/tests/test_mcp_tools.py": "13a81d8b46e33edcfa075e07aee2c5dd9f12ca9a16fc62b913c74bb5cd823906",
+    "backend/tests/test_medications_api.py": "fc17b71879780a66478adb4b9183c0eb2558faffb8de041d90231bb93eb556ef",
+    "backend/tests/test_medication_safety.py": "b99454e7ea0297867e8c7f5528780d6ac8e1449c33d4000f92bd718a88777a21",
+    "backend/tests/test_models.py": "29cd4f36cd9dcba51a6965992c1fd686494ccd5495c7938f21eff5d7c246c8cf",
+    "backend/tests/test_openrouter_provider.py": "38e2c7ac4dc8484f1265fc0667a5b0ef9d32208bc22526940506403e06c25edb",
+    "backend/tests/test_otp_login.py": "f68e453f7ed197e4d4c1ac3888bd3c1c82c64b32b6985f5a85133c65ace9664f",
+    "backend/tests/test_patients_api.py": "326047a2051fa1ddc9b7f118f7983a5076cda3a9ce8d192e81ac79c9bafad5d0",
+    "backend/tests/test_patient_access_control.py": "7b58c3218a6917926be669c259ac5b13ddc7f3084faffba98c0abe9a756dfc3b",
+    "backend/tests/test_patient_context_api.py": "7be5fb6b1326c9530c6ab6e201bf79578353fdf77d2a4e64738cae3bc7fbe80c",
+    "backend/tests/test_patient_overview_api.py": "a2d659f7f573b51e3c8015bd60cbc68b3f94ff560f221147cfa495f47b8ba9e6",
+    "backend/tests/test_seed.py": "f99fd9b91ad93032b2d3eb9044164a1c38827b0c5aa4d78e39bf4aee699e8420",
+    "backend/tests/test_storage_service.py": "22a54cbfbe14fe1e3d484e839acd8ecb4fa0e15707ed7200a8dd79fb1f99b78a",
+    "backend/tests/test_stt_google_and_openrouter.py": "95dc732eb8a0d25b046c784590829196d722bca2c10195588d3610af3c89787e",
+    "backend/tests/test_stt_service.py": "65e60f0e50c14797b1828685069ceddfcf69939e7025c654ad8ea82ee8b2e78e",
+    "backend/tests/test_voice_notes_api.py": "ee282da084399aa2c4f7f2433b1f3fb55ff6df8cd42543346cc615a831e2e75d",
+    "backend/tests/test_voice_note_cleanup.py": "164900170c6eaf4e271feb251b43d6e8ca7f08ff3d4c493cb1ebace31a3c4e69",
+    "backend/tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/alembic/versions/03378aed5376_add_persistent_conversations.py": "603801270d562eb9cd60be8ca129103ca0d399606fe7f3f1f0653ea6d46a38e8",
+    "backend/alembic/versions/49c86fd969f2_add_otp_login.py": "aa657c27b20c38a8eb146241751b312de15d16f2d7b8d3085d13a14d351add93",
+    "backend/alembic/versions/9a1c78a56f1a_add_users_and_patient_access.py": "abb0a4d22dce0d96e3a24f6c16d90dd6c4a1e53a66333dfebefa1ff6640ffc07",
+    "backend/alembic/versions/ab22d66552c2_add_message_evidence.py": "abc1609cb6322cd87f804d578800ca15936d6e74ceebc29eb4613e0d5f24b7c6",
+    "backend/alembic/versions/b309d1be6900_add_document_ai_analysis_columns.py": "ad7173d2236b09d666baf7dcbe109167268c2bb383f032f7cf9a7d052d75ccdd",
+    "backend/alembic/versions/d3d54628e9bd_create_core_clinical_entities.py": "8a8f0c3fed17f849cf1c6b84739944a715465063217d9998d9a4fa1d61cee001",
+    "backend/alembic/versions/fe6bf890d790_add_voice_note_cleanup_columns.py": "672e4e40419d4d5f8562796ea5cc93016320aa49f8c697a28d86747eb8a45db2",
+    "frontend/src/lib/api.ts": "3f998042644c11ca0adbac54def7af2a6b02e53e20054c87b3525d4059e8aa28",
+    "frontend/src/lib/auth.ts": "af98c8e01fbcba0c846f2bb0b5865b9e6bcb77f359741360059755249e7a74a3",
+    "frontend/src/components/patients/clinical-chat.tsx": "709a3f7b4d0e0b8b45a990c6782f871698a95a69d285e95c51a5275779b3ad4a",
+    "frontend/src/components/patients/medication-actions.tsx": "7c62a65533451fc265d1caa5017dfb7c0a883bcaf8b543bd137b2fa571bfe37b",
+    "frontend/src/components/patients/copilot/evidence-list.tsx": "be64a784630edb69481b188c596418cb1fd0c38bee7af0c3c5597475c9d296b3",
+    "backend/Dockerfile": "e86b4850ba3cb15b2f27405500d2523b38ef489af68e86e137372705c632dd5b",
+    "frontend/Dockerfile": "efa053e6e34d190db10a4ff7fb56e1f9be658f40c1fec9b6276e652d5a33b6f3",
+    "deploy/docker-compose.prod.yml": "aab5dcdef83ff0f6ba0102ab73d125d577e34faaa7026f0edce9e0844349498e",
+    "deploy/nginx/nginx.conf": "10b8e3c1b8063587e6fab7df19215d51c17a8f55a7a62cbf2f4edafd12e1d6f3"
+  }
+}

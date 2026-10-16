@@ -1,0 +1,21 @@
+F:\clinical-ai-copilot\backend\app\api\v1\api.py:9: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+  from app.api.v1.routes.ai_medication_safety import router as ai_medication_safety_router
+F:\clinical-ai-copilot\backend\app\api\v1\api.py:13: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+  from app.api.v1.routes.auth_otp import router as auth_otp_router
+F:\clinical-ai-copilot\backend\app\api\v1\api.py:13: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+  from app.api.v1.routes.auth_otp import router as auth_otp_router
+F:\clinical-ai-copilot\backend\app\api\v1\api.py:17: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+  from app.api.v1.routes.conversations import router as conversations_router
+F:\clinical-ai-copilot\backend\app\api\v1\api.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+  from app.api.v1.routes.documents import router as documents_router
+F:\clinical-ai-copilot\backend\app\api\v1\api.py:20: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+  from app.api.v1.routes.medication_safety import router as medication_safety_router
+F:\clinical-ai-copilot\backend\app\api\v1\api.py:23: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+  from app.api.v1.routes.voice_notes import router as voice_notes_router
+INFO:     Started server process [17020]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:4435 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:4835 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:4858 - "GET /health HTTP/1.1" 200 OK

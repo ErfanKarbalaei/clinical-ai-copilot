@@ -1,0 +1,40 @@
+                                                  ینیلاب یوگتفگ و ینابز لدم متفه لصف
+
+                                                             یدنبرکیپ و هدنهدهئارا دادرارق .۷-۱
+
+   system      ،   user      نآ یاه  یدورو .تسا       complete       اب   Protocol       کی     LLMProvider
+                           زا دناترابع دوجوم یزاس    هدایپ هس .تسا       str     نآ یجورخ و یرایتخا        history       و
+ تساوخرد       OpenRouterProvider.               و  OpenAICompatibleProvider                 ،   GeminiProvider
+     ،دنس لیلحت دوش یم ثعاب کچوک دادرارق .تسین ارجا طرش لدم                   SDK        و دوشیم هتخاس        httpx     اب
+         دادرارق و   prompt        دنچره ،دننک هدافتسا هیلا نامه زا هتفایراتخاس ینمیا و وگتفگ ،توص یزاسکاپ
+                                                                                              .تسا توافتم ناش     یجورخ
+         .دریگیم تامیظنت ای تساوخرد زا ار          model       و   provider        ی هسانش     build_provider
+           و دراد تسیود رثکادح لوط         model       .دشاب    PROVIDER_IDS                 رد دیاب هدنهد هئارا یهسانش
+      رد .دنوش یمن تفایرد ربراک زا      base URL          و دیلک .دوش یمن هتفریذپ هلصاف یاراد ی     هتشر ای     URL
+       AI_API_KEY              و مدقم    OPENROUTER_API_KEY                        یصاصتخا دیلک       OpenRouter
+                        دیلک دوبن .دننک یم هدافتسا       AI_API_KEY            زا نتم یاهریسم ریاس ؛تسا نیزگیاج
+                                                                          .دنک یم داجیا     AIUnavailableError
+           زا تساوخرد حیرص باختنا و دنک یم           cache       ار طیحم ضرف    شیپ ی    هنومن    get_provider
+     لاعف دنیارف رد طیحم لیاف رییغت ؛دراد        cache      زین   get_settings         .درذگیم     build_provider
+  دیاب یداع ی   هدافتسا رد .دراد دوجو نومزآ یارب        reset_provider_cache            .دنک یمن هزات ار تامیظنت ًاموزل
+          .دوش هداد حیضوت ادج رورس        runtime       تامیظنت زا طبار       build-time        ریغتم و    restart      رثا
+
+                                             نت م یاه هدنهدهئارا دادرارق  ۵ لودج
+
+                              تیدودحمودیلک                           سامتبلاق                                هدنهد  هئارا
+
+    رورس زا base URL       ؛  AI_API_KEY               و    chat/completions             OpenAICompatibleProvider
+                                                                    messages
+   تشاگن لدم هب   roles    ؛  AI_API_KEY                  و generateContent                            GeminiProvider
+                                         دنوشیم          system_instruction
+
+       سپس    OPENROUTER_API_KEY
+           نیمضت لدم مان ؛    AI_API_KEY                 و  chat/completions                     OpenRouterProvider
+                         تسین    availability                          X-Title
+
+
+
+
+
+
+                                                             33

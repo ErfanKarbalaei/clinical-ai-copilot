@@ -1,0 +1,1956 @@
+[
+  {
+    "path": "frontend/src/lib/api.ts",
+    "sha256": "3f998042644c11ca0adbac54def7af2a6b02e53e20054c87b3525d4059e8aa28",
+    "lines": 376,
+    "symbols": [
+      {
+        "line": 51,
+        "text": "async function authHeaders(): Promise<Headers | null> {"
+      },
+      {
+        "line": 79,
+        "text": "async function request<T>(path: string, init?: RequestInit): Promise<T> {"
+      },
+      {
+        "line": 126,
+        "text": "function withQuery("
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/lib/types.ts",
+    "sha256": "f2db97cab69e6a6ce2da80e072ee2a16ee052f9f89edfbd50df1502d383ebc9e",
+    "lines": 336,
+    "symbols": []
+  },
+  {
+    "path": "frontend/src/app/patients/page.tsx",
+    "sha256": "272701b0896c378fdd07bf02fed616e39ee72541350e25966a7007bfaa91dc95",
+    "lines": 220,
+    "symbols": [
+      {
+        "line": 36,
+        "text": "async function loadRowStatuses("
+      },
+      {
+        "line": 64,
+        "text": "function EmptyBlock({"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/app/patients/[id]/page.tsx",
+    "sha256": "c6752d2cf41ad020914b3a03a4e4171b0da788dd7d418f1734e6f9f5927731b1",
+    "lines": 622,
+    "symbols": [
+      {
+        "line": 81,
+        "text": "function flagClass(flag: ResultFlag | null): string {"
+      },
+      {
+        "line": 94,
+        "text": "function extractionStatusBadgeClass(status: ExtractionStatus): string {"
+      },
+      {
+        "line": 107,
+        "text": "function transcriptionStatusBadgeClass(status: TranscriptionStatus): string {"
+      },
+      {
+        "line": 120,
+        "text": "function timelineIcon(eventType: string) {"
+      },
+      {
+        "line": 140,
+        "text": "function TimelineView({ timeline }: { timeline: PatientTimeline }) {"
+      },
+      {
+        "line": 180,
+        "text": "function MedicationsView({"
+      },
+      {
+        "line": 261,
+        "text": "function LabsView({"
+      },
+      {
+        "line": 328,
+        "text": "function DocumentsView({"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/patients/clinical-chat.tsx",
+    "sha256": "709a3f7b4d0e0b8b45a990c6782f871698a95a69d285e95c51a5275779b3ad4a",
+    "lines": 681,
+    "symbols": [
+      {
+        "line": 65,
+        "text": "function ModeChip({"
+      },
+      {
+        "line": 103,
+        "text": "export function ClinicalChat({"
+      },
+      {
+        "line": 209,
+        "text": "function handleModelValueChange(value: string | null) {"
+      },
+      {
+        "line": 228,
+        "text": "async function selectConversation(conversationId: number) {"
+      },
+      {
+        "line": 248,
+        "text": "async function handleNewConversation() {"
+      },
+      {
+        "line": 263,
+        "text": "function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {"
+      },
+      {
+        "line": 272,
+        "text": "async function send(text: string) {"
+      },
+      {
+        "line": 342,
+        "text": "function handleSubmit(event: FormEvent) {"
+      },
+      {
+        "line": 350,
+        "text": "async function handleCopy(index: number, content: string) {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/patients/voice-note-actions.tsx",
+    "sha256": "7d0c7784fe0d8ba2456ead9dc5061381afe9592309f3b342760eb732b823e3e5",
+    "lines": 566,
+    "symbols": [
+      {
+        "line": 45,
+        "text": "function supportedMimeType(): string {"
+      },
+      {
+        "line": 63,
+        "text": "export function AddVoiceNoteButton({ patientId }: { patientId: number }) {"
+      },
+      {
+        "line": 101,
+        "text": "function stopTimer() {"
+      },
+      {
+        "line": 108,
+        "text": "async function startRecording() {"
+      },
+      {
+        "line": 144,
+        "text": "function stopRecording() {"
+      },
+      {
+        "line": 150,
+        "text": "async function handleSubmit(event: FormEvent) {"
+      },
+      {
+        "line": 304,
+        "text": "function CreateNoteFromVoiceDialog({"
+      },
+      {
+        "line": 329,
+        "text": "async function handleSubmit(event: FormEvent) {"
+      },
+      {
+        "line": 410,
+        "text": "export function ViewCleanedNoteButton({ voiceNote }: { voiceNote: VoiceNote }) {"
+      },
+      {
+        "line": 446,
+        "text": "export function ViewTranscriptButton({ voiceNote }: { voiceNote: VoiceNote }) {"
+      },
+      {
+        "line": 479,
+        "text": "export function VoiceNoteRowActions({ voiceNote }: { voiceNote: VoiceNote }) {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/patients/document-actions.tsx",
+    "sha256": "f3aa655352a9518e9cacc40e9db723bbeb8a552e9fe662d3a2f147f50069464b",
+    "lines": 264,
+    "symbols": [
+      {
+        "line": 39,
+        "text": "export function AddDocumentButton({ patientId }: { patientId: number }) {"
+      },
+      {
+        "line": 59,
+        "text": "async function handleSubmit(event: FormEvent) {"
+      },
+      {
+        "line": 176,
+        "text": "export function ViewExtractedTextButton({ document }: { document: Document }) {"
+      },
+      {
+        "line": 211,
+        "text": "export function DocumentRowActions({ document }: { document: Document }) {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/patients/medication-actions.tsx",
+    "sha256": "7c62a65533451fc265d1caa5017dfb7c0a883bcaf8b543bd137b2fa571bfe37b",
+    "lines": 458,
+    "symbols": [
+      {
+        "line": 45,
+        "text": "function SafetySection({"
+      },
+      {
+        "line": 67,
+        "text": "function MedicationFormDialog({"
+      },
+      {
+        "line": 113,
+        "text": "async function runSafetyCheck() {"
+      },
+      {
+        "line": 135,
+        "text": "async function handleSubmit(event: FormEvent) {"
+      },
+      {
+        "line": 363,
+        "text": "export function AddMedicationButton({ patientId }: { patientId: number }) {"
+      },
+      {
+        "line": 381,
+        "text": "export function MedicationRowActions({"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/app/login/page.tsx",
+    "sha256": "73542d0bd8cc97000041146a1d8e5521474df6a8e3e10a65e02f0b900b4da602",
+    "lines": 168,
+    "symbols": [
+      {
+        "line": 31,
+        "text": "function switchMode(next: \"login\" | \"register\") {"
+      },
+      {
+        "line": 36,
+        "text": "async function handleSubmit(event: FormEvent) {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/app/globals.css",
+    "sha256": "81f12c2f5395fef243e757a27d2e0839dfa16673ec6a121cde7eabc6ac4e6c9f",
+    "lines": 233,
+    "symbols": []
+  },
+  {
+    "path": "frontend/src/components/patients/summary/summary-view.tsx",
+    "sha256": "f689a7558e9d4d11d342af425412a26c857f2ce62dcac599c6239b67370e0441",
+    "lines": 484,
+    "symbols": [
+      {
+        "line": 48,
+        "text": "function ViewAllLink({"
+      },
+      {
+        "line": 66,
+        "text": "function flagClass(flag: ResultFlag | null): string {"
+      },
+      {
+        "line": 79,
+        "text": "function severityTextClass(severity: AllergySeverity): string {"
+      },
+      {
+        "line": 90,
+        "text": "function documentIcon(docType: DocumentType) {"
+      },
+      {
+        "line": 107,
+        "text": "function CriticalAlerts({ allergies }: { allergies: Allergy[] }) {"
+      },
+      {
+        "line": 177,
+        "text": "function ActiveProblems({"
+      },
+      {
+        "line": 227,
+        "text": "function AllergyList({"
+      },
+      {
+        "line": 271,
+        "text": "function ActiveMedications({"
+      },
+      {
+        "line": 332,
+        "text": "function RecentLabs({"
+      },
+      {
+        "line": 405,
+        "text": "function RecentDocuments({"
+      },
+      {
+        "line": 462,
+        "text": "export function SummaryView({"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/patients/workspace-tabs.tsx",
+    "sha256": "9aeaff8f65cd676ae8089e29dd1e7af6fdeef74429f792a9bea3142c7e3ca3ca",
+    "lines": 72,
+    "symbols": [
+      {
+        "line": 16,
+        "text": "export function parseWorkspaceTab("
+      },
+      {
+        "line": 31,
+        "text": "export function WorkspaceTabs({"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/patients/copilot/evidence-list.tsx",
+    "sha256": "be64a784630edb69481b188c596418cb1fd0c38bee7af0c3c5597475c9d296b3",
+    "lines": 116,
+    "symbols": [
+      {
+        "line": 63,
+        "text": "export function EvidenceList({ patientId, evidence }: EvidenceListProps) {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/patients/copilot/answer-text.tsx",
+    "sha256": "cc0508b4562d31050424bf05b9c9ef12cd55698818d0dc56b15681a5d125591b",
+    "lines": 84,
+    "symbols": [
+      {
+        "line": 17,
+        "text": "function parseBlocks(content: string): Block[] {"
+      },
+      {
+        "line": 42,
+        "text": "export function AnswerText({ content }: { content: string }) {"
+      }
+    ]
+  },
+  {
+    "path": "backend/app/api/v1/routes/documents.py",
+    "sha256": "eee165dafa3a75d1e4df0ba45d38e6e5efdf8e97e437ad604bf1afb8f64f9846",
+    "lines": 376,
+    "symbols": [
+      {
+        "line": 67,
+        "text": "def _get_document_or_404("
+      },
+      {
+        "line": 79,
+        "text": "@router.post("
+      },
+      {
+        "line": 98,
+        "text": "async def upload_document("
+      },
+      {
+        "line": 175,
+        "text": "@router.get("
+      },
+      {
+        "line": 182,
+        "text": "def list_documents("
+      },
+      {
+        "line": 194,
+        "text": "@router.get("
+      },
+      {
+        "line": 200,
+        "text": "def get_document("
+      },
+      {
+        "line": 208,
+        "text": "@router.post("
+      },
+      {
+        "line": 223,
+        "text": "def reextract_document("
+      },
+      {
+        "line": 239,
+        "text": "@router.post("
+      },
+      {
+        "line": 257,
+        "text": "def analyze_document_route("
+      },
+      {
+        "line": 291,
+        "text": "@router.get("
+      },
+      {
+        "line": 304,
+        "text": "def download_document("
+      },
+      {
+        "line": 320,
+        "text": "@router.patch("
+      },
+      {
+        "line": 327,
+        "text": "def update_document("
+      },
+      {
+        "line": 341,
+        "text": "@router.delete("
+      },
+      {
+        "line": 348,
+        "text": "def delete_document("
+      }
+    ]
+  },
+  {
+    "path": "backend/app/api/v1/routes/conversations.py",
+    "sha256": "56bb55819ff8c51b17cc2bb4c432d7170da939d617814e3081b995aa98fd2980",
+    "lines": 302,
+    "symbols": [
+      {
+        "line": 54,
+        "text": "def _get_conversation_or_404("
+      },
+      {
+        "line": 67,
+        "text": "def _derive_title(content: str) -> str:"
+      },
+      {
+        "line": 75,
+        "text": "@router.post("
+      },
+      {
+        "line": 87,
+        "text": "def create_conversation("
+      },
+      {
+        "line": 102,
+        "text": "@router.get("
+      },
+      {
+        "line": 109,
+        "text": "def list_conversations("
+      },
+      {
+        "line": 121,
+        "text": "@router.get("
+      },
+      {
+        "line": 130,
+        "text": "def get_conversation("
+      },
+      {
+        "line": 149,
+        "text": "@router.post("
+      },
+      {
+        "line": 174,
+        "text": "def send_conversation_message("
+      },
+      {
+        "line": 284,
+        "text": "@router.delete("
+      },
+      {
+        "line": 293,
+        "text": "def delete_conversation("
+      }
+    ]
+  },
+  {
+    "path": "backend/app/api/v1/routes/ai_medication_safety.py",
+    "sha256": "f702cb0f8bb78d71dccaa165f41baa637190c9a170c07d73aefc33f724ffbfdd",
+    "lines": 103,
+    "symbols": [
+      {
+        "line": 42,
+        "text": "@router.post("
+      },
+      {
+        "line": 64,
+        "text": "def ai_medication_safety_check("
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/patients/patient-form-dialog.tsx",
+    "sha256": "86b2e7293f744a406a915825aac8f83b23cbcfcb53704da12db53c3162caeba5",
+    "lines": 220,
+    "symbols": [
+      {
+        "line": 39,
+        "text": "export function PatientFormDialog({"
+      },
+      {
+        "line": 71,
+        "text": "async function handleSubmit(event: FormEvent) {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/patients/patient-list-row.tsx",
+    "sha256": "1e65fc39448101abfcb70269db95615a7b82127c97f7cfba6e9d41bf847feb3e",
+    "lines": 116,
+    "symbols": [
+      {
+        "line": 22,
+        "text": "export function PatientListRow({"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/shared/confirm-dialog.tsx",
+    "sha256": "8625815b427e1e952df89ccfb439559bab9669ab6b3d0d7b6b11981261518dbf",
+    "lines": 83,
+    "symbols": [
+      {
+        "line": 26,
+        "text": "export function ConfirmDialog({"
+      },
+      {
+        "line": 38,
+        "text": "async function handleConfirm() {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/patients/patient-identity-bar.tsx",
+    "sha256": "190698831263abd3f3321405718332b0bb528a1a6898555d0168e9e371649186",
+    "lines": 91,
+    "symbols": [
+      {
+        "line": 23,
+        "text": "export function PatientIdentityBar({"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/patients/condition-actions.tsx",
+    "sha256": "13380a4a7a99372b8718cad520e700c4ce85ffa4dde5cf034443519e244dfeae",
+    "lines": 261,
+    "symbols": [
+      {
+        "line": 34,
+        "text": "function ConditionFormDialog({"
+      },
+      {
+        "line": 67,
+        "text": "async function handleSubmit(event: FormEvent) {"
+      },
+      {
+        "line": 192,
+        "text": "export function AddConditionButton({ patientId }: { patientId: number }) {"
+      },
+      {
+        "line": 210,
+        "text": "export function ConditionRowActions({"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/patients/allergy-actions.tsx",
+    "sha256": "51de9ec6e42886c0a7bd6e009a6932ba522b1f9837063e7b7a49dec1f30afce7",
+    "lines": 231,
+    "symbols": [
+      {
+        "line": 33,
+        "text": "function AllergyFormDialog({"
+      },
+      {
+        "line": 62,
+        "text": "async function handleSubmit(event: FormEvent) {"
+      },
+      {
+        "line": 162,
+        "text": "export function AddAllergyButton({ patientId }: { patientId: number }) {"
+      },
+      {
+        "line": 180,
+        "text": "export function AllergyRowActions({"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/ui/dialog.tsx",
+    "sha256": "2cd96eb73add6ed27e1916cca2137755b8ebfede2b6d1ffe092bce47bbe9d101",
+    "lines": 161,
+    "symbols": [
+      {
+        "line": 10,
+        "text": "function Dialog({ ...props }: DialogPrimitive.Root.Props) {"
+      },
+      {
+        "line": 14,
+        "text": "function DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {"
+      },
+      {
+        "line": 18,
+        "text": "function DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {"
+      },
+      {
+        "line": 22,
+        "text": "function DialogClose({ ...props }: DialogPrimitive.Close.Props) {"
+      },
+      {
+        "line": 26,
+        "text": "function DialogOverlay({"
+      },
+      {
+        "line": 42,
+        "text": "function DialogContent({"
+      },
+      {
+        "line": 83,
+        "text": "function DialogHeader({ className, ...props }: React.ComponentProps<\"div\">) {"
+      },
+      {
+        "line": 93,
+        "text": "function DialogFooter({"
+      },
+      {
+        "line": 120,
+        "text": "function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {"
+      },
+      {
+        "line": 133,
+        "text": "function DialogDescription({"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/components/landing/reveal.tsx",
+    "sha256": "6c64a7cd09e5e14a329739ba5cfebe287dcac86c907c8c02a66666d088c1696b",
+    "lines": 32,
+    "symbols": [
+      {
+        "line": 17,
+        "text": "export function Reveal({ children, className, delay = 0, y = 24 }: RevealProps) {"
+      }
+    ]
+  },
+  {
+    "path": "frontend/src/app/patients/loading.tsx",
+    "sha256": "bd6d37354d97e8e5f3092ecf569e8c78e763e1de6575ac39e3d9037d96d0e5bb",
+    "lines": 67,
+    "symbols": []
+  },
+  {
+    "path": "deploy/docker-compose.prod.yml",
+    "sha256": "aab5dcdef83ff0f6ba0102ab73d125d577e34faaa7026f0edce9e0844349498e",
+    "lines": 152,
+    "symbols": []
+  },
+  {
+    "path": "deploy/nginx/nginx.conf",
+    "sha256": "10b8e3c1b8063587e6fab7df19215d51c17a8f55a7a62cbf2f4edafd12e1d6f3",
+    "lines": 94,
+    "symbols": []
+  },
+  {
+    "path": "frontend/Dockerfile",
+    "sha256": "efa053e6e34d190db10a4ff7fb56e1f9be658f40c1fec9b6276e652d5a33b6f3",
+    "lines": 54,
+    "symbols": []
+  },
+  {
+    "path": "backend/tests/conftest.py",
+    "sha256": "740c39a52d94241b78154ae19cfd9dbf5f0e560f48b3fc8d9dc3b639dc48a3ca",
+    "lines": 110,
+    "symbols": [
+      {
+        "line": 33,
+        "text": "def client() -> TestClient:"
+      },
+      {
+        "line": 39,
+        "text": "def api_client(db_session) -> TestClient:"
+      },
+      {
+        "line": 63,
+        "text": "def _create_test_database_if_missing() -> None:"
+      },
+      {
+        "line": 80,
+        "text": "def db_engine():"
+      },
+      {
+        "line": 97,
+        "text": "def db_session(db_engine):"
+      }
+    ]
+  },
+  {
+    "path": "backend/app/api/v1/dependencies.py",
+    "sha256": "2537eca686efd199e364d3ae891b045b49211f6bf252e8a498742c45eaf08eac",
+    "lines": 87,
+    "symbols": [
+      {
+        "line": 29,
+        "text": "def get_current_user("
+      },
+      {
+        "line": 50,
+        "text": "def user_has_patient_access(db: Session, user: User, patient_id: int) -> bool:"
+      },
+      {
+        "line": 65,
+        "text": "def ensure_patient_access(db: Session, user: User, patient_id: int) -> None:"
+      },
+      {
+        "line": 74,
+        "text": "def patient_from_id("
+      }
+    ]
+  },
+  {
+    "path": "backend/app/services/patient_context.py",
+    "sha256": "9ff20d15184b83030feeaf926cc5a5e87f5500f0f3270984dd7661f2d3d7fc5f",
+    "lines": 277,
+    "symbols": [
+      {
+        "line": 38,
+        "text": "def _as_utc_datetime(value: datetime | date | None, fallback: datetime) -> datetime:"
+      },
+      {
+        "line": 51,
+        "text": "def build_patient_context(db: Session, patient: Patient) -> PatientContextResponse:"
+      },
+      {
+        "line": 137,
+        "text": "def build_timeline(db: Session, patient: Patient) -> list[TimelineItem]:"
+      },
+      {
+        "line": 146,
+        "text": "def add("
+      }
+    ]
+  },
+  {
+    "path": "backend/app/schemas/conversation.py",
+    "sha256": "198e33be1a4f49c40d5cfd2f570cc56215b6700928881e036f69de903891a9da",
+    "lines": 102,
+    "symbols": [
+      {
+        "line": 12,
+        "text": "class ConversationCreate(BaseModel):"
+      },
+      {
+        "line": 20,
+        "text": "class EvidenceItemResponse(BaseModel):"
+      },
+      {
+        "line": 36,
+        "text": "class ConversationMessageResponse(BaseModel):"
+      },
+      {
+        "line": 53,
+        "text": "def _none_becomes_empty(cls, value):"
+      },
+      {
+        "line": 58,
+        "text": "class ConversationResponse(BaseModel):"
+      },
+      {
+        "line": 70,
+        "text": "class ConversationDetailResponse(ConversationResponse):"
+      },
+      {
+        "line": 76,
+        "text": "class ConversationMessageCreate(BaseModel):"
+      },
+      {
+        "line": 97,
+        "text": "class SendMessageResponse(BaseModel):"
+      }
+    ]
+  },
+  {
+    "path": "backend/tests/test_conversations_api.py",
+    "sha256": "0794d5e0736be27fdcf901dc6bf740ca0de2fe14cbcea11dd5ea23ec1c5c0096",
+    "lines": 301,
+    "symbols": [
+      {
+        "line": 19,
+        "text": "class FakeProvider:"
+      },
+      {
+        "line": 20,
+        "text": "def complete(self, *, system, user, history=None):"
+      },
+      {
+        "line": 28,
+        "text": "def fake_provider(monkeypatch):"
+      },
+      {
+        "line": 35,
+        "text": "def make_patient(api_client):"
+      },
+      {
+        "line": 36,
+        "text": "def _make(suffix: str) -> dict:"
+      },
+      {
+        "line": 47,
+        "text": "def _make_conversation(api_client, patient_id: int, title: str | None = None) -> dict:"
+      },
+      {
+        "line": 56,
+        "text": "def _send(api_client, conversation_id: int, content: str, safety: bool = False):"
+      },
+      {
+        "line": 66,
+        "text": "def test_create_conversation_default_title(api_client, make_patient):"
+      },
+      {
+        "line": 74,
+        "text": "def test_create_conversation_custom_title(api_client, make_patient):"
+      },
+      {
+        "line": 80,
+        "text": "def test_create_conversation_unknown_patient_404(api_client):"
+      },
+      {
+        "line": 87,
+        "text": "def test_list_conversations_most_recently_updated_first(api_client, db_session, make_patient):"
+      },
+      {
+        "line": 110,
+        "text": "def test_get_conversation_with_messages_ordered(api_client, make_patient, fake_provider):"
+      },
+      {
+        "line": 128,
+        "text": "def test_get_unknown_conversation_404(api_client):"
+      },
+      {
+        "line": 134,
+        "text": "def test_delete_conversation_cascades_messages(api_client, db_session, make_patient, fake_provider):"
+      },
+      {
+        "line": 153,
+        "text": "def test_send_message_persists_user_and_assistant(api_client, db_session, make_patient, fake_provider):"
+      },
+      {
+        "line": 170,
+        "text": "def test_first_message_derives_deterministic_title(api_client, make_patient, fake_provider):"
+      },
+      {
+        "line": 189,
+        "text": "def test_patient_context_and_history_passed_to_ai(api_client, make_patient, fake_provider):"
+      },
+      {
+        "line": 210,
+        "text": "def test_history_is_capped(api_client, make_patient, fake_provider):"
+      },
+      {
+        "line": 223,
+        "text": "def test_medication_safety_flag_switches_prompt(api_client, make_patient, fake_provider):"
+      },
+      {
+        "line": 241,
+        "text": "def test_ai_failure_keeps_user_message_without_fake_assistant("
+      },
+      {
+        "line": 247,
+        "text": "class FailingProvider:"
+      },
+      {
+        "line": 248,
+        "text": "def complete(self, *, system, user, history=None):"
+      },
+      {
+        "line": 261,
+        "text": "def test_ai_unconfigured_503_user_message_still_persisted("
+      },
+      {
+        "line": 267,
+        "text": "def unavailable():"
+      },
+      {
+        "line": 278,
+        "text": "def test_send_message_validations(api_client, make_patient, fake_provider):"
+      },
+      {
+        "line": 291,
+        "text": "def test_existing_stateless_chat_still_works(api_client, make_patient, fake_provider):"
+      }
+    ]
+  },
+  {
+    "path": "backend/tests/test_evidence_api.py",
+    "sha256": "743daa8dd0a3004f80ada498b791f33cd493db9a5622871e4bdf0dce90de3d6f",
+    "lines": 408,
+    "symbols": [
+      {
+        "line": 31,
+        "text": "def _ai_answer(items: list[str], answer: str = \"پاسخ مبتنی بر پرونده.\") -> str:"
+      },
+      {
+        "line": 35,
+        "text": "class FakeProvider:"
+      },
+      {
+        "line": 38,
+        "text": "def complete(self, *, system, user, history=None):"
+      },
+      {
+        "line": 46,
+        "text": "def fake_provider(monkeypatch):"
+      },
+      {
+        "line": 54,
+        "text": "def make_patient(api_client):"
+      },
+      {
+        "line": 55,
+        "text": "def _make(suffix: str) -> dict:"
+      },
+      {
+        "line": 66,
+        "text": "def _seed_records(api_client, patient_id: int) -> dict:"
+      },
+      {
+        "line": 86,
+        "text": "def _send(api_client, conversation_id: int, content: str, safety: bool = False):"
+      },
+      {
+        "line": 96,
+        "text": "def test_evidence_index_uses_real_record_ids(api_client, db_session, make_patient):"
+      },
+      {
+        "line": 114,
+        "text": "def test_evidence_ids_are_annotated_into_the_ai_context("
+      },
+      {
+        "line": 134,
+        "text": "def test_valid_evidence_accepted_and_enriched(api_client, make_patient, fake_provider):"
+      },
+      {
+        "line": 155,
+        "text": "def test_unknown_and_fabricated_evidence_dropped(api_client, make_patient, fake_provider):"
+      },
+      {
+        "line": 170,
+        "text": "def test_cross_patient_evidence_dropped(api_client, make_patient, fake_provider):"
+      },
+      {
+        "line": 185,
+        "text": "def test_validate_evidence_unit():"
+      },
+      {
+        "line": 199,
+        "text": "def test_parse_evidence_answer_structured_and_prose():"
+      },
+      {
+        "line": 218,
+        "text": "def test_document_evidence_resolves_and_link_is_the_existing_endpoint("
+      },
+      {
+        "line": 260,
+        "text": "def test_lab_evidence_carries_real_source_document("
+      },
+      {
+        "line": 305,
+        "text": "def test_evidence_persists_and_survives_reload(api_client, db_session, make_patient, fake_provider):"
+      },
+      {
+        "line": 332,
+        "text": "def test_old_messages_without_evidence_still_render(api_client, db_session, make_patient, fake_provider):"
+      },
+      {
+        "line": 357,
+        "text": "def test_safety_mode_uses_evidence_safety_prompt(api_client, make_patient, fake_provider):"
+      },
+      {
+        "line": 372,
+        "text": "def test_prompts_compose_existing_ones():"
+      },
+      {
+        "line": 385,
+        "text": "def test_task10_stateless_chat_unchanged(api_client, make_patient, fake_provider):"
+      },
+      {
+        "line": 395,
+        "text": "def test_prose_answer_falls_back_without_evidence(api_client, make_patient, fake_provider):"
+      }
+    ]
+  },
+  {
+    "path": "backend/tests/test_voice_notes_api.py",
+    "sha256": "ee282da084399aa2c4f7f2433b1f3fb55ff6df8cd42543346cc615a831e2e75d",
+    "lines": 292,
+    "symbols": [
+      {
+        "line": 25,
+        "text": "def faked_storage_and_stt(monkeypatch, db_session):"
+      },
+      {
+        "line": 32,
+        "text": "def fake_upload(*, patient_id, file_name, content_type, data, folder=\"documents\"):"
+      },
+      {
+        "line": 47,
+        "text": "def fake_transcribe(*, data, file_name, mime_type, language=\"fa\", diarize=False):"
+      },
+      {
+        "line": 60,
+        "text": "def unavailable_provider():"
+      },
+      {
+        "line": 74,
+        "text": "def make_patient(api_client):"
+      },
+      {
+        "line": 75,
+        "text": "def _make(suffix: str) -> dict:"
+      },
+      {
+        "line": 85,
+        "text": "def _upload(api_client, patient_id: int, files=None, data=None):"
+      },
+      {
+        "line": 96,
+        "text": "def test_upload_then_transcribes_physician_note(api_client, make_patient, faked_storage_and_stt):"
+      },
+      {
+        "line": 117,
+        "text": "def test_upload_doctor_patient_conversation_diarizes("
+      },
+      {
+        "line": 136,
+        "text": "def test_upload_creates_timeline_event(api_client, make_patient, faked_storage_and_stt, db_session):"
+      },
+      {
+        "line": 150,
+        "text": "def test_stt_unavailable_marks_failed(api_client, make_patient, monkeypatch, faked_storage_and_stt):"
+      },
+      {
+        "line": 153,
+        "text": "def broken_transcribe(**kwargs):"
+      },
+      {
+        "line": 169,
+        "text": "def test_upload_validations_and_404s(api_client, make_patient, faked_storage_and_stt):"
+      },
+      {
+        "line": 188,
+        "text": "def test_list_newest_first_and_get_missing(api_client, make_patient, faked_storage_and_stt):"
+      },
+      {
+        "line": 202,
+        "text": "def test_patch_renames_only_title(api_client, make_patient, faked_storage_and_stt):"
+      },
+      {
+        "line": 215,
+        "text": "def test_download_redirects_to_presigned(api_client, make_patient, faked_storage_and_stt):"
+      },
+      {
+        "line": 231,
+        "text": "def test_create_note_from_transcript_keeps_link_and_event("
+      },
+      {
+        "line": 260,
+        "text": "def test_delete_removes_audio_and_event_but_keeps_notes("
+      }
+    ]
+  },
+  {
+    "path": "backend/tests/test_documents_api.py",
+    "sha256": "1f1b5d2f4da473e0f4d38ae3a8583ed135b1bef80dc95186684d714e3c55f062",
+    "lines": 383,
+    "symbols": [
+      {
+        "line": 28,
+        "text": "def uploaded_keys(monkeypatch, db_session):"
+      },
+      {
+        "line": 34,
+        "text": "def fake_upload(*, patient_id, file_name, content_type, data):"
+      },
+      {
+        "line": 62,
+        "text": "def make_patient(api_client):"
+      },
+      {
+        "line": 63,
+        "text": "def _make(suffix: str) -> dict:"
+      },
+      {
+        "line": 73,
+        "text": "def _upload(api_client, patient_id: int, files=None, data=None):"
+      },
+      {
+        "line": 84,
+        "text": "def test_upload_document_returns_201_with_metadata(api_client, make_patient, uploaded_keys):"
+      },
+      {
+        "line": 107,
+        "text": "def test_upload_defaults_title_to_file_name(api_client, make_patient, uploaded_keys):"
+      },
+      {
+        "line": 116,
+        "text": "def test_upload_creates_timeline_event(api_client, make_patient, db_session, uploaded_keys):"
+      },
+      {
+        "line": 132,
+        "text": "def test_upload_rejects_disallowed_mime_type(api_client, make_patient, uploaded_keys):"
+      },
+      {
+        "line": 146,
+        "text": "def test_upload_rejects_empty_file(api_client, make_patient, uploaded_keys):"
+      },
+      {
+        "line": 158,
+        "text": "def test_upload_rejects_oversized_file(api_client, make_patient, uploaded_keys, monkeypatch):"
+      },
+      {
+        "line": 171,
+        "text": "def test_upload_for_missing_patient_returns_404(api_client, uploaded_keys):"
+      },
+      {
+        "line": 178,
+        "text": "def test_upload_returns_503_when_storage_fails(api_client, make_patient, monkeypatch):"
+      },
+      {
+        "line": 181,
+        "text": "def broken_upload(**kwargs):"
+      },
+      {
+        "line": 195,
+        "text": "def test_list_documents_scoped_and_newest_first(api_client, make_patient, uploaded_keys):"
+      },
+      {
+        "line": 209,
+        "text": "def test_get_document_metadata_and_missing(api_client, make_patient, uploaded_keys):"
+      },
+      {
+        "line": 225,
+        "text": "def test_download_redirects_to_presigned_url(api_client, make_patient, uploaded_keys):"
+      },
+      {
+        "line": 241,
+        "text": "def test_patch_document_metadata(api_client, make_patient, uploaded_keys):"
+      },
+      {
+        "line": 257,
+        "text": "def test_patch_missing_document_returns_404(api_client):"
+      },
+      {
+        "line": 268,
+        "text": "def test_delete_document_removes_metadata_object_and_event("
+      },
+      {
+        "line": 287,
+        "text": "def test_delete_missing_document_returns_404(api_client):"
+      },
+      {
+        "line": 296,
+        "text": "def test_upload_response_starts_as_pending_then_extracts(api_client, make_patient, uploaded_keys):"
+      },
+      {
+        "line": 310,
+        "text": "def test_upload_text_file_extracts_inline(api_client, make_patient, uploaded_keys):"
+      },
+      {
+        "line": 324,
+        "text": "def test_upload_pdf_with_text_layer_extracts(api_client, make_patient, uploaded_keys):"
+      },
+      {
+        "line": 338,
+        "text": "def test_storage_outage_during_extraction_marks_failed(api_client, make_patient, uploaded_keys, monkeypatch):"
+      },
+      {
+        "line": 342,
+        "text": "def broken_download(key):"
+      },
+      {
+        "line": 355,
+        "text": "def test_reextract_endpoint_and_404s(api_client, make_patient, uploaded_keys, monkeypatch):"
+      }
+    ]
+  },
+  {
+    "path": "backend/tests/test_patient_access_control.py",
+    "sha256": "7b58c3218a6917926be669c259ac5b13ddc7f3084faffba98c0abe9a756dfc3b",
+    "lines": 346,
+    "symbols": [
+      {
+        "line": 26,
+        "text": "class FakeProvider:"
+      },
+      {
+        "line": 29,
+        "text": "def complete(self, *, system, user, history=None):"
+      },
+      {
+        "line": 49,
+        "text": "class FakeMCP:"
+      },
+      {
+        "line": 50,
+        "text": "def __init__(self):"
+      },
+      {
+        "line": 53,
+        "text": "def call_tool(self, name, arguments):"
+      },
+      {
+        "line": 59,
+        "text": "def auth_client(db_session, monkeypatch):"
+      },
+      {
+        "line": 73,
+        "text": "def users(db_session):"
+      },
+      {
+        "line": 92,
+        "text": "def patients(db_session, users):"
+      },
+      {
+        "line": 104,
+        "text": "def _login(client, email, password):"
+      },
+      {
+        "line": 113,
+        "text": "def doctor_headers(auth_client, users):"
+      },
+      {
+        "line": 118,
+        "text": "def admin_headers(auth_client, users):"
+      },
+      {
+        "line": 140,
+        "text": "def test_doctor_allowed_on_assigned(auth_client, patients, doctor_headers, path, query):"
+      },
+      {
+        "line": 146,
+        "text": "def test_doctor_forbidden_on_other(auth_client, patients, doctor_headers, path, query):"
+      },
+      {
+        "line": 152,
+        "text": "def test_admin_allowed_everywhere("
+      },
+      {
+        "line": 163,
+        "text": "def test_chat_allowed_for_assigned_not_for_other(auth_client, patients, doctor_headers):"
+      },
+      {
+        "line": 178,
+        "text": "def test_ai_medication_safety_respects_access(auth_client, patients, doctor_headers):"
+      },
+      {
+        "line": 193,
+        "text": "def test_agent_route_respects_access_before_mcp(auth_client, patients, doctor_headers):"
+      },
+      {
+        "line": 211,
+        "text": "def _make_document(db_session, patient_id, key):"
+      },
+      {
+        "line": 226,
+        "text": "def test_document_download_authorized_before_presigned("
+      },
+      {
+        "line": 247,
+        "text": "def test_document_metadata_and_delete_respect_access("
+      },
+      {
+        "line": 261,
+        "text": "def test_conversation_flat_routes_respect_access("
+      },
+      {
+        "line": 304,
+        "text": "def test_voice_note_flat_route_respects_access("
+      },
+      {
+        "line": 324,
+        "text": "def test_patient_list_scoped_by_role(auth_client, patients, doctor_headers, admin_headers):"
+      },
+      {
+        "line": 331,
+        "text": "def test_doctor_created_patient_is_auto_assigned("
+      }
+    ]
+  },
+  {
+    "path": "backend/app/api/v1/routes/auth.py",
+    "sha256": "ee5087a6d5db88556d1d4f037d0de5e2af56ca4ea607a741853c3b36e1e3c25c",
+    "lines": 108,
+    "symbols": [
+      {
+        "line": 36,
+        "text": "@router.post("
+      },
+      {
+        "line": 46,
+        "text": "def register(payload: UserRegister, db: Session = Depends(get_db)) -> User:"
+      },
+      {
+        "line": 72,
+        "text": "@router.post("
+      },
+      {
+        "line": 80,
+        "text": "def login(payload: UserLogin, db: Session = Depends(get_db)) -> TokenResponse:"
+      },
+      {
+        "line": 100,
+        "text": "@router.get("
+      },
+      {
+        "line": 106,
+        "text": "def me(current_user: User = Depends(get_current_user)) -> User:"
+      }
+    ]
+  },
+  {
+    "path": "backend/app/api/v1/routes/auth_otp.py",
+    "sha256": "cff64fc066cedf7810710707533fc772ab848188311d4528557174197d319c67",
+    "lines": 172,
+    "symbols": [
+      {
+        "line": 43,
+        "text": "class OtpRequestPayload(BaseModel):"
+      },
+      {
+        "line": 49,
+        "text": "class OtpVerifyPayload(BaseModel):"
+      },
+      {
+        "line": 54,
+        "text": "@router.post("
+      },
+      {
+        "line": 71,
+        "text": "def request_otp("
+      },
+      {
+        "line": 126,
+        "text": "@router.post("
+      },
+      {
+        "line": 135,
+        "text": "def verify_otp(payload: OtpVerifyPayload, db: Session = Depends(get_db)) -> TokenResponse:"
+      }
+    ]
+  },
+  {
+    "path": "backend/app/api/v1/routes/patients.py",
+    "sha256": "bc2c87f8fcffeab6613a6432b88e549c3e813ded7bf34c7a747e9f450521f437",
+    "lines": 281,
+    "symbols": [
+      {
+        "line": 55,
+        "text": "@router.post("
+      },
+      {
+        "line": 62,
+        "text": "def create_patient("
+      },
+      {
+        "line": 86,
+        "text": "@router.get(\"\", response_model=PatientListResponse, summary=\"List patients\")"
+      },
+      {
+        "line": 87,
+        "text": "def list_patients("
+      },
+      {
+        "line": 119,
+        "text": "@router.get("
+      },
+      {
+        "line": 125,
+        "text": "def get_patient(patient: Patient = Depends(patient_from_id)) -> Patient:"
+      },
+      {
+        "line": 129,
+        "text": "@router.patch("
+      },
+      {
+        "line": 135,
+        "text": "def update_patient("
+      },
+      {
+        "line": 154,
+        "text": "@router.delete("
+      },
+      {
+        "line": 160,
+        "text": "def delete_patient("
+      },
+      {
+        "line": 168,
+        "text": "@router.get("
+      },
+      {
+        "line": 181,
+        "text": "def get_patient_context("
+      },
+      {
+        "line": 188,
+        "text": "@router.get("
+      },
+      {
+        "line": 200,
+        "text": "def get_patient_timeline("
+      },
+      {
+        "line": 208,
+        "text": "@router.get("
+      },
+      {
+        "line": 219,
+        "text": "def get_patient_overview("
+      }
+    ]
+  },
+  {
+    "path": "backend/app/api/v1/routes/voice_notes.py",
+    "sha256": "a58bfceb49a9d5f29df2cce8ea8d16ed03ad658bf2d2331c6874679e7e8f4053",
+    "lines": 369,
+    "symbols": [
+      {
+        "line": 73,
+        "text": "def _get_voice_note_or_404("
+      },
+      {
+        "line": 86,
+        "text": "@router.post("
+      },
+      {
+        "line": 108,
+        "text": "async def upload_voice_note("
+      },
+      {
+        "line": 185,
+        "text": "@router.get("
+      },
+      {
+        "line": 192,
+        "text": "def list_voice_notes("
+      },
+      {
+        "line": 204,
+        "text": "@router.get("
+      },
+      {
+        "line": 210,
+        "text": "def get_voice_note("
+      },
+      {
+        "line": 218,
+        "text": "@router.get("
+      },
+      {
+        "line": 228,
+        "text": "def download_voice_note("
+      },
+      {
+        "line": 244,
+        "text": "@router.patch("
+      },
+      {
+        "line": 251,
+        "text": "def update_voice_note("
+      },
+      {
+        "line": 265,
+        "text": "@router.post("
+      },
+      {
+        "line": 275,
+        "text": "def retranscribe_voice_note("
+      },
+      {
+        "line": 291,
+        "text": "@router.post("
+      },
+      {
+        "line": 304,
+        "text": "def create_note_from_transcript("
+      },
+      {
+        "line": 336,
+        "text": "@router.delete("
+      },
+      {
+        "line": 343,
+        "text": "def delete_voice_note("
+      }
+    ]
+  },
+  {
+    "path": "backend/app/api/v1/routes/medication_safety.py",
+    "sha256": "887fb07b567c133bb7bf34c601effcae5bdc33cdab2efabe8b5af994791ccc86",
+    "lines": 161,
+    "symbols": [
+      {
+        "line": 52,
+        "text": "@router.post("
+      },
+      {
+        "line": 72,
+        "text": "def check_patient_medication("
+      },
+      {
+        "line": 133,
+        "text": "def _explain_warnings(warnings: list[SafetyWarning]) -> str | None:"
+      }
+    ]
+  },
+  {
+    "path": "backend/app/services/ai.py",
+    "sha256": "9c1e727dc8c29ef63f430cf0a73edf48dedd291f3987c7b8f73d1eddc2dfdd4f",
+    "lines": 437,
+    "symbols": [
+      {
+        "line": 39,
+        "text": "class AIError(Exception):"
+      },
+      {
+        "line": 43,
+        "text": "class AIUnavailableError(AIError):"
+      },
+      {
+        "line": 47,
+        "text": "class AIInvalidSelectionError(AIError):"
+      },
+      {
+        "line": 69,
+        "text": "class LLMProvider(Protocol):"
+      },
+      {
+        "line": 72,
+        "text": "def complete("
+      },
+      {
+        "line": 81,
+        "text": "def _post_with_retries("
+      },
+      {
+        "line": 104,
+        "text": "def _log_request(provider: str, method: str, url: str, *, model: str, key_present: bool) -> None:"
+      },
+      {
+        "line": 112,
+        "text": "def _log_response(provider: str, response: httpx.Response) -> None:"
+      },
+      {
+        "line": 123,
+        "text": "def _http_client(timeout: float, proxy: str | None) -> httpx.Client:"
+      },
+      {
+        "line": 130,
+        "text": "def _snippet(text: str, limit: int = 200) -> str:"
+      },
+      {
+        "line": 134,
+        "text": "def _looks_like_json(response: httpx.Response, body_text: str) -> bool:"
+      },
+      {
+        "line": 139,
+        "text": "class OpenAICompatibleProvider:"
+      },
+      {
+        "line": 142,
+        "text": "def __init__("
+      },
+      {
+        "line": 161,
+        "text": "def complete("
+      },
+      {
+        "line": 224,
+        "text": "class OpenRouterProvider(OpenAICompatibleProvider):"
+      },
+      {
+        "line": 231,
+        "text": "def __init__("
+      },
+      {
+        "line": 250,
+        "text": "class GeminiProvider:"
+      },
+      {
+        "line": 258,
+        "text": "def __init__("
+      },
+      {
+        "line": 271,
+        "text": "def complete("
+      },
+      {
+        "line": 350,
+        "text": "def _key_for(provider_id: str, settings) -> str:"
+      },
+      {
+        "line": 357,
+        "text": "def build_provider("
+      },
+      {
+        "line": 402,
+        "text": "def get_provider() -> LLMProvider:"
+      },
+      {
+        "line": 410,
+        "text": "def reset_provider_cache() -> None:"
+      },
+      {
+        "line": 416,
+        "text": "def _trim_text(value: str | None, limit: int = _MAX_TEXT_FIELD_CHARS) -> str | None:"
+      },
+      {
+        "line": 422,
+        "text": "def build_user_message(context_dict: dict, question: str) -> str:"
+      }
+    ]
+  },
+  {
+    "path": "backend/app/services/stt.py",
+    "sha256": "b1cf3ebf1c15938955dcad74c6977bf273544152a6d5d32311935cec58261777",
+    "lines": 604,
+    "symbols": [
+      {
+        "line": 47,
+        "text": "class TranscriptionError(Exception):"
+      },
+      {
+        "line": 51,
+        "text": "class SttUnavailableError(TranscriptionError):"
+      },
+      {
+        "line": 58,
+        "text": "def _client() -> httpx.Client:"
+      },
+      {
+        "line": 66,
+        "text": "class SpeechToTextProvider(Protocol):"
+      },
+      {
+        "line": 69,
+        "text": "def transcribe("
+      },
+      {
+        "line": 80,
+        "text": "def format_transcript_json(payload: dict) -> str:"
+      },
+      {
+        "line": 105,
+        "text": "class SpeechmaticsProvider:"
+      },
+      {
+        "line": 108,
+        "text": "def __init__(self, *, api_key: str):"
+      },
+      {
+        "line": 115,
+        "text": "def transcribe("
+      },
+      {
+        "line": 198,
+        "text": "def get_stt_provider() -> SpeechToTextProvider:"
+      },
+      {
+        "line": 239,
+        "text": "def _ffprobe_duration(path: Path) -> float | None:"
+      },
+      {
+        "line": 263,
+        "text": "def _ffmpeg_convert(path: Path, output: Path, *, start: float | None = None,"
+      },
+      {
+        "line": 277,
+        "text": "def _cleanup(paths: list[Path]) -> None:"
+      },
+      {
+        "line": 286,
+        "text": "def _mkstemp_path(*, suffix: str) -> Path:"
+      },
+      {
+        "line": 293,
+        "text": "def _sr_recognize(recognizer, audio_data, language_code: str) -> str:"
+      },
+      {
+        "line": 300,
+        "text": "def _sr_record(recognizer, wav_path: Path):"
+      },
+      {
+        "line": 308,
+        "text": "class GoogleSpeechProvider:"
+      },
+      {
+        "line": 317,
+        "text": "def __init__(self):"
+      },
+      {
+        "line": 325,
+        "text": "def _install_proxy(self):"
+      },
+      {
+        "line": 343,
+        "text": "def _restore_proxy():"
+      },
+      {
+        "line": 348,
+        "text": "def transcribe("
+      },
+      {
+        "line": 436,
+        "text": "class OpenRouterSTTProvider:"
+      },
+      {
+        "line": 439,
+        "text": "def __init__(self):"
+      },
+      {
+        "line": 447,
+        "text": "def transcribe("
+      },
+      {
+        "line": 533,
+        "text": "def _provider_by_name(name: str) -> SpeechToTextProvider:"
+      },
+      {
+        "line": 549,
+        "text": "def transcribe_audio("
+      }
+    ]
+  },
+  {
+    "path": "backend/app/services/evidence.py",
+    "sha256": "72844ca861be079a8e1e36834089d936ce40576a7408a8bbf1b1898932c4651f",
+    "lines": 238,
+    "symbols": [
+      {
+        "line": 45,
+        "text": "class EvidenceItem(BaseModel):"
+      },
+      {
+        "line": 62,
+        "text": "def _describe(source_type: str, item: dict) -> str:"
+      },
+      {
+        "line": 89,
+        "text": "def _document_id_for(source_type: str, item: dict) -> int | None:"
+      },
+      {
+        "line": 98,
+        "text": "def build_evidence_index(context_dict: dict) -> dict[str, dict]:"
+      },
+      {
+        "line": 120,
+        "text": "def annotate_context(context_dict: dict) -> None:"
+      },
+      {
+        "line": 167,
+        "text": "def parse_evidence_answer(raw: str) -> tuple[str, list[str]]:"
+      },
+      {
+        "line": 207,
+        "text": "def validate_evidence("
+      }
+    ]
+  },
+  {
+    "path": "backend/app/services/documents.py",
+    "sha256": "ccc4dfd7643d9e4f8a31696ea4ed4af51efbd5155414e7907d0afff9c191a88d",
+    "lines": 72,
+    "symbols": [
+      {
+        "line": 21,
+        "text": "def process_document(document_id: int, db: Session | None = None) -> None:"
+      },
+      {
+        "line": 35,
+        "text": "def _process(db: Session, document_id: int) -> None:"
+      }
+    ]
+  },
+  {
+    "path": "backend/app/services/document_analysis.py",
+    "sha256": "22c24dabd83ed41e87dbc13f94b4303cfad589a3b4a3415b68abd3791ed60b4b",
+    "lines": 89,
+    "symbols": [
+      {
+        "line": 47,
+        "text": "def build_analysis_message(document: Document) -> str:"
+      },
+      {
+        "line": 59,
+        "text": "def analyze_document(document: Document, db: Session) -> Document:"
+      },
+      {
+        "line": 84,
+        "text": "def mark_analysis_failed(document: Document, db: Session) -> None:"
+      }
+    ]
+  },
+  {
+    "path": "backend/app/services/agent.py",
+    "sha256": "2c51436b597f2edff1a1f01d69954f87593aca8e7d225295b49f2354ae3af8f0",
+    "lines": 327,
+    "symbols": [
+      {
+        "line": 48,
+        "text": "class MCPUnavailableError(Exception):"
+      },
+      {
+        "line": 52,
+        "text": "class MCPToolError(Exception):"
+      },
+      {
+        "line": 62,
+        "text": "class MCPStdioClient:"
+      },
+      {
+        "line": 65,
+        "text": "def __init__(self) -> None:"
+      },
+      {
+        "line": 76,
+        "text": "def _submit(self, coro, timeout: float) -> Any:"
+      },
+      {
+        "line": 79,
+        "text": "def ensure_session(self) -> None:"
+      },
+      {
+        "line": 92,
+        "text": "async def _open(self) -> None:"
+      },
+      {
+        "line": 107,
+        "text": "def list_tools(self) -> list[str]:"
+      },
+      {
+        "line": 112,
+        "text": "def call_tool(self, name: str, arguments: dict[str, Any]) -> Any:"
+      },
+      {
+        "line": 138,
+        "text": "def _result_data(result: Any) -> Any:"
+      },
+      {
+        "line": 157,
+        "text": "def _reset(self) -> None:"
+      },
+      {
+        "line": 162,
+        "text": "def close(self) -> None:"
+      },
+      {
+        "line": 184,
+        "text": "def get_mcp_client() -> MCPStdioClient:"
+      },
+      {
+        "line": 192,
+        "text": "def reset_mcp_client() -> None:"
+      },
+      {
+        "line": 237,
+        "text": "def _extract_json_object(text: str) -> dict:"
+      },
+      {
+        "line": 255,
+        "text": "def run_agent(*, patient: Patient, question: str) -> dict[str, Any]:"
+      }
+    ]
+  },
+  {
+    "path": "backend/app/services/ai_medication_safety.py",
+    "sha256": "6765f88c8d04790ed8f4387483c4c9abdd5acb32383722d93a103ae3704955bc",
+    "lines": 195,
+    "symbols": [
+      {
+        "line": 91,
+        "text": "def build_safety_question("
+      },
+      {
+        "line": 110,
+        "text": "def _extract_json_object(text: str) -> dict:"
+      },
+      {
+        "line": 140,
+        "text": "def _string_list(data: dict, key: str) -> list[str]:"
+      },
+      {
+        "line": 150,
+        "text": "def parse_analysis(raw: str) -> dict:"
+      },
+      {
+        "line": 172,
+        "text": "def analyze_medication_safety("
+      }
+    ]
+  },
+  {
+    "path": "backend/app/schemas/auth.py",
+    "sha256": "c31950c6a4ffe79d4b94ef05272d771cbed9559776bdd5a9b9294d73655aa0ea",
+    "lines": 43,
+    "symbols": [
+      {
+        "line": 10,
+        "text": "class UserRegister(BaseModel):"
+      },
+      {
+        "line": 21,
+        "text": "class UserLogin(BaseModel):"
+      },
+      {
+        "line": 26,
+        "text": "class UserResponse(BaseModel):"
+      },
+      {
+        "line": 40,
+        "text": "class TokenResponse(BaseModel):"
+      }
+    ]
+  },
+  {
+    "path": "backend/app/core/security.py",
+    "sha256": "212f815ff5e1c42ff66a6c319fa9745df0b4e4b88de69967a6ab288fdb213953",
+    "lines": 58,
+    "symbols": [
+      {
+        "line": 19,
+        "text": "def hash_password(plain: str) -> str:"
+      },
+      {
+        "line": 24,
+        "text": "def verify_password(plain: str, password_hash: str) -> bool:"
+      },
+      {
+        "line": 32,
+        "text": "def create_access_token(user: User, *, expires_minutes: int | None = None) -> str:"
+      },
+      {
+        "line": 44,
+        "text": "def decode_access_token(token: str) -> int | None:"
+      }
+    ]
+  },
+  {
+    "path": "frontend/next.config.ts",
+    "sha256": "46cdb0370028cc1d5b74db51bb02802bb410d67833b4ee34a51849d4f51f9f43",
+    "lines": 11,
+    "symbols": []
+  },
+  {
+    "path": "frontend/tsconfig.json",
+    "sha256": "5c51df4c59f4510d8c7dadf07a5c32132228826a3b331da5e286207b4df7ef9c",
+    "lines": 35,
+    "symbols": []
+  }
+]

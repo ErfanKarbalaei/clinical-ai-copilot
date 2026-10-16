@@ -1,0 +1,37 @@
+                          نتم هب راتفگ لیدبت و توص متشه لصف                                                      40
+
+           دک ضرف    شیپ .دریگ  یم     STT_PROVIDER                 زا ار  provider        مان  transcribe_audio
+      و دنراد دوجو یلعف یراک لیاف رد         openrouter         و  google        یاهریسم .تسا       speechmatics
+   یحارط نیا .دوش ارجا یلصا ریسم زا سپ دناوت          یم      STT_FALLBACK_PROVIDERS                            ی هریجنز
+                                                                 .دنکیم ادج توص         route     زا ار سیورس باختنا
+     و   confidence        ،اههژاو یدنب  نامز ،قفوم      provider      ی   هسانش .تسا نتم طقف دادرارق ی       هجیتن
+    نتم ،دوش قفوم      fallback        یتقو نیاربانب .دنوش یمن هریخذ       VoiceNote          لدم رد     job     تایئزج
+    هدنیآ رد هدنهد هئارا   metadata         تبث .تسا هتخاس ار نآ ریسم مادک دهد         یمن ناشن ًاموزل هاگیاپ رد ییاهن
+     نتم ای هدنیوگ ی  هرابرد یناسکی نیمضت اه        provider        مامت نینچمه .دراد تیمها یبایدر و یبایزرا یارب
+                                                                                                           .دنرادن یلاخ
+
+                                         Speechmatics رد توص یا                       هتسد شزادرپ .۸-۳
+
+   و  type=transcription          ،   language        اب  job_config        ادتبا   SpeechmaticsProvider
+      diarization=max            ،دوش تساوخرد        diarize      رگا .دزاسیم     operating_point=enhanced
+   ار راک   id     دیاب ۲۰۱ خساپ .دنوریم       POST        /jobs      هب تامیظنت      JSON      و لیاف .دوش  یم هدوزفا
+      ضرف شیپ      deadline        ات هیناث هس ضرف شیپ ی      هلصاف رد    GET       /jobs/{id}        سپس .دشاب هتشاد
+       تسکش      cant_run        ای   error    ،   rejected       و قفوم نایاپ    done       .دوش یم رارکت هیناث دصیس
+                                                                                                                    .تسا
+                                  .دوش یم هتفرگ      format=json-v2          اب /jobs/{id}/transcript          زا نتم
+                رییغت ماگنه و دناوخ یم ار شخب ره         alternative        نیتسخن     format_transcript_json
+  کشزپ درف دنک یمن مولعم ییاهنتهب          S2     ای   S1     بسچرب .دزاس یم بسچرب اب دیدج طخ               speaker
+   ببس      doctor_patient          یدورو .تسا رتشیب ینیبزاب ای تاعلاطا دنمزاین شقن نداد تبسن .رامیب ای تسا
+                                    .دنک یمن لاعف ار نآ      physician_note           ؛دوش یم    diarize       تساوخرد
+   رظتنم هجیتن ات     worker Backend            یلو ،دراد یجراخ سیورس رد ماگمهریغ             job      کی ریسم نیا
+   مه   job      یهسانش و تسین دوجوم          restart      زا سپ     job     یریگیپ یارب لقتسم رادیاپ فص .دنام        یم
+                  تیعضو اب     transcript=None           هب دناوت یم یلاخ خساپ .دوش    یمن تبث      VoiceNote          رد
+  نانچمه نتم تیافک ینیبزاب هب زاین ؛تسا هدش ارجا راک ینعی              completed         .دوش لیدبت     completed
+                                                                                                              .دراد دوجو
+
+               Google web Speech اب راتفگ صیخشت و لیاف یزاس                                          هدامآ .۸-۴
+
+      هدافتسا   recognize_google             و  SpeechRecognition              زا  GoogleSpeechProvider
+     fa-  هب   fa     نابز .تسین سیورس باسح اب           Google Cloud Speech-to-Text                  ریسم نیا ؛دنک یم
+   اب هلاناککت   WAV          هب ار نآ   ffmpeg        و دناوخ یم ار لیاف تدم       ffprobe       .دوشیم تشاگن     IR
+

@@ -1,0 +1,67 @@
+[
+  [
+    "Next.js",
+    "Server and Client Components",
+    "https://nextjs.org/docs/app/getting-started/server-and-client-components"
+  ],
+  [
+    "TypeScript",
+    "Everyday Types",
+    "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html"
+  ],
+  [
+    "MDN",
+    "Using the Fetch API",
+    "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"
+  ],
+  [
+    "React",
+    "useEffect",
+    "https://react.dev/reference/react/useEffect"
+  ],
+  [
+    "MDN",
+    "MediaRecorder",
+    "https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder"
+  ],
+  [
+    "MDN",
+    "MediaDevices getUserMedia",
+    "https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia"
+  ],
+  [
+    "W3C WAI",
+    "Understanding Focus Visible",
+    "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible"
+  ],
+  [
+    "OWASP",
+    "HTML5 Security Cheat Sheet",
+    "https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html"
+  ],
+  [
+    "OWASP",
+    "Session Management Cheat Sheet",
+    "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html"
+  ],
+  [
+    "W3C WAI",
+    "Understanding Use of Color",
+    "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html"
+  ],
+  [
+    "W3C WAI",
+    "Understanding Status Messages",
+    "https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html"
+  ],
+  [
+    "Docker",
+    "Multi-stage builds",
+    "https://docs.docker.com/build/building/multi-stage/"
+  ],
+  [
+    "Nginx",
+    "ngx_http_core_module client_max_body_size",
+    "https://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size"
+  ]
+]

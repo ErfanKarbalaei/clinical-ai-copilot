@@ -1,0 +1,13 @@
+HEAD 56ed4513818268c320e706a61b6d37e3f401e6da
+ M .env.example
+ M backend/app/core/config.py
+ M backend/app/services/stt.py
+ M backend/requirements.txt
+?? .archify/
+?? 0)
+?? backend/tests/test_stt_google_and_openrouter.py
+?? docs/medical-reference-mcp-report-fa.md
+?? report-inputs/
+?? report_builder/
+?? reports/
+?? tmp/

@@ -1,0 +1,132 @@
+
+F:\clinical-ai-copilot\frontend\src\components\patients\allergy-actions.tsx
+  55:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+F:\clinical-ai-copilot\frontend\src\components\patients\allergy-actions.tsx:55:5
+  53 |   useEffect(() => {
+  54 |     if (!open) return;
+> 55 |     setAllergen(allergy?.allergen ?? "");
+     |     ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  56 |     setReaction(allergy?.reaction ?? "");
+  57 |     setSeverity(allergy?.severity ?? "unknown");
+  58 |     setError(null);  react-hooks/set-state-in-effect
+
+F:\clinical-ai-copilot\frontend\src\components\patients\condition-actions.tsx
+  58:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+F:\clinical-ai-copilot\frontend\src\components\patients\condition-actions.tsx:58:5
+  56 |   useEffect(() => {
+  57 |     if (!open) return;
+> 58 |     setName(condition?.name ?? "");
+     |     ^^^^^^^ Avoid calling setState() directly within an effect
+  59 |     setStatus(condition?.status ?? "active");
+  60 |     setOnsetDate(condition?.onset_date ?? "");
+  61 |     setResolvedDate(condition?.resolved_date ?? "");  react-hooks/set-state-in-effect
+
+F:\clinical-ai-copilot\frontend\src\components\patients\document-actions.tsx
+  51:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+F:\clinical-ai-copilot\frontend\src\components\patients\document-actions.tsx:51:5
+  49 |   useEffect(() => {
+  50 |     if (!open) return;
+> 51 |     setFile(null);
+     |     ^^^^^^^ Avoid calling setState() directly within an effect
+  52 |     setTitle("");
+  53 |     setDocType("other");
+  54 |     setError(null);  react-hooks/set-state-in-effect
+
+F:\clinical-ai-copilot\frontend\src\components\patients\medication-actions.tsx
+  98:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+F:\clinical-ai-copilot\frontend\src\components\patients\medication-actions.tsx:98:5
+   96 |   useEffect(() => {
+   97 |     if (!open) return;
+>  98 |     setMedicationName(record?.medication.name ?? "");
+      |     ^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+   99 |     setDosage(record?.dosage ?? "");
+  100 |     setFrequency(record?.frequency ?? "");
+  101 |     setStatus(record?.status ?? "active");  react-hooks/set-state-in-effect
+
+F:\clinical-ai-copilot\frontend\src\components\patients\patient-form-dialog.tsx
+  60:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+F:\clinical-ai-copilot\frontend\src\components\patients\patient-form-dialog.tsx:60:5
+  58 |   useEffect(() => {
+  59 |     if (!open) return;
+> 60 |     setFirstName(patient?.first_name ?? "");
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  61 |     setLastName(patient?.last_name ?? "");
+  62 |     setNationalCode(patient?.national_code ?? "");
+  63 |     setDateOfBirth(patient?.date_of_birth ?? "");  react-hooks/set-state-in-effect
+
+F:\clinical-ai-copilot\frontend\src\components\patients\voice-note-actions.tsx
+   89:5  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+F:\clinical-ai-copilot\frontend\src\components\patients\voice-note-actions.tsx:89:5
+  87 |     recorderRef.current = null;
+  88 |     recordedRef.current = null;
+> 89 |     setRecording(false);
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  90 |     setSeconds(0);
+  91 |     setFile(null);
+  92 |     setMode("record");                                                                react-hooks/set-state-in-effect
+   98:5  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+  323:5  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+F:\clinical-ai-copilot\frontend\src\components\patients\voice-note-actions.tsx:323:5
+  321 |   useEffect(() => {
+  322 |     if (!open) return;
+> 323 |     setTitle(voiceNote.title ?? "یادداشت صوتی");
+      |     ^^^^^^^^ Avoid calling setState() directly within an effect
+  324 |     setContent(voiceNote.cleaned_note ?? voiceNote.transcript ?? "");
+  325 |     setError(null);
+  326 |     setSubmitting(false);  react-hooks/set-state-in-effect
+
+F:\clinical-ai-copilot\frontend\src\lib\api.ts
+  117:7  warning  Do not use `window.location.href` to navigate to internal Next.js pages. Use `redirect()` in the render phase, or `useRouter().push()` in Client Components' event handlers instead. See: https://nextjs.org/docs/messages/no-location-assign-relative-destination  @next/next/no-location-assign-relative-destination
+
+✖ 9 problems (7 errors, 2 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+

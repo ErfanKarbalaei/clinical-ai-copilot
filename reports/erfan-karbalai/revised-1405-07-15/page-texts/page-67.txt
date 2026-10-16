@@ -1,0 +1,37 @@
+                                                     57                              رارقتسا و یزاسهچراپکی نومزآ مهدزای لصف
+
+    false negative         و   true positive      ،   false positive       ،   true negative         ،وراد ینمیا یارب
+           زا یگژیو و    TP+FN         رب میسقت    TP     زا تیساسح .دنیآ تسد هب لقتسم عجرم یویرانس زا دیاب
+      نتشادن .دراد هژیو تیمها بذاک یفنم یاطخ ندوب مک ؛دوش               یم هبساحم      TN+FP          رب میسقت    TN
+   مدع ی  هجیتن ،   AI      ریسم رد .دوش هدرمش        true negative         دیابن ششوپ جراخ مان یارب        warning
+                                                                       .دروخب بسچرب »نمیا« زا ادج دیاب زین تیعطق
+         ات  upload        ،تبث ات   CRUD        ،   upload        :دوش یریگ  هزادنا ادج یاهریسم یارب دیاب ریخأت
+    ؛دنک ناهنپ ار هکبش دنلب ی     هلابند دناوت یم هداس نیگنایم     transcript.        ات توص و خساپ ات لاؤس ،جارختسا
+              تیعضو ،تساوخرد لوط و دادعت لرتنک .دنهد            یم یرتشیب تاعلاطا        timeout        دصرد و اهکدص
+     یریگ هزادنا   settings      رد   timeout        رادقم ای   pytest      یارجا نامز .تسا مزلا لدم و         cache
+                                                                                           .تسین یعقاو       latency
+
+                                                                               هعسوت تخاسریز .۱۱-۵
+
+               و دنک یم ارجا ار    MinIO         و  PostgreSQL           طقف هشیر      docker-compose.yml
+             postgres:17-  ریوصت زا        PostgreSQL          .دنا یلحم هعسوت رد      Frontend        و   Backend
+         healthcheck         و دنراد   volume         ود ره .دنک یم هدافتسا     latest     زا   MinIO         و alpine
+        یارب یژولوپوت نیا .دنوش یم رشتنم نابزیم هب زاس هریخذ و هاگیاپ یاه تروپ لیاف نیا رد .تسا هدش فیرعت
+                            .دنیشنب یرگید یاج یکی حرش دیابن و تسا توافتم                production          لیاف اب هعسوت
+  زونه همانرب   container         دیوگ یم و دهد یم حرش ار هعسوت ی       هلحرم نامه      infra/README.md
+  هدوزفا نزخم هب ًادعب    deploy/docker-compose.prod.yml                    و دیدج یاه     Dockerfile         .درادن دوجو
+   لیاف ره ،رارقتسا شرازگ .دنک یم حلاصا ار نآ دک یسررب هک تسا یدراوم زا تادنتسم یگنهامهان نیا .دنا                   هدش
+              .دمان یمن لوصحم ییاهن تیعضو ار یمیدق              README            و دنکیم یفرعم شدوخ ی          هنماد اب ار
+
+                                                         Frontend و Backend ریوصت .۱۱-۶
+
+      .دنک یم بصن ار یسراف نابز و         Tesseract        و هدش انب   python:3.12-slim            رب  Backend
+            .دوش هدافتسا    dependency           ی هیلا   cache       ات دوش یم یپک دک زا شیپ        requirements
+         اب  root    ریغ    appuser        ربراک .دنوش یم ریوصت دراو اه     script      و اه  app    ،    migration
+      زا   healthcheck          .دراد رارق 0.0.0.0:8000  یور        uvicorn       و دنکیم ارجا ار همانرب رازه     uid
+        یارجا رد    build       قفوم نومزآ ینعم هب تامیظنت نیا دوجو .دنز         یم  /health     تساوخرد       urllib
+                                                                                                           .تسین رضاح
+                اب  lockfile     ،   builder       زا  npm ci       اب   deps       :دراد هلحرم هس     Frontend
+             و   node:24-alpine           هیاپ ریوصت   standalone.         یجورخ اب     runner        و  next build
+           رد   build       ماگنه    NEXT_PUBLIC_API_URL                      .تسا     node      ربراک اب   runtime
+

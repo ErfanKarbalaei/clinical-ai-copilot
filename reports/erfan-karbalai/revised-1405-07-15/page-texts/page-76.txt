@@ -1,0 +1,51 @@
+                                        عجارم و عبانم                                                 66
+
+  هب JavaScript        یسرتسد ثحب عجرم      ]۱۰[     OWASP. HTML5 Security Cheat Sheet.
+                       HttpOnly.        یاراد  cookie       زا هدافتسا و  XSS       رطخ ،  localStorage
+
+      https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

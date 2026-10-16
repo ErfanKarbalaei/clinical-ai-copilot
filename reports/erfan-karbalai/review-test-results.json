@@ -1,0 +1,55 @@
+{
+  "verification_utc": "2026-10-14T09:40:21.162457+00:00",
+  "completed_utc": "2026-10-14T09:41:02.020214+00:00",
+  "python": "3.12.2",
+  "pytest": "8.4.2",
+  "command": [
+    "F:\\clinical-ai-copilot\\.venv\\Scripts\\python.exe",
+    "-B",
+    "F:\\clinical-ai-copilot\\reports\\erfan-karbalai\\review_tests.py"
+  ],
+  "pytest_arguments": [
+    "-v",
+    "F:\\clinical-ai-copilot\\backend\\tests\\test_health.py",
+    "F:\\clinical-ai-copilot\\backend\\tests\\test_cors.py",
+    "F:\\clinical-ai-copilot\\backend\\tests\\test_logging.py",
+    "F:\\clinical-ai-copilot\\backend\\tests\\test_storage_service.py",
+    "F:\\clinical-ai-copilot\\backend\\tests\\test_extraction_service.py",
+    "F:\\clinical-ai-copilot\\backend\\tests\\test_stt_service.py",
+    "F:\\clinical-ai-copilot\\backend\\tests\\test_stt_google_and_openrouter.py",
+    "F:\\clinical-ai-copilot\\backend\\tests\\test_openrouter_provider.py",
+    "-q",
+    "-r",
+    "a",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "F:\\clinical-ai-copilot\\reports\\erfan-karbalai\\review-test-tmp",
+    "--junitxml",
+    "F:\\clinical-ai-copilot\\reports\\erfan-karbalai\\review-unit-tests.xml"
+  ],
+  "exit_code": 1,
+  "stats": {
+    "collected": 61,
+    "passed": 59,
+    "failed": 0,
+    "errors": 2,
+    "skipped": 0
+  },
+  "errors": [
+    {
+      "test": "tests.test_storage_service::test_upload_presign_download_delete_roundtrip",
+      "phase": "error",
+      "reason": "Connection refused at localhost:9000 (MinIO fixture)"
+    },
+    {
+      "test": "tests.test_storage_service::test_storage_key_is_unique_and_sanitized",
+      "phase": "error",
+      "reason": "Connection refused at localhost:9000 (MinIO fixture)"
+    }
+  ],
+  "duration": "36.533",
+  "warnings_summary": [
+    "================= 59 passed, 10 warnings, 2 errors in 36.61s =================="
+  ]
+}

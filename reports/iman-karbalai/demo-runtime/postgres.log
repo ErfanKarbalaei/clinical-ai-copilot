@@ -1,0 +1,26 @@
+2026-10-15 03:58:57.753 +0330 [18300] LOG:  starting PostgreSQL 17.5 on x86_64-windows, compiled by msvc-19.44.35209, 64-bit
+2026-10-15 03:58:57.754 +0330 [18300] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2026-10-15 03:58:57.819 +0330 [18324] LOG:  database system was shut down at 2026-10-15 03:58:45 +0330
+2026-10-15 03:58:57.840 +0330 [18300] LOG:  database system is ready to accept connections
+2026-10-15 03:59:47.235 +0330 [19108] FATAL:  role "clinical_user" does not exist
+2026-10-15 04:03:57.810 +0330 [5824] LOG:  checkpoint starting: time
+2026-10-15 04:05:47.941 +0330 [5824] LOG:  checkpoint complete: wrote 1092 buffers (6.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=109.832 s, sync=0.231 s, total=110.133 s; sync files=409, longest=0.060 s, average=0.001 s; distance=5288 kB, estimate=5288 kB; lsn=0/1A92788, redo lsn=0/1A926F8
+2026-10-15 04:08:57.948 +0330 [5824] LOG:  checkpoint starting: time
+2026-10-15 04:09:00.003 +0330 [5824] LOG:  checkpoint complete: wrote 20 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.928 s, sync=0.037 s, total=2.056 s; sync files=15, longest=0.029 s, average=0.003 s; distance=1 kB, estimate=4759 kB; lsn=0/1A92F00, redo lsn=0/1A92EA8
+2026-10-15 04:18:57.004 +0330 [5824] LOG:  checkpoint starting: time
+2026-10-15 04:18:57.648 +0330 [5824] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.512 s, sync=0.065 s, total=0.644 s; sync files=6, longest=0.061 s, average=0.011 s; distance=1 kB, estimate=4283 kB; lsn=0/1A93598, redo lsn=0/1A93540
+2026-10-15 10:44:43.898 +0330 [18148] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-10-15 10:44:43.898 +0330 [18952] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-10-15 10:44:43.898 +0330 [8940] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-10-15 10:44:43.898 +0330 [3808] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-10-15 10:48:02.577 +0330 [18300] LOG:  received fast shutdown request
+2026-10-15 10:48:02.578 +0330 [18300] LOG:  aborting any active transactions
+2026-10-15 10:48:02.595 +0330 [18300] LOG:  background worker "logical replication launcher" (PID 6252) exited with exit code 1
+2026-10-15 10:48:02.595 +0330 [5824] LOG:  shutting down
+2026-10-15 10:48:02.598 +0330 [5824] LOG:  checkpoint starting: shutdown immediate
+2026-10-15 10:48:02.614 +0330 [5824] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.017 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=3855 kB; lsn=0/1A93648, redo lsn=0/1A93648
+2026-10-15 10:48:02.634 +0330 [18300] LOG:  database system is shut down

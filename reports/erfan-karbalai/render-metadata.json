@@ -1,0 +1,132 @@
+{
+  "word_version": "16.0",
+  "word_pages": 122,
+  "sections": [
+    {
+      "title": "فصل اول مقدمه و معرفی پروژه",
+      "kind": "main",
+      "bookmark": "section_1",
+      "physical_page": 19,
+      "display_page": 11
+    },
+    {
+      "title": "فصل دوم تعریف مسئله و مبانی طراحی",
+      "kind": "main",
+      "bookmark": "section_2",
+      "physical_page": 23,
+      "display_page": 15
+    },
+    {
+      "title": "فصل سوم معماری کلان و جریان داده",
+      "kind": "main",
+      "bookmark": "section_3",
+      "physical_page": 27,
+      "display_page": 19
+    },
+    {
+      "title": "فصل چهارم پیاده‌سازی Backend و مدل داده",
+      "kind": "main",
+      "bookmark": "section_4",
+      "physical_page": 31,
+      "display_page": 23
+    },
+    {
+      "title": "فصل پنجم پرونده بیمار زمینه و تایم‌لاین",
+      "kind": "main",
+      "bookmark": "section_5",
+      "physical_page": 37,
+      "display_page": 29
+    },
+    {
+      "title": "فصل ششم بارگذاری پردازش و تحلیل اسناد",
+      "kind": "main",
+      "bookmark": "section_6",
+      "physical_page": 41,
+      "display_page": 33
+    },
+    {
+      "title": "فصل هفتم مدل زبانی و گفتگوی بالینی",
+      "kind": "main",
+      "bookmark": "section_7",
+      "physical_page": 45,
+      "display_page": 37
+    },
+    {
+      "title": "فصل هشتم صوت و تبدیل گفتار به متن",
+      "kind": "main",
+      "bookmark": "section_8",
+      "physical_page": 51,
+      "display_page": 43
+    },
+    {
+      "title": "فصل نهم ایمنی دارو شواهد و عامل آزمایشی",
+      "kind": "main",
+      "bookmark": "section_9",
+      "physical_page": 57,
+      "display_page": 49
+    },
+    {
+      "title": "فصل دهم احراز هویت امنیت و حریم خصوصی",
+      "kind": "main",
+      "bookmark": "section_10",
+      "physical_page": 63,
+      "display_page": 55
+    },
+    {
+      "title": "فصل یازدهم آزمون یکپارچه‌سازی و استقرار",
+      "kind": "main",
+      "bookmark": "section_11",
+      "physical_page": 67,
+      "display_page": 59
+    },
+    {
+      "title": "فصل دوازدهم خلاصه نتیجه‌گیری و کارهای آینده",
+      "kind": "main",
+      "bookmark": "section_12",
+      "physical_page": 73,
+      "display_page": 65
+    },
+    {
+      "title": "منابع و مراجع",
+      "kind": "references",
+      "bookmark": "section_13",
+      "physical_page": 77,
+      "display_page": 69
+    },
+    {
+      "title": "پیوست الف مرجع مسیرهای واقعی API",
+      "kind": "appendix",
+      "bookmark": "section_14",
+      "physical_page": 79,
+      "display_page": 71
+    },
+    {
+      "title": "پیوست ب فرهنگ داده و روابط پایگاه",
+      "kind": "appendix",
+      "bookmark": "section_15",
+      "physical_page": 87,
+      "display_page": 79
+    },
+    {
+      "title": "پیوست پ تنظیمات و حدود اجرای محیط",
+      "kind": "appendix",
+      "bookmark": "section_16",
+      "physical_page": 103,
+      "display_page": 95
+    },
+    {
+      "title": "پیوست ت قرارداد نمونه و گزیدهٔ کد",
+      "kind": "appendix",
+      "bookmark": "section_17",
+      "physical_page": 109,
+      "display_page": 101
+    },
+    {
+      "title": "پیوست ث مرجع آزمون و سناریوهای تکمیلی",
+      "kind": "appendix",
+      "bookmark": "section_18",
+      "physical_page": 113,
+      "display_page": 105
+    }
+  ]
+}

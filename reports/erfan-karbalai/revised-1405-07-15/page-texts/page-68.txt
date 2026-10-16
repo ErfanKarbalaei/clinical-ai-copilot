@@ -1,0 +1,42 @@
+                        رارقتسا و یزاسهچراپکی نومزآ مهدزای لصف                                                       58
+
+   تادنتسم .دنک یمن ضوع ار           client      ًاموزل  build      زا سپ     env      رییغت و دریگ یم رارق      bundle
+        ریوصت تایئزج ؛]۳ [ دهد یم حیضوت           runtime        تامیظنت و      self-hosting         یهرابرد    Next.js
+                                                                                        .تسا     Dockerfile          زا رضاح
+      باختنا نیا .دوش  یم هدافتسا       MinIO latest          و دنایاهزاب ًاتدمع    Backend         یگتسباو یاه    هخسن
+  ناوت یم یریذپرارکت یارب .درادن ناسکی تیاب ًامازلا فلتخم نامز ود             build       یلو ،دنک  یم رتناسآ ار یرادهگن
+   و یراگزاس تست اب دیاب زین اقترا ره .درک هفاضا ار ریوصت           digest       تبث و هدش  لرتنک      pin     ای   lock
+                                                     package.         قفوم بصن طقف هن ،دوش یسررب            migration
+
+                                                   یزادناهار بیترت و رارقتسا یژولوپوت .۱۱-۷
+
+  و    nginx      ،   frontend      ،   backend        ،   postgres        سیورس جنپ       production          یدنبرکیپ
+      expose        اه سیورس ریاس ؛دنکیم          publish       ار ۴۴۳  و ۸۰  تروپ       nginx       اهنت .دراد   minio
+  طقف    Frontend         یلو ،تسا     MinIO         و هاگیاپ ندش      healthy       رظتنم     Backend          .دنراد یلخاد
+   لکش .دراد سیورس زاغآ         dependency           زین   Nginx       .دهاوخ یم ار     service_started Backend
+                                                                     .دهد یم شیامن ار اه       volume         و هکبش ۱۱-۱
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    رارقتسا  Compose       رد هدش فیرعت یژولوپوت  ۱۱-۱ لکش
+                       .تسا     mc ready        اب   MinIO         و   pg_isready         اب هاگیاپ   healthcheck
+     مامت ندوب هدامآ ربارب     started       طرش .دنک یم یسررب ار        HTTP         خساپ طقف       health Backend
+    بیترت توافت     Docker         تادنتسم .دنک     یمن نیمضت ار      migration         تحص و تسین اه         endpoint
+   و تسین راکدوخ ًادمع         migration         نزخم نیا رد .]۹ [ دهد یم حیضوت ار          healthcheck           و یزادناهار
+                                                                                   .دوش ارجا ادج ی    هلحرم ناونع    هب دیاب
+
+
+
+
+
+

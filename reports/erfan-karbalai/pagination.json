@@ -1,0 +1,1003 @@
+{
+  "word_version": "16.0",
+  "word_pages": 122,
+  "sections": [
+    {
+      "title": "فصل اول مقدمه و معرفی پروژه",
+      "kind": "main",
+      "bookmark": "section_1",
+      "physical_page": 19,
+      "display_page": 11
+    },
+    {
+      "title": "فصل دوم تعریف مسئله و مبانی طراحی",
+      "kind": "main",
+      "bookmark": "section_2",
+      "physical_page": 23,
+      "display_page": 15
+    },
+    {
+      "title": "فصل سوم معماری کلان و جریان داده",
+      "kind": "main",
+      "bookmark": "section_3",
+      "physical_page": 27,
+      "display_page": 19
+    },
+    {
+      "title": "فصل چهارم پیاده‌سازی Backend و مدل داده",
+      "kind": "main",
+      "bookmark": "section_4",
+      "physical_page": 31,
+      "display_page": 23
+    },
+    {
+      "title": "فصل پنجم پرونده بیمار زمینه و تایم‌لاین",
+      "kind": "main",
+      "bookmark": "section_5",
+      "physical_page": 37,
+      "display_page": 29
+    },
+    {
+      "title": "فصل ششم بارگذاری پردازش و تحلیل اسناد",
+      "kind": "main",
+      "bookmark": "section_6",
+      "physical_page": 41,
+      "display_page": 33
+    },
+    {
+      "title": "فصل هفتم مدل زبانی و گفتگوی بالینی",
+      "kind": "main",
+      "bookmark": "section_7",
+      "physical_page": 45,
+      "display_page": 37
+    },
+    {
+      "title": "فصل هشتم صوت و تبدیل گفتار به متن",
+      "kind": "main",
+      "bookmark": "section_8",
+      "physical_page": 51,
+      "display_page": 43
+    },
+    {
+      "title": "فصل نهم ایمنی دارو شواهد و عامل آزمایشی",
+      "kind": "main",
+      "bookmark": "section_9",
+      "physical_page": 57,
+      "display_page": 49
+    },
+    {
+      "title": "فصل دهم احراز هویت امنیت و حریم خصوصی",
+      "kind": "main",
+      "bookmark": "section_10",
+      "physical_page": 63,
+      "display_page": 55
+    },
+    {
+      "title": "فصل یازدهم آزمون یکپارچه‌سازی و استقرار",
+      "kind": "main",
+      "bookmark": "section_11",
+      "physical_page": 67,
+      "display_page": 59
+    },
+    {
+      "title": "فصل دوازدهم خلاصه نتیجه‌گیری و کارهای آینده",
+      "kind": "main",
+      "bookmark": "section_12",
+      "physical_page": 73,
+      "display_page": 65
+    },
+    {
+      "title": "منابع و مراجع",
+      "kind": "references",
+      "bookmark": "section_13",
+      "physical_page": 77,
+      "display_page": 69
+    },
+    {
+      "title": "پیوست الف مرجع مسیرهای واقعی API",
+      "kind": "appendix",
+      "bookmark": "section_14",
+      "physical_page": 79,
+      "display_page": 71
+    },
+    {
+      "title": "پیوست ب فرهنگ داده و روابط پایگاه",
+      "kind": "appendix",
+      "bookmark": "section_15",
+      "physical_page": 87,
+      "display_page": 79
+    },
+    {
+      "title": "پیوست پ تنظیمات و حدود اجرای محیط",
+      "kind": "appendix",
+      "bookmark": "section_16",
+      "physical_page": 103,
+      "display_page": 95
+    },
+    {
+      "title": "پیوست ت قرارداد نمونه و گزیدهٔ کد",
+      "kind": "appendix",
+      "bookmark": "section_17",
+      "physical_page": 109,
+      "display_page": 101
+    },
+    {
+      "title": "پیوست ث مرجع آزمون و سناریوهای تکمیلی",
+      "kind": "appendix",
+      "bookmark": "section_18",
+      "physical_page": 113,
+      "display_page": 105
+    }
+  ],
+  "pdf_pages": 122,
+  "counts": {
+    "main": 51,
+    "appendix": 38,
+    "references": 2,
+    "prelim": 11,
+    "blank": 17,
+    "english": 1,
+    "bismillah_reserved": 1,
+    "defense_placeholder": 1
+  },
+  "substantive_pages": 89,
+  "main_start": 19,
+  "refs_start": 77,
+  "appendix_start": 79,
+  "page_summary": [
+    {
+      "page": 1,
+      "kind": "prelim",
+      "words": 55,
+      "body_words": 56,
+      "head": " \nدانشگاه تهران \n دانشکدگان فارابی \nدانشکده ی مهندسی \nگروه مهندسی کامپیوتر \n طراحی و پیاده سازی دستیار هوشمند بالینی \n(Clinical AI Copilot)\n \n مبتنی بر تلفیق پرونده بیمار و دانش پز"
+    },
+    {
+      "page": 2,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": " \n \n"
+    },
+    {
+      "page": 3,
+      "kind": "bismillah_reserved",
+      "words": 0,
+      "body_words": 0,
+      "head": " \n \n"
+    },
+    {
+      "page": 4,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": " \n \n"
+    },
+    {
+      "page": 5,
+      "kind": "defense_placeholder",
+      "words": 14,
+      "body_words": 14,
+      "head": "صورت\nجلسه\nی داوری \nمحل درج فرم رسمی داوری پس از دریافت از دانشگاه \n \n \n"
+    },
+    {
+      "page": 6,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": " \n \n"
+    },
+    {
+      "page": 7,
+      "kind": "prelim",
+      "words": 270,
+      "body_words": 294,
+      "head": "چکیده \n این پروژه یک نمونه ی دانشگاهی تحت وب برای ثبت و مرور داده های بیمار و استفاده از ابزارهای آماده ی\n هوش مصنوعی است. هسته ی سمت سرور باFastAPI\n \n وPostgreSQL\n اطالعات بالینی،"
+    },
+    {
+      "page": 8,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": ""
+    },
+    {
+      "page": 9,
+      "kind": "prelim",
+      "words": 315,
+      "body_words": 356,
+      "head": " \nفهرست ها \n1 \n \n فهرست مطالب \n فصل اول مقدمه و معرفی پروژه \n................................\n................................\n................................\n...................."
+    },
+    {
+      "page": 10,
+      "kind": "prelim",
+      "words": 321,
+      "body_words": 360,
+      "head": " \n2 فهرست ها\n \n5-1\n \n تجمیع داده بدون تولید اطالعات تازه \n................................\n................................\n................................\n.............\n۲9\n \n5-۲\n"
+    },
+    {
+      "page": 11,
+      "kind": "prelim",
+      "words": 322,
+      "body_words": 345,
+      "head": " \nفهرست ها \n3 \n \n8-5\n \nOpenRouter\n \n برای ورودی صوت \n................................\n................................\n................................\n..............\n \n۴5\n \n8-6\n \n"
+    },
+    {
+      "page": 12,
+      "kind": "prelim",
+      "words": 296,
+      "body_words": 330,
+      "head": " \n4 فهرست ها\n \n11-8\n \nNginx\n و نشانی امضاشده \n................................\n................................\n................................\n.............................\n \n6۲\n"
+    },
+    {
+      "page": 13,
+      "kind": "prelim",
+      "words": 300,
+      "body_words": 332,
+      "head": " \nفهرست ها \n5 \n \nبـ5 حساسیت ها \n................................\n................................\n................................\n................................\n................"
+    },
+    {
+      "page": 14,
+      "kind": "prelim",
+      "words": 23,
+      "body_words": 20,
+      "head": " \n6 فهرست ها\n \nثـ۲ سناریوهای تکمیلی پیشنهادی \n................................\n................................\n................................\n........................\n \n110\n \nثـ"
+    },
+    {
+      "page": 15,
+      "kind": "prelim",
+      "words": 144,
+      "body_words": 162,
+      "head": " \nفهرست ها \n7 \n \nفهرست شکل\nها \n شکل۳-1\n \n معماری سامانه و مرزهای ذخیره و پردازش \n................................\n................................\n.............................\n \n1"
+    },
+    {
+      "page": 16,
+      "kind": "prelim",
+      "words": 262,
+      "body_words": 303,
+      "head": " \n8 فهرست ها\n \n فهرست جدول\nها \n جدول1 \n تقسیم مسئولیت مطابق پروپوزال \n................................\n................................\n................................\n..........."
+    },
+    {
+      "page": 17,
+      "kind": "prelim",
+      "words": 242,
+      "body_words": 302,
+      "head": " \nفهرست ها \n9 \n \n جدول۲8\n \n فیلدهایallergies\n \n................................\n................................\n................................\n................................\n."
+    },
+    {
+      "page": 18,
+      "kind": "blank",
+      "words": 3,
+      "body_words": 0,
+      "head": " \n10 فهرست ها\n \n \n"
+    },
+    {
+      "page": 19,
+      "kind": "main",
+      "words": 474,
+      "body_words": 507,
+      "head": " \n11 \n فصل اول مقدمه و معرفی پروژه \n۱-۱\n \n مسئله و جایگاه پروژه \n پرونده ی بیمار مجموعه ای از داده های هم\nشکل نیست. مشخصات پایه، وضعیت مصرف دارو، حساسیت ،ها\n نتیجه ی آزمایش، تصویر "
+    },
+    {
+      "page": 20,
+      "kind": "main",
+      "words": 365,
+      "body_words": 396,
+      "head": " \n12 \n فصل اول مقدمه و معرفی پروژه\n \nدر مخزن رابط تبادل با سامانه ی واقعی بیمارستان، ورودی استاندارد پرونده ی الکترونیک سالمت یا\nپیاده سازیFHIR\n \n وجود ندارد. پرونده ها از طریقAPI\n"
+    },
+    {
+      "page": 21,
+      "kind": "main",
+      "words": 237,
+      "body_words": 252,
+      "head": " \n فصل اول مقدمه و معرفی پروژه \n13 \n \n۱-۴\n وضعیت بررسی شده و معیار خواندن گزارش \n مبنای فنی گزارش نسخه ی کاری مخزن در زمان بررسی است. آخرینcommit\n مشاهده شده56ed451\n \n است و تغییرا"
+    },
+    {
+      "page": 22,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": ""
+    },
+    {
+      "page": 23,
+      "kind": "main",
+      "words": 452,
+      "body_words": 488,
+      "head": " \n15 \nفصل دوم تعریف مسئله و مبانی طراحی \n۲-۱\n گردش کار بالینی و نیازهای عملکردی \n گردش کار مورد نظر با یافتن یا ایجاد بیمار آغاز می ،شود. پس از ثبت مشخصات، کاربر مشکل بالینی\n حساسی"
+    },
+    {
+      "page": 24,
+      "kind": "main",
+      "words": 371,
+      "body_words": 404,
+      "head": " \n16 \n فصل دوم تعریف مسئله و مبانی طراحی\n \n آزمون پذیری با جدا کردن سرویس های خالص از مسیرهایHTTP\n \n و با قابل جایگزین بودن ارائه دهنده ها\n حاصل می\nشود. موتور قواعد دارویی بدون شبک"
+    },
+    {
+      "page": 25,
+      "kind": "main",
+      "words": 438,
+      "body_words": 475,
+      "head": " \n فصل دوم تعریف مسئله و مبانی طراحی \n17 \n \n و برخی محدودیت های ورودی را تعریف می کند؛ مدلSQLAlchemy\n \n .مسئول نگاشت داده به جدول است\n داشتن دو نمایش جدا باعث می  ًشود مثالpassword"
+    },
+    {
+      "page": 26,
+      "kind": "main",
+      "words": 407,
+      "body_words": 438,
+      "head": " \n18 \n فصل دوم تعریف مسئله و مبانی طراحی\n \n۲-۵\n مدل زبانی و زمینه\nی کنترل شده \n مدل زبانی بزرگ یاLLM\n ، مخففLarge Language Model\n ، در این سامانه یک سرویس آماده ی تولید\n متن است. ب"
+    },
+    {
+      "page": 27,
+      "kind": "main",
+      "words": 284,
+      "body_words": 333,
+      "head": " \n19 \nفصل سوم معماری کالن و جریان داده \n۳-۱\n اجزای اجرا و مسئولیت آن ها \n معماری موجود شاملFrontend\n \n باNext.js\n ،\nBackend\n \n باFastAPI\n ، پایگاهPostgreSQL\n \n و ذخیره ساز\nMinIO\n  "
+    },
+    {
+      "page": 28,
+      "kind": "main",
+      "words": 322,
+      "body_words": 360,
+      "head": " \n20 فصل سوم معماری کالن و جریان داده\n \npatient_from_id\n \n عالوه بر خواندن بیمار، انتساب دسترسی را بررسی می کند. شکل۳-۲\n \n جای بررسی مجوز را\n پیش از ورود به منطق کاربردی نشان می.ده"
+    },
+    {
+      "page": 29,
+      "kind": "main",
+      "words": 395,
+      "body_words": 464,
+      "head": " \nفصل سوم معماری کالن و جریان داده \n21 \n \n می\nدهد سیاست بی اعتبار کردن داده ی مشتق در تمام زیرسامانه ها یکسان نشده است. افزودن نسخه یا\nfingerprint\n \n ورودی می تواند این رابطه را قا"
+    },
+    {
+      "page": 30,
+      "kind": "main",
+      "words": 156,
+      "body_words": 162,
+      "head": " \n22 فصل سوم معماری کالن و جریان داده\n \n محدودیت حجم آپلود پس از خواندن کامل فایل اعمال می شود. این کنترل جلوی ثبت فایل بزرگ را\n می گیرد، اما مصرف حافظه ی اولیه را محدود نمی کند. د"
+    },
+    {
+      "page": 31,
+      "kind": "main",
+      "words": 384,
+      "body_words": 453,
+      "head": " \n23 \nفصل چهارم پیاده سازیBackend\n \n و مدل داده \n۴-۱\n \n ساخت برنامه و سازمان مسیرها \n تابعcreate_app\n \n درbackend/app/main.py\n \n تنظیمات را دریافت می ،کندlogging\n \n را آماده می ساز"
+    },
+    {
+      "page": 32,
+      "kind": "main",
+      "words": 438,
+      "body_words": 511,
+      "head": " \n24 فصل چهارم پیاده سازیBackend\n \n و مدل داده\n \n هنگام ساخت پاسخquery\n \n دیگری ایجاد کند؛ برای داده ی دارو درContext\n \n ازselectinload\n \n استفاده شده\n است. بنابراینschema\n \n فقط م"
+    },
+    {
+      "page": 33,
+      "kind": "main",
+      "words": 248,
+      "body_words": 285,
+      "head": " \nفصل چهارم پیاده سازیBackend\n \n و مدل داده \n25 \n \n مقدم می گذارد و فهرست حساسیت، شدیدترها را. این ترتیب، تصمیم نمایش است و از آن نمی توان رتبه بندی\n.قطعی خطر بیمار را نتیجه گرفت \n"
+    },
+    {
+      "page": 34,
+      "kind": "main",
+      "words": 291,
+      "body_words": 328,
+      "head": " \n26 فصل چهارم پیاده سازیBackend\n \n و مدل داده\n \nClinicalEvent\n \n به منبع باsource_type\n \n وsource_id\n \n اشاره می کند، اما این اشارهFK\n \n واقعی به چند\n جدول مختلف نیست. باز بودن نو"
+    },
+    {
+      "page": 35,
+      "kind": "main",
+      "words": 98,
+      "body_words": 101,
+      "head": " \nفصل چهارم پیاده سازیBackend\n \n و مدل داده \n27 \n \n  یا حذف رکورد باعثcrash\n  \n بی  مهار نشود. با این حال صرف گرفتنexception\n  \n به معنی اصالح تمام\nوضعیت های نیمه .کاره نیست \n برای"
+    },
+    {
+      "page": 36,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": ""
+    },
+    {
+      "page": 37,
+      "kind": "main",
+      "words": 272,
+      "body_words": 317,
+      "head": " \n29 \nفصل پنجم پرونده بیمار زمینه و تایم الین \n۵-۱\n تجمیع داده بدون تولید اطالعات تازه \nbuild_patient_context\n  \n  درservices/patient_context.py\n  هفت گروه داده ی بالینی را همراه\n "
+    },
+    {
+      "page": 38,
+      "kind": "main",
+      "words": 428,
+      "body_words": 485,
+      "head": " \n30 فصل پنجم پرونده بیمار زمینه و تایم الین\n \n  سپس تاریخ شروع نزولی وid\n  \n نزولی می  ،آید. برای داروactive\n  ،\nstopped\n  و سایر وضعیت ها به ترتیب قرار\n می گیرند. حساسیتsevere\n \n"
+    },
+    {
+      "page": 39,
+      "kind": "main",
+      "words": 394,
+      "body_words": 446,
+      "head": " \nفصل پنجم پرونده بیمار زمینه و تایم الین \n31 \n \nhelper\n  \n  داخلیadd\n  ،\nevent_type\n  ،\ndate\n  ،\ntitle\n  ،\ndescription\n  ،\nsource_type\n  \n  وsource_id\n  \n را به\nTimelineItem\n \n تب"
+    },
+    {
+      "page": 40,
+      "kind": "main",
+      "words": 193,
+      "body_words": 205,
+      "head": " \n32 فصل پنجم پرونده بیمار زمینه و تایم الین\n \n می شود» اگر درباره ی تمام مصرف های داده به کار رود دقیق نیست. تأیید، مرحله ی تبدیل به یادداشت بالینی\n .است؛ دسترسی مدل به خروجی خام "
+    },
+    {
+      "page": 41,
+      "kind": "main",
+      "words": 272,
+      "body_words": 325,
+      "head": " \n33 \n فصل ششم بارگذاری پردازش و تحلیل اسناد \n۶-۱\n قرارداد بارگذاری و ثبت متادیتا \n مسیرPOST\n \n/api/v1/patients/{patient_id}/documents\n \n فایل را با فیلدfile\n \n وtitle\n \n وdoc_type"
+    },
+    {
+      "page": 42,
+      "kind": "main",
+      "words": 384,
+      "body_words": 445,
+      "head": " \n34 فصل ششم بارگذاری پردازش و تحلیل اسناد\n \nStorageError\n  \n تبدیل می  شوند تاroute\n  \n  با جزئیاتSDK\n  \n درگیر نباشد. با این حال همه ی خطاهای\ntransport\n  \n  ًالزاماS3Error\n  \n نی"
+    },
+    {
+      "page": 43,
+      "kind": "main",
+      "words": 415,
+      "body_words": 471,
+      "head": " \nفصل ششم بارگذاری پردازش و تحلیل اسناد \n35 \n \n درPDF\n \n ترکیبی، ممکن است صفحه\nی اول متن کافی داشته باشد و صفحات اسکن\nشده ی بعدی بدون متن\n بمانند. این محدودیت از شرط مجموع متن نتیج"
+    },
+    {
+      "page": 44,
+      "kind": "main",
+      "words": 286,
+      "body_words": 320,
+      "head": " \n36 فصل ششم بارگذاری پردازش و تحلیل اسناد\n \n۶-۶\n دانلود حذف و نقاط یکپارچه سازی \nGET download\n \n ابتدا_get_document_or_404\n \n را اجرا می کند؛ اینhelper\n \n مجوز بیمار را بررسی\n می "
+    },
+    {
+      "page": 45,
+      "kind": "main",
+      "words": 268,
+      "body_words": 329,
+      "head": " \n37 \nفصل هفتم مدل زبانی و گفتگوی بالینی \n۷-۱\n قرارداد ارائه دهنده و پیکربندی \nLLMProvider\n \n یکProtocol\n \n باcomplete\n \n است. ورودی های آنsystem\n ،\nuser\n \n وhistory\n \n اختیاری و\n "
+    },
+    {
+      "page": 46,
+      "kind": "main",
+      "words": 383,
+      "body_words": 441,
+      "head": " \n38 فصل هفتم مدل زبانی و گفتگوی بالینی\n \n و سایر وضعیت های غیر۲۰۰\n \n بهAIError\n \n تبدیل می شوند. نبود ساختار مورد انتظار نیز به خطای تمیز تبدیل\n می .گردد \nOpenRouterProvider\n \n هم"
+    },
+    {
+      "page": 47,
+      "kind": "main",
+      "words": 371,
+      "body_words": 429,
+      "head": " \nفصل هفتم مدل زبانی و گفتگوی بالینی \n39 \n \nAIError\n  می  .رودtimeout\n  \n  ازAI_TIMEOUT_SECONDS\n  می آید. چند تالش می تواند زمان نهایی را\n بیش ازtimeout\n \n یک تماس کند. بودجه ی کل "
+    },
+    {
+      "page": 48,
+      "kind": "main",
+      "words": 337,
+      "body_words": 389,
+      "head": " \n40 فصل هفتم مدل زبانی و گفتگوی بالینی\n \n۷-۷\n \n گفتگوی ماندگار و ترتیبcommit\n \nConversation\n  \n  به بیمار وConversationMessage\n  \n به گفتگو وابسته\nاند. عنوان پیش فرض «گفتگوی\n جدید"
+    },
+    {
+      "page": 49,
+      "kind": "main",
+      "words": 193,
+      "body_words": 206,
+      "head": " \nفصل هفتم مدل زبانی و گفتگوی بالینی \n41 \n \ncomponent\n های مجزا نمایش داده می شوند. گزارش این جزئیات را برای تشریح اتصالAPI\n \n به گردش کار\n ذکر می  کند؛ طراحی اصلیFrontend\n  \n طبق "
+    },
+    {
+      "page": 50,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": ""
+    },
+    {
+      "page": 51,
+      "kind": "main",
+      "words": 183,
+      "body_words": 231,
+      "head": " \n43 \nفصل هشتم صوت و تبدیل گفتار به متن \n۸-۱\n ثبت صوت و وضعیت های مستقل \n  ،آپلود صوت در مسیر وابسته به بیمار با عنوانconversation_type\n  \n  وduration_seconds\n  \n اختیاری\n انجام می"
+    },
+    {
+      "page": 52,
+      "kind": "main",
+      "words": 378,
+      "body_words": 453,
+      "head": " \n44 \n فصل هشتم صوت و تبدیل گفتار به متن\n \n فایل کاری فعلی وجود دارند و زنجیره یSTT_FALLBACK_PROVIDERS\n \n می تواند پس از مسیر اصلی\n اجرا شود. این طراحی انتخاب سرویس را ازroute\n \n ص"
+    },
+    {
+      "page": 53,
+      "kind": "main",
+      "words": 326,
+      "body_words": 390,
+      "head": " \n فصل هشتم صوت و تبدیل گفتار به متن \n45 \n \n فاصله به هم متصل می شود. بریدن واژه روی مرز قطعه و از دست رفتن زمینه ی جمله باید در ارزیابی واقعی\n .بررسی شود \n  برای هر قطعهUnknownVal"
+    },
+    {
+      "page": 54,
+      "kind": "main",
+      "words": 397,
+      "body_words": 463,
+      "head": " \n46 \n فصل هشتم صوت و تبدیل گفتار به متن\n \n۸-۶\n زنجیره\nی جایگزین و معنای موفقیت \n  در نبودSTT_FALLBACK_PROVIDERS\n  ، خطایprovider\n  \n مستقیم عبور می کند. در وجود\n  ،فهرستprovider\n "
+    },
+    {
+      "page": 55,
+      "kind": "main",
+      "words": 293,
+      "body_words": 335,
+      "head": " \n فصل هشتم صوت و تبدیل گفتار به متن \n47 \n \npending\n \n بماند؛ شکست دیگرcleaned_note\n \n را خالی وcleanup_status\n \n راfailed\n \n می کند. متن خام نباید\n.جایگزین شود \n  کدtry\n  \n  اصلی "
+    },
+    {
+      "page": 56,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": ""
+    },
+    {
+      "page": 57,
+      "kind": "main",
+      "words": 232,
+      "body_words": 266,
+      "head": " \n49 \n فصل نهم ایمنی دارو شواهد و عامل آزمایشی \n۹-۱\n \n تغییر مسیر ایمنی نسبت به طرح اولیه \n  پروپوزال برایPrescription Safety\n  بر هشدارهای ساخته\nشده با قواعد و نقش توضیح دهنده  یL"
+    },
+    {
+      "page": 58,
+      "kind": "main",
+      "words": 383,
+      "body_words": 442,
+      "head": " \n50 فصل نهم ایمنی دارو شواهد و عامل آزمایشی\n \n۹-۲\n \n قرارداد تحلیل ساختاریافته \nAiMedicationSafetyCheckRequest\n  \n  یک تا پنجMedicationCandidate\n  \n  باname\n  \n  وdose\n \n  و\nاختیا"
+    },
+    {
+      "page": 59,
+      "kind": "main",
+      "words": 335,
+      "body_words": 384,
+      "head": " \nفصل نهم ایمنی دارو شواهد و عامل آزمایشی \n51 \n \n واحدها را کنار می  .گذاردmatch_classes\n  \n  باalias\n  \n به کالس نگاشت می کند؛ این روش شناسه ی استاندارد\n .دارویی یا حل جامع نام تج"
+    },
+    {
+      "page": 60,
+      "kind": "main",
+      "words": 440,
+      "body_words": 511,
+      "head": " \n52 فصل نهم ایمنی دارو شواهد و عامل آزمایشی\n \n را نیز برای شناسه های جعلی داخل متن بازنویسی نمی کند. بنابراین فهرست شواهد کنترل شده است، اما کل\n پاسخ باverifier\n \n معنایی تأیید نش"
+    },
+    {
+      "page": 61,
+      "kind": "main",
+      "words": 229,
+      "body_words": 259,
+      "head": " \nفصل نهم ایمنی دارو شواهد و عامل آزمایشی \n53 \n \n مدل داده می شود. مسیرanswer\n \n مستقیم برای سؤال عمومی نیز وجود دارد و کنترل مستقل برای عمومی\n بودن سؤال اعمال نمی.شود \n۹-۸\n \n امنی"
+    },
+    {
+      "page": 62,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": ""
+    },
+    {
+      "page": 63,
+      "kind": "main",
+      "words": 294,
+      "body_words": 347,
+      "head": " \n55 \n فصل دهم احراز هویت امنیت و حریم خصوصی \n۱۰-۱\n \n حساب کاربری و توکن \nثبت  نام ایمیل و گذرواژه حسابdoctor\n  \n می  سازد و درخواست نقشadmin\n  \n رد می شود. ایمیل به\nlowercase\n \n ت"
+    },
+    {
+      "page": 64,
+      "kind": "main",
+      "words": 319,
+      "body_words": 362,
+      "head": " \n56 \n فصل دهم احراز هویت امنیت و حریم خصوصی\n \n \n شکل۱۰-۱\n احراز هویت و کنترل انتساب بیمار \n برگرداندن۴۰۴\n \n برای منبع ناموجود و۴۰۳\n \n برای منبع موجود ولی غیرمجاز می تواند تفاوت وج"
+    },
+    {
+      "page": 65,
+      "kind": "main",
+      "words": 394,
+      "body_words": 454,
+      "head": " \n فصل دهم احراز هویت امنیت و حریم خصوصی \n57 \n \n شدن بی دلیل حذف می شود. خطای ارسالUniomError\n \n به۵۰۲\n \n تبدیل می شود، اماroute\n شماره ی مقصد را\n درlog\n \n خطا ثبت می کند. ادعایcom"
+    },
+    {
+      "page": 66,
+      "kind": "main",
+      "words": 215,
+      "body_words": 235,
+      "head": " \n58 \n فصل دهم احراز هویت امنیت و حریم خصوصی\n \n درlogging\n ، بخشی از پاسخAI\n \n و در خطای چت بخشی از سؤال و در خطایOTP\n \n شماره دیده می .شود\nClinicalEvent\n هم همه\nی خواندن\nها، تغییر"
+    },
+    {
+      "page": 67,
+      "kind": "main",
+      "words": 328,
+      "body_words": 399,
+      "head": " \n59 \nفصل یازدهم آزمون یکپارچه سازی و استقرار \n۱۱-۱\n ساختار آزمون\nها \n مخزن تست  هایservice\n  ،\nschema\n  ،\nORM\n  \n  وAPI\n  \n  و چندscript\n  \n  .سرتاسری داردconftest\n  \n یک\nTestClie"
+    },
+    {
+      "page": 68,
+      "kind": "main",
+      "words": 331,
+      "body_words": 364,
+      "head": " \n60 فصل یازدهم آزمون یکپارچه سازی و استقرار\n \n جدول۶ نتیجه ی اجرای منتخب \n فایل آزمون موفق خطا کنارگذاشته \ntest_health \n3 \n0 \n0 \ntest_cors \n4 \n0 \n0 \ntest_logging \n2 \n0 \n0 \ntest_st"
+    },
+    {
+      "page": 69,
+      "kind": "main",
+      "words": 367,
+      "body_words": 457,
+      "head": " \nفصل یازدهم آزمون یکپارچه سازی و استقرار \n61 \n \n ،برای ایمنی داروtrue positive\n ،\nfalse positive\n ،\ntrue negative\n \n وfalse negative\n \n باید از سناریوی\n مرجع مستقل به دست آیند. حس"
+    },
+    {
+      "page": 70,
+      "kind": "main",
+      "words": 261,
+      "body_words": 336,
+      "head": " \n62 فصل یازدهم آزمون یکپارچه سازی و استقرار\n \n نسخه های وابستگیBackend\n عمدتاً بازه\nای اند وMinIO latest\n \n استفاده می شود. این انتخاب نگهداری را\nآسان تر می کند، ولیbuild\n \n دو زم"
+    },
+    {
+      "page": 71,
+      "kind": "main",
+      "words": 235,
+      "body_words": 269,
+      "head": " \nفصل یازدهم آزمون یکپارچه سازی و استقرار \n63 \n \n محلی اند و باید برای دامنه .ی واقعی تغییر کنندtimeout proxy\n \n برایAPI\n \n سیصد ثانیه است؛ چند فراخوانی\n عامل یاretry\n \n ممکن است ب"
+    },
+    {
+      "page": 72,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": ""
+    },
+    {
+      "page": 73,
+      "kind": "main",
+      "words": 319,
+      "body_words": 358,
+      "head": " \n65 \nفصل دوازدهم خالصه نتیجه گیری و کارهای آینده \n۱۲-۱\n تطبیق با هدف\nهای مصوب \nهسته ی ثبت بیمار و داده  ،ی بالینی، پیوند اسناد و صوتContext\n  \n  وtimeline\n ، اتصال مدل آماده و\n ،گ"
+    },
+    {
+      "page": 74,
+      "kind": "main",
+      "words": 461,
+      "body_words": 512,
+      "head": " \n66 فصل دوازدهم خالصه نتیجه گیری و کارهای آینده\n \n نمونه هایی از تصمیم های قابل مشاهده اند. این تصمیم ها مسیر توسعه و رسیدگی به خطا را روشن تر می .کنند\n نتیجه ی آن ها یک نمونه\nی ن"
+    },
+    {
+      "page": 75,
+      "kind": "main",
+      "words": 243,
+      "body_words": 255,
+      "head": " \nفصل دوازدهم خالصه نتیجه گیری و کارهای آینده \n67 \n \nبرای گفتگو، پرسش ها باید شامل داده ی کافی، داده ی غایب، داده .ی متناقض و متن سند دستورگونه باشند\n ارزیاب باید مشخص کند کدام ادع"
+    },
+    {
+      "page": 76,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": ""
+    },
+    {
+      "page": 77,
+      "kind": "references",
+      "words": 286,
+      "body_words": 308,
+      "head": " \n69 \n منابع و مراجع \n شیوه\nنامه ی ارائه\nشده روش استناد خاصی تعیین نکرده است؛ در این گزارش منابع با شماره ی یکتا معرفی\n می\nشوند. ارجاع\nهای شماره دار مربوط به مبانی فنی اند و مسیر ف"
+    },
+    {
+      "page": 78,
+      "kind": "references",
+      "words": 122,
+      "body_words": 140,
+      "head": " \n70 \n منابع و مراجع\n \nhttps://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html \n [\n۱۱\n ،] پروپوزال پروژه\nAI_Clinical_Copilot_Proposal_Task_Split_RTL_WORD_FIX"
+    },
+    {
+      "page": 79,
+      "kind": "appendix",
+      "words": 200,
+      "body_words": 227,
+      "head": " \n71 \n پیوست الف مرجع مسیرهای واقعیAPI\n \nاین پیوست از مسیرهای ثبت\nشده ی برنامه و قراردادOpenAPI\n \n ساخته شده است. مسیر/health\n \n بدون\n نسخه و سایر منابع زیر پیشوند نسخه قرار دارند."
+    },
+    {
+      "page": 80,
+      "kind": "appendix",
+      "words": 195,
+      "body_words": 207,
+      "head": " \n72 \n پیوست الف مرجع مسیرهای واقعیAPI\n \n \n الفـ۳ کاتالوگ مدل \n پاسخ این مسیر فقط شناسه و نامprovider\n \n و مدل را دارد. کاتالوگGemini\n \n ایستا وOpenRouter\n \n از\n سرویسmodels\n \n گرف"
+    },
+    {
+      "page": 81,
+      "kind": "appendix",
+      "words": 209,
+      "body_words": 216,
+      "head": " \n پیوست الف مرجع مسیرهای واقعیAPI\n \n73 \n \n فعل و مسیر \n ورودی و پارامتر \n پاسخ موفق \nGET \n/api/v1/patients/{patient_id}/timeline \nبدنه ندارد \npatient_id\n (\npath\n :)\ninteger\n \n200:"
+    },
+    {
+      "page": 82,
+      "kind": "appendix",
+      "words": 180,
+      "body_words": 185,
+      "head": " \n74 \n پیوست الف مرجع مسیرهای واقعیAPI\n \n فعل و مسیر \n ورودی و پارامتر \n پاسخ موفق \nGET \n/api/v1/patients/{patient_id}/allergies \nبدنه ندارد \npatient_id\n (\npath\n :)\ninteger\n \n200: "
+    },
+    {
+      "page": 83,
+      "kind": "appendix",
+      "words": 180,
+      "body_words": 192,
+      "head": " \n پیوست الف مرجع مسیرهای واقعیAPI\n \n75 \n \n الفـ۸ \n اسناد \n  آپلودmultipart\n  \n  ،استextract\n  \n کار پس زمینه می  پذیرد وanalyze\n  \n  همگام بهAI\n  \n تماس می .زند\ndownload\n \n پاسخre"
+    },
+    {
+      "page": 84,
+      "kind": "appendix",
+      "words": 183,
+      "body_words": 187,
+      "head": " \n76 \n پیوست الف مرجع مسیرهای واقعیAPI\n \n جدول۱۶\n قراردادهای صوت و یادداشت \n فعل و مسیر \n ورودی و پارامتر \n پاسخ موفق \nPOST \n/api/v1/patients/{patient_id}/voice-notes \nmultipart/fo"
+    },
+    {
+      "page": 85,
+      "kind": "appendix",
+      "words": 206,
+      "body_words": 225,
+      "head": " \n پیوست الف مرجع مسیرهای واقعیAPI\n \n77 \n \n الفـ۱۱\n قواعد دارویی \nendpoint\n \n قدیمی قواعد محلی را با داروهایactive\n \n و حساسیت مقایسه می .کندcandidate_covered\n \n وضعیت نگاشت نام را"
+    },
+    {
+      "page": 86,
+      "kind": "appendix",
+      "words": 140,
+      "body_words": 149,
+      "head": " \n78 \n پیوست الف مرجع مسیرهای واقعیAPI\n \n فعل و مسیر \n ورودی و پارامتر \n پاسخ موفق \nGET \n/api/v1/conversations/{conversation_id} \nبدنه ندارد \nconversation_id\n (\npath\n :)\ninteger\n \n"
+    },
+    {
+      "page": 87,
+      "kind": "appendix",
+      "words": 206,
+      "body_words": 243,
+      "head": " \n79 \nپیوست ب فرهنگ داده و روابط پایگاه \nجدول  های زیر مستقیماً ازmetadata\n  مدل  هایSQLAlchemy\n  \n استخراج شده  اند. نوع نمایشیORM\n ،\nnullable\n ،\nPK\n \n وFK\n از مدل برداشت شده اند."
+    },
+    {
+      "page": 88,
+      "kind": "appendix",
+      "words": 247,
+      "body_words": 271,
+      "head": " \n80 \n پیوست ب فرهنگ داده و روابط پایگاه\n \n کد به صورتhash\n \n نگهداری می ،شودexpires_at\n \n انقضا وattempts_left\n \n تعداد فرصت باقی مانده را ثبت\n می .کندconsumed_at\n \n مصرف موفق را "
+    },
+    {
+      "page": 89,
+      "kind": "appendix",
+      "words": 185,
+      "body_words": 208,
+      "head": " \n پیوست ب فرهنگ داده و روابط پایگاه \n81 \n \n نام فیلد \n نوعORM\n قید و رابطه \n تفسیر \nfirst_name \nVARCHAR(\n100) \nNOT NULL نام بیمار با طول محدود؛ داده\nی شناسایی .کننده \nlast_name \nV"
+    },
+    {
+      "page": 90,
+      "kind": "appendix",
+      "words": 198,
+      "body_words": 218,
+      "head": " \n82 \n پیوست ب فرهنگ داده و روابط پایگاه\n \n جدول۲۶\n \n فیلدهایusers\n \n نام فیلد \n نوعORM\n قید و رابطه \n تفسیر \nid \nINTEGER \nPK \nNOT NULL \n کلید اصلی رکورد؛ برای رابطه و ردیابی استفا"
+    },
+    {
+      "page": 91,
+      "kind": "appendix",
+      "words": 201,
+      "body_words": 216,
+      "head": " \n پیوست ب فرهنگ داده و روابط پایگاه \n83 \n \n جدول۲۸\n \n فیلدهایallergies\n \n نام فیلد \n نوعORM\n قید و رابطه \n تفسیر \nid \nINTEGER \nPK \nNOT NULL \n کلید اصلی رکورد؛ برای رابطه و ردیابی "
+    },
+    {
+      "page": 92,
+      "kind": "appendix",
+      "words": 229,
+      "body_words": 249,
+      "head": " \n84 \n پیوست ب فرهنگ داده و روابط پایگاه\n \n نام فیلد \n نوعORM\n قید و رابطه \n تفسیر \npatient_id \nINTEGER \nFK patients.id / \nCASCADE \nNOT NULL \n کلید خارجی بیمار؛ درquery\n های پرونده"
+    },
+    {
+      "page": 93,
+      "kind": "appendix",
+      "words": 203,
+      "body_words": 217,
+      "head": " \n پیوست ب فرهنگ داده و روابط پایگاه \n85 \n \n نام فیلد \n نوعORM\n قید و رابطه \n تفسیر \nstatus \nVARCHAR(\n8) \nNOT NULL \n وضعیت رکورد؛ در ترتیب و انتخاب داروهای\nactive\n \n.مؤثر است \nonse"
+    },
+    {
+      "page": 94,
+      "kind": "appendix",
+      "words": 228,
+      "body_words": 250,
+      "head": " \n86 \n پیوست ب فرهنگ داده و روابط پایگاه\n \n نام فیلد \n نوعORM\n قید و رابطه \n تفسیر \ncreated_at \nDATETIME \nNOT NULL \n زمان ایجاد باtimezone\n ؛fallback\n \n بسیاری از\nتاریخ .ها \nupdate"
+    },
+    {
+      "page": 95,
+      "kind": "appendix",
+      "words": 198,
+      "body_words": 215,
+      "head": " \n پیوست ب فرهنگ داده و روابط پایگاه \n87 \n \n نام فیلد \n نوعORM\n قید و رابطه \n تفسیر \nextracted_text \nTEXT \nNULL \n متن مشتقparser/OCR\n ؛ فایل اصلی را\nجایگزین نمی .کند \nanalysis_stat"
+    },
+    {
+      "page": 96,
+      "kind": "appendix",
+      "words": 193,
+      "body_words": 206,
+      "head": " \n88 \n پیوست ب فرهنگ داده و روابط پایگاه\n \n نام فیلد \n نوعORM\n قید و رابطه \n تفسیر \nmedication_id \nINTEGER \nINDEX \nFK medications.id / NO \nACTION \nNOT NULL \nپیوند نسخه.ی بیمار به ک"
+    },
+    {
+      "page": 97,
+      "kind": "appendix",
+      "words": 216,
+      "body_words": 236,
+      "head": " \n پیوست ب فرهنگ داده و روابط پایگاه \n89 \n \n جدول۳۸\n \n فیلدهایpatient_user_access\n \n نام فیلد \n نوعORM\n قید و رابطه \n تفسیر \nid \nINTEGER \nPK \nNOT NULL \n کلید اصلی رکورد؛ برای رابطه"
+    },
+    {
+      "page": 98,
+      "kind": "appendix",
+      "words": 201,
+      "body_words": 220,
+      "head": " \n90 \n پیوست ب فرهنگ داده و روابط پایگاه\n \n نام فیلد \n نوعORM\n قید و رابطه \n تفسیر \nduration_seconds \nINTEGER \nNULL \n مدت اعالمی ضبط؛ ممکن است ازclient\n \n آمده\n .باشد \nlanguage \nVA"
+    },
+    {
+      "page": 99,
+      "kind": "appendix",
+      "words": 193,
+      "body_words": 210,
+      "head": " \n پیوست ب فرهنگ داده و روابط پایگاه \n91 \n \n جدول۴۱\n \n فیلدهایclinical_notes\n \n نام فیلد \n نوعORM\n قید و رابطه \n تفسیر \nid \nINTEGER \nPK \nNOT NULL \n کلید اصلی رکورد؛ برای رابطه و رد"
+    },
+    {
+      "page": 100,
+      "kind": "appendix",
+      "words": 198,
+      "body_words": 218,
+      "head": " \n92 \n پیوست ب فرهنگ داده و روابط پایگاه\n \n جدول۴۳\n \n فیلدهایconversation_messages\n \n نام فیلد \n نوعORM\n قید و رابطه \n تفسیر \nid \nINTEGER \nPK \nNOT NULL \n کلید اصلی رکورد؛ برای رابط"
+    },
+    {
+      "page": 101,
+      "kind": "appendix",
+      "words": 219,
+      "body_words": 237,
+      "head": " \n پیوست ب فرهنگ داده و روابط پایگاه \n93 \n \n نام فیلد \n نوعORM\n قید و رابطه \n تفسیر \npatient_id \nINTEGER \nFK patients.id / \nCASCADE \nNOT NULL \n کلید خارجی بیمار؛ درquery\n های پروند"
+    },
+    {
+      "page": 102,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": ""
+    },
+    {
+      "page": 103,
+      "kind": "appendix",
+      "words": 205,
+      "body_words": 241,
+      "head": " \n95 \n پیوست پ تنظیمات و حدود اجرای محیط \n  این مرجع نام و نوع فیلدهایSettings\n  \n را از کالس تنظیمات می. گیرد، نه از فایلenv\n  \n کاربر. مقدار\ncredential\n \n وsecret\n و هر پیش فرضی "
+    },
+    {
+      "page": 104,
+      "kind": "appendix",
+      "words": 176,
+      "body_words": 198,
+      "head": " \n96 پیوست پ تنظیمات و حدود اجرای محیط\n \n متغیر پیش فرض کد کاربرد و محدودیت \nPOSTGRES_HOST \nlocalhost \n میزبان داده؛ درproduction\n \n بهpostgres override\n \nمی .شود \nPOSTGRES_PORT \n5"
+    },
+    {
+      "page": 105,
+      "kind": "appendix",
+      "words": 174,
+      "body_words": 202,
+      "head": " \nپیوست پ تنظیمات و حدود اجرای محیط \n97 \n \n متغیر پیش فرض کد کاربرد و محدودیت \nSPEECHMATICS_BASE_URL \nhttps://asr.api.speec\nhmatics.com/v2 پایه یendpoint batch\n \n وjob\n هایSpeechma"
+    },
+    {
+      "page": 106,
+      "kind": "appendix",
+      "words": 199,
+      "body_words": 231,
+      "head": " \n98 پیوست پ تنظیمات و حدود اجرای محیط\n \n پـ۶ مدل زبانی \n جدول۵۲\n \n تنظیمات مدل زبانی \n متغیر پیش فرض کد کاربرد و محدودیت \nAI_PROVIDER \nopenai_compatible \n انتخابprovider\n پیش\nفرض "
+    },
+    {
+      "page": 107,
+      "kind": "appendix",
+      "words": 25,
+      "body_words": 21,
+      "head": " \nپیوست پ تنظیمات و حدود اجرای محیط \n99 \n \n نام محل \n رفتار \nHTTP_PORT / HTTPS_PORT \nCompose production \n پورتpublish\n ؛ وجود443\n \n به معنی\nlisten TLS\n \n درNginx\n \n.نیست \n \n"
+    },
+    {
+      "page": 108,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": ""
+    },
+    {
+      "page": 109,
+      "kind": "appendix",
+      "words": 244,
+      "body_words": 279,
+      "head": " \n101 \n پیوست ت قرارداد نمونه و گزیده\nی کد \n نمونه های این پیوست مصنوعی و صرفاً برای توضیح شکل داده اند. آن ها نتیجه ی اجرای زنده یا داده ی بیمار\n نیستند و هیچ پیشنهاد درمانی ارائه"
+    },
+    {
+      "page": 110,
+      "kind": "appendix",
+      "words": 220,
+      "body_words": 239,
+      "head": " \n102 پیوست ت قرارداد نمونه و گزیده ی کد\n \n تـ۴ \n ورودی تحلیل دارویی \n{ \n  \"medications\": [ \n    { \n      \"name\": \"ExampleDrug\", \n      \"dose\": null \n    } \n  ], \n  \"question\": \"چه"
+    },
+    {
+      "page": 111,
+      "kind": "appendix",
+      "words": 171,
+      "body_words": 181,
+      "head": " \nپیوست ت قرارداد نمونه و گزیده ی کد \n103 \n \n \n    try: \n        # runtime selection (ids only) with env-default fallback \n گزیده یroute\n \n ماندگار، ساخت پیام کاربر وcommit\n \n آن ر"
+    },
+    {
+      "page": 112,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": ""
+    },
+    {
+      "page": 113,
+      "kind": "appendix",
+      "words": 218,
+      "body_words": 239,
+      "head": " \n105 \n پیوست ث مرجع آزمون و سناریوهای تکمیلی \nجدول نخست تعداد توابع تعریف شده با نامtest_\n را در فایل ها نشان می دهد. این شمارش ازAST\n \n است؛\nparametrization\n می تواند تعداد موارد"
+    },
+    {
+      "page": 114,
+      "kind": "appendix",
+      "words": 202,
+      "body_words": 221,
+      "head": " \n106 پیوست ث مرجع آزمون و سناریوهای تکمیلی\n \nفایل \n توابع\nتعریف شده دامنه ی تفسیر \ntest_evidence_api.py \n15 \n دارایfixture\n \n پایگاه یا سرویس؛ اجرای منتخب را\nدر جدول نتیجه ببینید "
+    },
+    {
+      "page": 115,
+      "kind": "appendix",
+      "words": 124,
+      "body_words": 132,
+      "head": " \nپیوست ث مرجع آزمون و سناریوهای تکمیلی \n107 \n \nفایل \n توابع\nتعریف شده دامنه ی تفسیر \ntest_storage_service.py \n2 \n آزمونservice\n \n یا قرارداد؛ وابستگی\n واقعی/جایگزین ازfixture\n تعی"
+    },
+    {
+      "page": 116,
+      "kind": "appendix",
+      "words": 93,
+      "body_words": 87,
+      "head": " \n108 پیوست ث مرجع آزمون و سناریوهای تکمیلی\n \nفایل مورد آزمون نتیجه \ntest_storage_service \ntest_storage_key_is_unique_and_sanitized \n خطایsetup\n ؛MinIO\n \n در\n دسترس نبود \ntest_extr"
+    },
+    {
+      "page": 117,
+      "kind": "appendix",
+      "words": 90,
+      "body_words": 82,
+      "head": " \nپیوست ث مرجع آزمون و سناریوهای تکمیلی \n109 \n \nفایل مورد آزمون نتیجه \ntest_stt_google_and_openrouter \ntest_google_provider_temp_files_cleaned موفق \ntest_stt_google_and_openrouter "
+    },
+    {
+      "page": 118,
+      "kind": "appendix",
+      "words": 312,
+      "body_words": 355,
+      "head": " \n110 پیوست ث مرجع آزمون و سناریوهای تکمیلی\n \nفایل مورد آزمون نتیجه \ntest_openrouter_provider \ntest_malformed_response_raises موفق \ntest_openrouter_provider \ntest_key_never_in_erro"
+    },
+    {
+      "page": 119,
+      "kind": "appendix",
+      "words": 194,
+      "body_words": 212,
+      "head": " \nپیوست ث مرجع آزمون و سناریوهای تکمیلی \n111 \n \nموضوع ورودی و پیش\nشرط انتظار و اندازه گیری \nproxy\n \n صوت \nOpenRouter STT\n \n باproxy\n الزم و شبکه ی\n.مستقیم ناممکن اجرا شود \n اثبات م"
+    },
+    {
+      "page": 120,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": ""
+    },
+    {
+      "page": 121,
+      "kind": "english",
+      "words": 51,
+      "body_words": 51,
+      "head": " \n \n \nUniversity of Tehran \nCollege of Farabi \nFaculty of Engineering \nDepartment of Computer Engineering \nDesign and Implementation of an AI Clinical Copilot \nBased on Integration"
+    },
+    {
+      "page": 122,
+      "kind": "blank",
+      "words": 0,
+      "body_words": 0,
+      "head": " \n \n \n"
+    }
+  ]
+}

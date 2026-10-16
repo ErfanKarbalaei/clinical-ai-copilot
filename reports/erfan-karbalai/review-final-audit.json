@@ -1,0 +1,59 @@
+{
+  "preserved_originals": true,
+  "preserved_code_and_json": true,
+  "preserved_figure_binaries": true,
+  "preserved_table_identifiers_types_values_except_three_explanations": true,
+  "changed_explanation_cells": [
+    {
+      "table_index": 25,
+      "field": "role",
+      "before": "نوع نویسنده‌ی پیام یا نقش حساب، بسته به جدول.",
+      "after": "نقش حساب: doctor یا admin؛ مبنای سیاست دسترسی پرونده."
+    },
+    {
+      "table_index": 30,
+      "field": "name",
+      "before": "نام متنی منبع؛ در کاتالوگ دارو قید یکتا دارد.",
+      "after": "نام مشکل بالینی به‌صورت متن آزاد؛ در این جدول قید یکتایی یا کد استاندارد تشخیص ندارد."
+    },
+    {
+      "table_index": 42,
+      "field": "role",
+      "before": "نوع نویسنده‌ی پیام یا نقش حساب، بسته به جدول.",
+      "after": "نقش پیام در گفتگو: user یا assistant؛ از نقش حساب کاربری مستقل است."
+    }
+  ],
+  "pages": 124,
+  "main_pages": 51,
+  "appendix_pages": 39,
+  "blank_text_and_image_pages": [
+    2,
+    3,
+    4,
+    6,
+    8,
+    18,
+    22,
+    36,
+    50,
+    56,
+    62,
+    72,
+    76,
+    88,
+    104,
+    110,
+    114,
+    122,
+    124
+  ],
+  "hashes": {
+    "original_docx": "88ec2fe5c8f06717c9c7abe12ec4fff054e91a3e3df9fd6800174934b8ddaf44",
+    "original_pdf": "de31eec4643b66146f30b39a53e40c47a078890686b8b529fbcdfbd9c311eb24",
+    "revised_docx": "6cc1979bb7557048019e57bed34789be397dc888cb9d9d34dbb923c4834bceea",
+    "revised_pdf": "0acf3474c9630940dfcbd5ac6034f740661a081dfbc587af77b0e5d3c348e542"
+  },
+  "word_opened_and_rendered": true,
+  "zip_ok": true,
+  "source_hashes_preserved": true
+}

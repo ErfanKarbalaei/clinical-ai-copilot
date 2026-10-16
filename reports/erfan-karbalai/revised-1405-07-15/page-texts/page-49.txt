@@ -1,0 +1,39 @@
+                                              نتم هب راتفگ لیدبت و توص متشه لصف
+
+                                                        لقتسم یاه        تیعضو و توص تبث                 .۸-۱
+
+        duration_seconds           و  conversation_type           ،ناونع اب رامیب هب هتسباو ریسم رد توص دولپآ
+                   یجورخ ات دوش یم ادج لوگریو       هطقن زا دعب یاهرتماراپ زا   MIME         .دوش یم ماجنا یرایتخا
+        لماش زاجم تسرهف .دوش هتفریذپ         codecs       یاراد   audio/webm         دننام   MediaRecorder
+                     زین و  FLAC         و  WebM       ،   OGG       ،   MP3     ،   MP4/M4A          ،   WAV
+                 .تسا هسیون دصیس لیاف مان و       MiB      هاجنپ    Backend         فقس .تسا      video/webm
+   .دوشیمن ماجنا    route       نیا رد تدم ربتعم یریگ    هزادنا و دوش یم تفایرد مرف زا     duration_seconds
+     ،هملاکم عون ،نابز لماش     VoiceNote         .دریگ یم رارق زاس هریخذ زا   voice       ی هشوپ رد توص لصا
+         و   cleaned_note       ،   error_message          ،یزاس  کاپ تیعضو ،     transcript       ،یسیونور تیعضو
+   failed     ای  completed        سپس و      processing        ادتبا هنیمز سپ شزادرپ .تسا       processed_at
+        ؛دوشیم     cleanup_status pending             و کاپ   cleaned_note         ،هرابود یارجا رد .دنک یم تبث ار
+                                                   .دوشیمن ضرف هزات یدورو اب رظانتم رگید یلبق قتشم یجورخ
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     نیزگیاج یاهریسم و راتفگ یاههدنهد هئارا ۸-۱ لکش
+                                                     هدنهد     هئارا باختنا و        STT دادرارق .۸-۲
+
+                     data    ،   file_name      ،   اب transcribe    یاراد      SpeechToTextProvider
+               یمومع    facade       .دنادرگ یمرب نتم و تسا     diarize       و  mime_type        ،   language
+
+                                                          39

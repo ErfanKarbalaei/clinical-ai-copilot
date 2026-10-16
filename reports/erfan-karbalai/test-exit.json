@@ -1,0 +1,13 @@
+{
+  "exit_code": 1,
+  "files": [
+    "test_health.py",
+    "test_cors.py",
+    "test_logging.py",
+    "test_storage_service.py",
+    "test_extraction_service.py",
+    "test_stt_service.py",
+    "test_stt_google_and_openrouter.py",
+    "test_openrouter_provider.py"
+  ]
+}
